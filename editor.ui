@@ -127,70 +127,63 @@
         <attribute name="toolTip">
          <string>Select tiles to place on the map</string>
         </attribute>
-        <widget class="QFrame" name="tilePreviewFrame">
-         <property name="geometry">
-          <rect>
-           <x>80</x>
-           <y>130</y>
-           <width>120</width>
-           <height>80</height>
-          </rect>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Plain</enum>
-         </property>
-        </widget>
-        <widget class="QTreeWidget" name="treeWidget">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>270</y>
-           <width>256</width>
-           <height>192</height>
-          </rect>
-         </property>
-         <column>
-          <property name="text">
-           <string>Tileset</string>
-          </property>
-         </column>
-         <item>
-          <property name="text">
-           <string>Directory</string>
-          </property>
-          <item>
-           <property name="text">
-            <string>Subdirectory</string>
-           </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <property name="text">
-             <string>tiles0.png</string>
-            </property>
+            <widget class="QFrame" name="tilePreviewFrame">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>50</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+            </widget>
            </item>
-          </item>
+           <item>
+            <widget class="QTreeWidget" name="tilesetTree">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>30</verstretch>
+              </sizepolicy>
+             </property>
+             <column>
+              <property name="text">
+               <string>Tileset</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>Directory</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>Subdirectory</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>tiles0.png</string>
+                </property>
+               </item>
+              </item>
+             </item>
+             <item>
+              <property name="text">
+               <string>Directory 2</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
          </item>
-         <item>
-          <property name="text">
-           <string>Directory 2</string>
-          </property>
-         </item>
-        </widget>
-        <widget class="QPushButton" name="pushButton">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>480</y>
-           <width>93</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
+        </layout>
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
