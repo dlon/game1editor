@@ -295,6 +295,8 @@
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
     <addaction name="actionDelete"/>
+    <addaction name="separator"/>
+    <addaction name="actionRun"/>
    </widget>
    <widget class="QMenu" name="menu_View">
     <property name="title">
@@ -324,6 +326,8 @@
    <addaction name="separator"/>
    <addaction name="actionGrid"/>
    <addaction name="actionSnap"/>
+   <addaction name="separator"/>
+   <addaction name="actionRun"/>
   </widget>
   <action name="actionNew">
    <property name="text">
@@ -505,6 +509,20 @@
    </property>
    <property name="statusTip">
     <string>Delete selection</string>
+   </property>
+  </action>
+  <action name="actionRun">
+   <property name="text">
+    <string>&amp;Run...</string>
+   </property>
+   <property name="toolTip">
+    <string>Play the map</string>
+   </property>
+   <property name="statusTip">
+    <string>Play the map</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
   </action>
  </widget>
