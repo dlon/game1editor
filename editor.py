@@ -3,7 +3,7 @@ import copy
 import pickle
 import sys
 
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget)
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QFileDialog)
 from ui_editor import Ui_EditorWindow
 
 class EditorException(Exception):
@@ -89,6 +89,9 @@ class Editor(QMainWindow):
 		
 		self.ui.objectTree.expandAll()
 		self.ui.tilesetTree.expandAll()
+		
+		self.ui.actionOpen.triggered.connect(self.openFile)
+		self.ui.actionSaveAs.triggered.connect(self.saveAs)
 
 		# s
 		self.editStates = [EditState(self)] # list of edit states
@@ -96,6 +99,13 @@ class Editor(QMainWindow):
 
 		self.currentState = self.editStates[0]
 		self.lastSavedState = self.editStates[0]
+	def openFile(self):
+		path = QFileDialog.getOpenFileName(caption = "Open map", filter = "game1 maps (*.map)")
+		if path:
+			pass
+	def saveAs(self):
+		file = QFileDialog.getSaveFileName(caption = "Save map", filter = "game1 maps (*.map)")
+		print(file)
 	def isModified(self):
 		return not self.currentState.equals(self.lastSavedState)
 	#def canRedo(self):
