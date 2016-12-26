@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>816</width>
-    <height>650</height>
+    <width>978</width>
+    <height>730</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,8 +22,8 @@
       </property>
       <widget class="QTabWidget" name="tabWidget">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-         <horstretch>20</horstretch>
+        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+         <horstretch>10</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -35,19 +35,176 @@
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
-         <string>Tab 1</string>
+         <string>&amp;Objects</string>
         </attribute>
+        <attribute name="toolTip">
+         <string>Select objects to place on the map</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QFrame" name="objectPreviewFrame">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>50</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::WinPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Sunken</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="objectTree">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>30</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="sizeAdjustPolicy">
+              <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+             </property>
+             <property name="dragDropMode">
+              <enum>QAbstractItemView::DragOnly</enum>
+             </property>
+             <column>
+              <property name="text">
+               <string>Entity</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Path</string>
+              </property>
+             </column>
+             <item>
+              <property name="text">
+               <string>player</string>
+              </property>
+              <property name="text">
+               <string>data/entities/player.py</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Enemies</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <item>
+               <property name="text">
+                <string>monster</string>
+               </property>
+               <property name="text">
+                <string>data/entities/enemies/monster1.py</string>
+               </property>
+              </item>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="editSourceButton">
+             <property name="text">
+              <string>E&amp;dit source</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_3">
+        <attribute name="title">
+         <string>&amp;Tiles</string>
+        </attribute>
+        <attribute name="toolTip">
+         <string>Select tiles to place on the map</string>
+        </attribute>
+        <widget class="QFrame" name="tilePreviewFrame">
+         <property name="geometry">
+          <rect>
+           <x>80</x>
+           <y>130</y>
+           <width>120</width>
+           <height>80</height>
+          </rect>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+        </widget>
+        <widget class="QTreeWidget" name="treeWidget">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>270</y>
+           <width>256</width>
+           <height>192</height>
+          </rect>
+         </property>
+         <column>
+          <property name="text">
+           <string>Tileset</string>
+          </property>
+         </column>
+         <item>
+          <property name="text">
+           <string>Directory</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>Subdirectory</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>tiles0.png</string>
+            </property>
+           </item>
+          </item>
+         </item>
+         <item>
+          <property name="text">
+           <string>Directory 2</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QPushButton" name="pushButton">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>480</y>
+           <width>93</width>
+           <height>28</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>PushButton</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
-         <string>Tab 2</string>
+         <string>&amp;Settings</string>
+        </attribute>
+        <attribute name="toolTip">
+         <string>Settings for this map</string>
         </attribute>
        </widget>
       </widget>
       <widget class="QFrame" name="frame">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>80</horstretch>
+         <horstretch>90</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -67,7 +224,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>816</width>
+     <width>978</width>
      <height>26</height>
     </rect>
    </property>
@@ -76,18 +233,26 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
     <addaction name="separator"/>
-    <addaction name="action_Quit"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSave_As"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
      <string>&amp;Edit</string>
     </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
    </widget>
    <widget class="QMenu" name="menu_View">
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <addaction name="actionGrid"/>
+    <addaction name="actionSnap"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -105,40 +270,146 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNew"/>
-   <addaction name="actionToggle_tools"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionGrid"/>
+   <addaction name="actionSnap"/>
   </widget>
   <action name="actionNew">
    <property name="text">
     <string>&amp;New</string>
    </property>
+   <property name="toolTip">
+    <string>Create a new map</string>
+   </property>
+   <property name="statusTip">
+    <string>Create a new map</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="action_Quit">
+  <action name="actionQuit">
    <property name="text">
     <string>&amp;Quit</string>
+   </property>
+   <property name="statusTip">
+    <string>Quit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionToggle_tools">
+  <action name="actionGrid">
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>Toggle tools</string>
+    <string>Show grid</string>
    </property>
    <property name="toolTip">
-    <string>Show/hide the Tools dialog</string>
+    <string>Show grid on map surface</string>
+   </property>
+   <property name="statusTip">
+    <string>Show grid on map surface</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionSnap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Snap to grid</string>
+   </property>
+   <property name="toolTip">
+    <string>Snap objects and tiles to the grid</string>
+   </property>
+   <property name="statusTip">
+    <string>Snap objects and tiles to the grid</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>&amp;Open</string>
+   </property>
+   <property name="toolTip">
+    <string>Open a map file</string>
+   </property>
+   <property name="statusTip">
+    <string>Open a map file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save the map</string>
+   </property>
+   <property name="statusTip">
+    <string>Save the map</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_As">
+   <property name="text">
+    <string>Save &amp;As</string>
+   </property>
+   <property name="toolTip">
+    <string>Save the map to a chosen file</string>
+   </property>
+   <property name="statusTip">
+    <string>Save the map to a chosen file</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="toolTip">
+    <string>Undo previous change to the map</string>
+   </property>
+   <property name="statusTip">
+    <string>Undo previous change to the map</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="toolTip">
+    <string>Redo next change to the map</string>
+   </property>
+   <property name="statusTip">
+    <string>Redo next change to the map</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>action_Quit</sender>
+   <sender>actionQuit</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>close()</slot>
