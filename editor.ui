@@ -340,7 +340,7 @@
     <string>Create a new map</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="actionQuit">
