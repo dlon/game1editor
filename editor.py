@@ -115,6 +115,11 @@ class Editor(QMainWindow):
 
 		self.currentState = self.editStates[0]
 		self.lastSavedState = self.editStates[0]
+	def closeEvent(self, event):
+		if self.saveIfWants():
+			event.accept()
+		else:
+			event.ignore()
 	def initSignals(self):
 		self.ui.actionNew.triggered.connect(self.new)
 		self.ui.actionOpen.triggered.connect(self.open)
