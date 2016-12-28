@@ -85,10 +85,10 @@ class EditState:
 		#	super(EditState, self).__setattr__(name, val)
 		super(EditState, self).__setattr__(name, val)
 
-class Editor(QMainWindow):
+class EditorWindow(QMainWindow):
 	def __init__(self):
 		# set up UI window
-		super(Editor, self).__init__()
+		super(EditorWindow, self).__init__()
 		self.ui = Ui_EditorWindow()
 		self.ui.setupUi(self)
 		
@@ -184,7 +184,7 @@ class Editor(QMainWindow):
 # create Qt application
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
-	editor = Editor()
+	editor = EditorWindow()
 
 	state = EditState(editor, objects = [{'type':'player', 'x':10, 'y':10}])
 	state2 = copy.deepcopy(state)
