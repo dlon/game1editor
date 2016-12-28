@@ -22,8 +22,8 @@
       </property>
       <widget class="QTabWidget" name="tabWidget">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-         <horstretch>10</horstretch>
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -413,10 +413,10 @@
         </widget>
        </widget>
       </widget>
-      <widget class="QFrame" name="frame">
+      <widget class="QFrame" name="mapSurfaceFrame">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>90</horstretch>
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>100</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>

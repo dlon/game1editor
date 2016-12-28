@@ -4,10 +4,11 @@ import pickle
 import sys
 
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget,
-	QFileDialog, QStyle, QMessageBox)
+	QFileDialog, QStyle, QMessageBox, QGridLayout)
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtGui
 from uiEditor import Ui_EditorWindow
+from mapSurface import MapSurface
 import icons_rc
 
 class EditorException(Exception):
@@ -99,6 +100,14 @@ class Editor(QMainWindow):
 		self.mapFile = ''
 		self.setWindowTitle('untitled[*] - game1 editor')
 		self.setWindowModified(True)
+		
+		# add window surface
+		self.mapSurfaceGrid = QGridLayout(self.ui.mapSurfaceFrame)
+		self.mapSurfaceGrid.setObjectName("mapSurfaceGrid")
+		#self.mapSurface = MapSurface(self.mapSurfaceGrid)
+		self.mapSurface = MapSurface(self.ui.mapSurfaceFrame)
+		self.mapSurface.setObjectName("mapSurface")
+		self.mapSurfaceGrid.addWidget(self.mapSurface)
 
 		# s
 		self.editStates = [EditState(self)] # list of edit states
