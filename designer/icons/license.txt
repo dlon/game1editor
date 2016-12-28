@@ -1,0 +1,16 @@
+icons designed by Darius Dan from Flaticon:
+	layout-4.png
+
+icons designed by madebyoliver from Flaticon:
+	file.png
+	folder-10.png
+	save.png
+	magnet-1.png
+	play-button.png
+
+icons designed by Freepik from Flaticon:
+	copy.png
+	paste.png
+	redo.png
+	undo.png
+	scissors.png

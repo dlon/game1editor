@@ -330,6 +330,10 @@
    <addaction name="actionRun"/>
   </widget>
   <action name="actionNew">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/file.png</normaloff>:/icons/file.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;New...</string>
    </property>
@@ -361,6 +365,10 @@
    <property name="checked">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/layout-4.png</normaloff>:/icons/layout-4.png</iconset>
+   </property>
    <property name="text">
     <string>Show grid</string>
    </property>
@@ -381,6 +389,10 @@
    <property name="checked">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/magnet-1.png</normaloff>:/icons/magnet-1.png</iconset>
+   </property>
    <property name="text">
     <string>Snap to grid</string>
    </property>
@@ -392,6 +404,10 @@
    </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/folder-10.png</normaloff>:/icons/folder-10.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Open...</string>
    </property>
@@ -406,6 +422,10 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Save</string>
    </property>
@@ -431,6 +451,10 @@
    </property>
   </action>
   <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/undo.png</normaloff>:/icons/undo.png</iconset>
+   </property>
    <property name="text">
     <string>Undo</string>
    </property>
@@ -445,6 +469,10 @@
    </property>
   </action>
   <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/redo.png</normaloff>:/icons/redo.png</iconset>
+   </property>
    <property name="text">
     <string>Redo</string>
    </property>
@@ -459,6 +487,10 @@
    </property>
   </action>
   <action name="actionCut">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/scissors.png</normaloff>:/icons/scissors.png</iconset>
+   </property>
    <property name="text">
     <string>Cu&amp;t</string>
    </property>
@@ -473,6 +505,10 @@
    </property>
   </action>
   <action name="actionCopy">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/copy.png</normaloff>:/icons/copy.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Copy</string>
    </property>
@@ -487,6 +523,10 @@
    </property>
   </action>
   <action name="actionPaste">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/paste.png</normaloff>:/icons/paste.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Paste</string>
    </property>
@@ -512,6 +552,10 @@
    </property>
   </action>
   <action name="actionRun">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/play-button.png</normaloff>:/icons/play-button.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Run...</string>
    </property>
@@ -526,7 +570,9 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionQuit</sender>

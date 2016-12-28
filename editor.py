@@ -3,8 +3,12 @@ import copy
 import pickle
 import sys
 
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QFileDialog)
-from ui_editor import Ui_EditorWindow
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget,
+	QFileDialog, QStyle)
+from PyQt5.QtGui import QIcon
+from PyQt5 import QtGui
+from uiEditor import Ui_EditorWindow
+import icons_rc
 
 class EditorException(Exception):
 	pass
