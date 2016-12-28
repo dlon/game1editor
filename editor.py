@@ -92,14 +92,11 @@ class EditorWindow(QMainWindow):
 		self.ui = Ui_EditorWindow()
 		self.ui.setupUi(self)
 		
-		self.ui.objectTree.expandAll()
-		self.ui.tilesetTree.expandAll()
-		
-		self.initSignals()
+		self._initTrees()
+		self._initSignals()
 
 		self.mapFile = ''
 		self.setWindowTitle('untitled[*] - game1 editor')
-		self.setWindowModified(True)
 		
 		# add window surface
 		self.mapSurfaceGrid = QGridLayout(self.ui.mapSurfaceFrame)
@@ -120,12 +117,15 @@ class EditorWindow(QMainWindow):
 			event.accept()
 		else:
 			event.ignore()
-	def initSignals(self):
+	def _initSignals(self):
 		self.ui.actionNew.triggered.connect(self.new)
 		self.ui.actionOpen.triggered.connect(self.open)
 		self.ui.actionSave.triggered.connect(self.save)
 		self.ui.actionSaveAs.triggered.connect(self.saveAs)
 		#self.ui.actionQuit.triggered.connect(self.quitIfWants)
+	def _initTrees(self):
+		self.ui.objectTree.expandAll()
+		self.ui.tilesetTree.expandAll()
 	def mapTitle(self):
 		return self.mapFile if self.mapFile else 'untitled'
 	def new(self):
@@ -137,7 +137,7 @@ class EditorWindow(QMainWindow):
 		if self.saveIfWants():
 			path, _ = QFileDialog.getOpenFileName(caption = "Open map", filter = "game1 maps (*.map)")
 			if path:
-				return self.openFile(path)
+				return self.loadFile(path)
 		return False
 	def save(self):
 		if self.mapFile:
@@ -148,7 +148,6 @@ class EditorWindow(QMainWindow):
 		if not file:
 			return False
 		return self.saveFile(file)
-	#def quitIfWants(self):
 	def saveIfWants(self):
 		# False: cancelled
 		if self.isWindowModified():
@@ -160,15 +159,17 @@ class EditorWindow(QMainWindow):
 			elif ret == QMessageBox.Cancel:
 				return False
 		return True
-	def openFile(self, path):
-		# return False if unsuccessful
+	def setPath(self, path):
+		self.mapFile = path
+		self.setWindowTitle('%s[*] - game1 editor' % path)
+		self.setWindowModified(False)
+	def loadFile(self, path):
 		print("open data here")
+		self.setPath(path)
 		return True
 	def saveFile(self, path):
-		# return False if unsuccessful
 		print("save data here")
-		print(path)
-		self.setWindowModified(False)
+		self.setPath(path)
 		return True
 	def isModified(self):
 		return not self.currentState.equals(self.lastSavedState)
