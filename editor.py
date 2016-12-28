@@ -4,7 +4,7 @@ import pickle
 import sys
 
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget,
-	QFileDialog, QStyle)
+	QFileDialog, QStyle, QMessageBox)
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtGui
 from uiEditor import Ui_EditorWindow
@@ -94,8 +94,11 @@ class Editor(QMainWindow):
 		self.ui.objectTree.expandAll()
 		self.ui.tilesetTree.expandAll()
 		
-		self.ui.actionOpen.triggered.connect(self.openFile)
-		self.ui.actionSaveAs.triggered.connect(self.saveAs)
+		self.initSignals()
+
+		self.mapFile = ''
+		self.setWindowTitle('untitled[*] - game1 editor')
+		self.setWindowModified(True)
 
 		# s
 		self.editStates = [EditState(self)] # list of edit states
@@ -103,13 +106,56 @@ class Editor(QMainWindow):
 
 		self.currentState = self.editStates[0]
 		self.lastSavedState = self.editStates[0]
-	def openFile(self):
-		path = QFileDialog.getOpenFileName(caption = "Open map", filter = "game1 maps (*.map)")
-		if path:
-			pass
+	def initSignals(self):
+		self.ui.actionNew.triggered.connect(self.new)
+		self.ui.actionOpen.triggered.connect(self.open)
+		self.ui.actionSave.triggered.connect(self.save)
+		self.ui.actionSaveAs.triggered.connect(self.saveAs)
+		#self.ui.actionQuit.triggered.connect(self.quitIfWants)
+	def mapTitle(self):
+		return self.mapFile if self.mapFile else 'untitled'
+	def new(self):
+		if self.saveIfWants():
+			# create new project
+			self.mapFile = ''
+			self.setWindowModified(False)
+	def open(self):
+		if self.saveIfWants():
+			path, _ = QFileDialog.getOpenFileName(caption = "Open map", filter = "game1 maps (*.map)")
+			if path:
+				return self.openFile(path)
+		return False
+	def save(self):
+		if self.mapFile:
+			return self.saveFile(self.mapFile)
+		return self.saveAs()
 	def saveAs(self):
-		file = QFileDialog.getSaveFileName(caption = "Save map", filter = "game1 maps (*.map)")
-		print(file)
+		file, _ = QFileDialog.getSaveFileName(caption = "Save map", filter = "game1 maps (*.map)")
+		if not file:
+			return False
+		return self.saveFile(file)
+	#def quitIfWants(self):
+	def saveIfWants(self):
+		# False: cancelled
+		if self.isWindowModified():
+			ret = QMessageBox.warning(self, "Save",
+				"Save %s?" % self.mapTitle(),
+				QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
+			if ret == QMessageBox.Save:
+				return self.save()
+			elif ret == QMessageBox.Cancel:
+				return False
+		return True
+	def openFile(self, path):
+		# return False if unsuccessful
+		print("open data here")
+		return True
+	def saveFile(self, path):
+		# return False if unsuccessful
+		print("save data here")
+		print(path)
+		self.setWindowModified(False)
+		return True
 	def isModified(self):
 		return not self.currentState.equals(self.lastSavedState)
 	#def canRedo(self):
