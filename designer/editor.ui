@@ -28,7 +28,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="documentMode">
         <bool>true</bool>
@@ -157,26 +157,6 @@
                   <string>Tileset</string>
                  </property>
                 </column>
-                <item>
-                 <property name="text">
-                  <string>Directory</string>
-                 </property>
-                 <item>
-                  <property name="text">
-                   <string>Subdirectory</string>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>tiles0.png</string>
-                   </property>
-                  </item>
-                 </item>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Directory 2</string>
-                 </property>
-                </item>
                </widget>
               </widget>
              </item>

@@ -140,6 +140,11 @@ class EditorWindow(QMainWindow):
 			objectTree = json.load(f)
 		self._addObjectTreeDir(objectTree)
 		self.ui.objectTree.expandAll()
+		with open("tilesets.json") as f:
+			tilesetTree = json.load(f)
+		for tileset in tilesetTree:
+			QTreeWidgetItem(self.ui.tilesetTree,
+				[tilesetTree[tileset]])
 		self.ui.tilesetTree.expandAll()
 	def mapTitle(self):
 		return self.mapFile if self.mapFile else 'untitled'
