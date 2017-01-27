@@ -3,12 +3,13 @@ import copy
 import pickle
 import sys
 
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget,
-	QFileDialog, QStyle, QMessageBox, QGridLayout)
+from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtGui
+
 from uiEditor import Ui_EditorWindow
 from mapSurface import MapSurface
+import entities
 import icons_rc
 
 class EditorException(Exception):
@@ -124,6 +125,7 @@ class EditorWindow(QMainWindow):
 		self.ui.actionSaveAs.triggered.connect(self.saveAs)
 		#self.ui.actionQuit.triggered.connect(self.quitIfWants)
 	def _initTrees(self):
+		self.ui.objectTree.addTopLevelItems(QTreeWidgetItem(e) for e in [1,2,3])
 		self.ui.objectTree.expandAll()
 		self.ui.tilesetTree.expandAll()
 	def mapTitle(self):

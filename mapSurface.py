@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QApplication
-from PyQt5.QtGui import QPainter, QImage
+from PyQt5.QtGui import QPainter, QImage, QBrush, QColor
 import sys
 
 class MapSurface(QWidget):
@@ -13,5 +13,6 @@ class MapSurface(QWidget):
 	def paintEvent(self, event):
 		qp = QPainter()
 		qp.begin(self)
+		qp.fillRect(0,0,self.width(),self.height(), QColor(255,255,255))
 		qp.drawImage(0, 0, self.image)
 		qp.end()
