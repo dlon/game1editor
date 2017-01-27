@@ -2,6 +2,7 @@
 import copy
 import pickle
 import sys
+import json
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
@@ -124,8 +125,20 @@ class EditorWindow(QMainWindow):
 		self.ui.actionSave.triggered.connect(self.save)
 		self.ui.actionSaveAs.triggered.connect(self.saveAs)
 		#self.ui.actionQuit.triggered.connect(self.quitIfWants)
+	def _addObjectTreeDir(self, dir, parent=None):
+		if not parent:
+			parent = self.ui.objectTree
+		for object in dir['objects']:
+			QTreeWidgetItem(parent,
+				[object, dir['objects'][object]['script']])
+		for subdir in dir['subdirs']:
+			subNode = QTreeWidgetItem(parent, [subdir])
+			self._addObjectTreeDir(dir['subdirs'][subdir],
+				subNode)
 	def _initTrees(self):
-		self.ui.objectTree.addTopLevelItems(QTreeWidgetItem(e) for e in [1,2,3])
+		with open("entities.json") as f:
+			objectTree = json.load(f)
+		self._addObjectTreeDir(objectTree)
 		self.ui.objectTree.expandAll()
 		self.ui.tilesetTree.expandAll()
 	def mapTitle(self):

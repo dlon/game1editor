@@ -83,30 +83,6 @@
                <string>Path</string>
               </property>
              </column>
-             <item>
-              <property name="text">
-               <string>player</string>
-              </property>
-              <property name="text">
-               <string>data/entities/player.py</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Enemies</string>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <item>
-               <property name="text">
-                <string>monster</string>
-               </property>
-               <property name="text">
-                <string>data/entities/enemies/monster1.py</string>
-               </property>
-              </item>
-             </item>
             </widget>
            </item>
            <item>

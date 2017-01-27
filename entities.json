@@ -1,0 +1,22 @@
+{
+    "objects": {
+        "Player": {
+            "image": "data/playerStill.png",
+            "script": "entities/player.py"
+        }
+    },
+    "subdirs": {
+        "enemies": {
+            "objects": {
+                "Monster": {
+                    "image": {
+                        "file": "data/hudHeart.png",
+                        "w": 16
+                    },
+                    "script": "entities/enemies/monster.py"
+                }
+            },
+            "subdirs": {}
+        }
+    }
+}
