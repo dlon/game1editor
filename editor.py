@@ -3,7 +3,9 @@ import copy
 import pickle
 import sys
 import json
+import os
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtGui
@@ -12,80 +14,105 @@ from uiEditor import Ui_EditorWindow
 from mapSurface import MapSurface
 import entities
 import icons_rc
+from objectPreview import QObjectPreview
 
 class EditorException(Exception):
 	pass
 
-class EditStateContainer:
-	'''pseudo-container used by EditState to track changes'''
-	def __init__(self, container_type, callback = None):
-		self.container = container_type()
-	def __getattr__(self, key):
-		print('notify parent here!')
-		# FIXME: not attributes that make no edits
-		return getattr(self.container, key)
-	def __getitem__(self, key):
-		return self.container[key]
-	def __setitem__(self, key, val):
-		print('notify parent here!')
-		self.container[key] = val
-	def setCallback(self, fn):
-		self.cb = fn
+class TrackedStruct:
+	def __init__(self, ds, observer):
+		self._ds = ds
+		self._observer = observer
+	def __len__(self):
+		return len(self._ds)
+	def __contains__(self, i):
+		return i in self._ds
+	def __getitem__(self, k):
+		return self._ds[k]
+	def __setitem__(self, k, v):
+		oldds = self._ds.copy()
+		self._ds[k] = v
+		self._observer.onChange(self._ds, oldds)
+	def __delitem__(self, k):
+		oldds = self._ds.copy()
+		del self._ds[k]
+		self._observer.onChange(self._ds, oldds)
+	def append(self, item):
+		oldds = self._ds.copy()
+		self._ds.append(item)
+		self._observer.onChange(self._ds, oldds)
 
-l = EditStateContainer(list)
-l.append(5)
-print(l[0])
-d = EditStateContainer(dict)
-d['a'] = 10
-print(d['a'])
+class Map:
+	def __init__(self):
+		tiles = TrackedStruct([], self)
+		objects = TrackedStruct([], self)
+		settings = TrackedStruct({
+			'width':100,
+			'height':100,
+		}, self)
+	def onChange(self, ds, oldds):
+		print('change observed!', ds, oldds)
+	def onchange(self, obj):
+		print('onchange')
+	def addTile(self, tile):
+		pass
+	def export(self):
+		return {
+			'settings': {},
+		}
 
-class EditState:
-	'''stores map data and detects changes to them'''
-	_stateAttributes = ("height", "width", "objects",)
-	_observe = False
-	def __init__(self, editor, **kwargs):
-		self._editor = editor
-		self._pickleRequest = False
-		# set defaults
-		#self._data = dict()
-		self.height = 100
-		self.width = 100
-		self.objects = []
-		# set keyword values
+class MapTrackable:
+	map = None
+	def __init__(self, map, *args):
+		for k in args:
+			setattr(self, k, args[k])
+		self.map = map
+	def __setattr__(self, k, v):
+		self.__dict__[k] = v
+		if self.map:
+			self.map.onchange(self)
+
+#mt = MapTrackable(Map(), x=0,y=0, w=16,h=16, xOffset=0,yOffset=0)
+#mt.w = 10
+
+class MapObject:
+	def __init__(self, **kwargs):
+		self.x = kwargs['x']
+		self.y = kwargs['y']
+		self.creationCode = kwargs['creationCode']
+	def dump(self):
+		o = {
+			'x': self.x,
+			'y': self.y,
+		}
+		if self.creationCode:
+			o['creationCode'] = self.creationCode
+		return o
+class MapTile:
+	def __init__(self, **kwargs):
 		for k,v in kwargs.items():
-			setattr(self, k, v)
-		# inform editor of changes
-		self._observe = True
-	def __deepcopy__(self, memo):
-		# only deep-copy map state (i.e. not the editor)
-		new = EditState(self._editor)
-		new._observe = False
-		for a in self._stateAttributes:
-			setattr(new, a, copy.deepcopy(getattr(self, a), memo))
-		new._observe = True
-		return new
-	def equals(self, otherState):
-		# compares two EditStates (by value, if necessary)
-		if self == otherState: return True
-		return pickle.dumps(self) == pickle.dumps(otherState)
-	'''
-	def __getattr__(self, name):
-		attr = super(EditState, self).__getattr__(name)
-		if type(attr) in (list, dict):
-			print(1)
-			attr = EditStateContainer(attr)
-		return attr
-	'''
-	def __setattr__(self, name, val):
-		if name[0] != '_':
-			if name not in self._stateAttributes:
-				raise EditorException("EditState: no such attribute: %s" % name)
-			if self._observe:
-				self._editor.stateBeforeChange(self, name, val)
-		#	self._data[name] = val
-		#else:
-		#	super(EditState, self).__setattr__(name, val)
-		super(EditState, self).__setattr__(name, val)
+			self.__dict__[k] = v
+	def dump(self):
+		return {
+			'x': self.x,
+			'y': self.y,
+			'w': self.w,
+			'h': self.h,
+			'xOffset': self.xOffset,
+			'yOffset': self.yOffset,
+		}
+
+editState = {
+	'settings': {
+		'width': 100,
+		'height': 100,
+	},
+	'objects': [],
+	'tiles': [],
+}
+
+print(MapObject(**{'x':0,'y':0,'creationCode':'hello'}).dump())
+print(MapTile(x=0,y=0,w=16,h=16,xOffset=0,yOffset=0).dump())
 
 class EditorWindow(QMainWindow):
 	def __init__(self):
@@ -93,27 +120,28 @@ class EditorWindow(QMainWindow):
 		super(EditorWindow, self).__init__()
 		self.ui = Ui_EditorWindow()
 		self.ui.setupUi(self)
-		
+
 		self._initTrees()
 		self._initSignals()
 
 		self.mapFile = ''
 		self.setWindowTitle('untitled[*] - game1 editor')
-		
+
 		# add window surface
 		self.mapSurfaceGrid = QGridLayout(self.ui.mapSurfaceFrame)
 		self.mapSurfaceGrid.setObjectName("mapSurfaceGrid")
-		#self.mapSurface = MapSurface(self.mapSurfaceGrid)
 		self.mapSurface = MapSurface(self.ui.mapSurfaceFrame)
 		self.mapSurface.setObjectName("mapSurface")
 		self.mapSurfaceGrid.addWidget(self.mapSurface)
 
 		# s
-		self.editStates = [EditState(self)] # list of edit states
+		#self.editStates = [EditState(self)] # list of edit states
 		# an edit state contains options that can be undone (Ctrl-Z)
 
-		self.currentState = self.editStates[0]
-		self.lastSavedState = self.editStates[0]
+		#self.currentState = self.editStates[0]
+		#self.lastSavedState = self.editStates[0]
+
+		self.ui.objectTree.currentItemChanged.connect(self.ui.objectPreviewFrame.setImage)
 	def closeEvent(self, event):
 		if self.saveIfWants():
 			event.accept()
@@ -129,8 +157,13 @@ class EditorWindow(QMainWindow):
 		if not parent:
 			parent = self.ui.objectTree
 		for object in dir['objects']:
-			QTreeWidgetItem(parent,
+			item = QTreeWidgetItem(parent,
 				[object, dir['objects'][object]['script']])
+			if type(dir['objects'][object]['image']) == str:
+				dir['objects'][object]['image'] = '../%s' % dir['objects'][object]['image']
+			else:
+				dir['objects'][object]['image']['file'] = '../%s' % dir['objects'][object]['image']['file']
+			item.setData(0, Qt.UserRole, dir['objects'][object]['image'])
 		for subdir in dir['subdirs']:
 			subNode = QTreeWidgetItem(parent, [subdir])
 			self._addObjectTreeDir(dir['subdirs'][subdir],
@@ -188,7 +221,11 @@ class EditorWindow(QMainWindow):
 		self.setPath(path)
 		return True
 	def saveFile(self, path):
-		print("save data here")
+		with open(path,'w') as f:
+			json.put({
+				'objects': objects,
+				
+			}, f)
 		self.setPath(path)
 		return True
 	def isModified(self):
@@ -206,16 +243,5 @@ class EditorWindow(QMainWindow):
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	editor = EditorWindow()
-
-	state = EditState(editor, objects = [{'type':'player', 'x':10, 'y':10}])
-	state2 = copy.deepcopy(state)
-	print('state == state2?', state.equals(state2))
-	state2.objects[0]['x'] = 20 # FIXME: change not detected
-	print('state == state2?', state.equals(state2))
-
-	# EditState: could instead have 'onChange(self, fn)'
-	# Editor: state = EditState()
-	#	state.onChange(self.stateChange)
-
 	editor.show()
 	sys.exit(app.exec_())
