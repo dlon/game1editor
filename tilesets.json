@@ -1,4 +1,8 @@
 {
-    "castle": "data/tileset1.png",
-    "happy": "data/tileset0.png"
+    "castle": "tileset1.png",
+    "electronics": "tilesetElectronics.png",
+    "happy": "tileset0.png",
+    "overworld": "tilesetOverworld.png",
+    "room16": "tilesetRoom16.png",
+    "shop": "tilesetShop.png"
 }

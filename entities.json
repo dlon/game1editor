@@ -1,19 +1,48 @@
 {
     "objects": {
+        "Falltrap": {
+            "image": "",
+            "script": "entities/falltrap.py"
+        },
+        "Lava": {
+            "image": "",
+            "script": "entities/lava.py"
+        },
+        "LiftableGrass": {
+            "image": "",
+            "script": "entities/happyPlanet.py"
+        },
+        "MovingPlatform": {
+            "image": "",
+            "script": "entities/movingPlatform.py"
+        },
         "Player": {
-            "image": "data/playerStill.png",
+            "image": "data\\playerStill.png",
             "script": "entities/player.py"
+        },
+        "SwitchLeft": {
+            "image": "",
+            "script": "entities/switch.py"
+        },
+        "SwitchRight": {
+            "image": "",
+            "script": "entities/switch.py"
+        },
+        "Teleporter": {
+            "image": "",
+            "script": "entities/teleporter.py"
+        },
+        "Water": {
+            "image": "",
+            "script": "entities/water.py"
         }
     },
     "subdirs": {
         "enemies": {
             "objects": {
-                "Monster": {
-                    "image": {
-                        "file": "data/hudHeart.png",
-                        "w": 16
-                    },
-                    "script": "entities/enemies/monster.py"
+                "Enemy0": {
+                    "image": "",
+                    "script": "entities/enemies/enemy0.py"
                 }
             },
             "subdirs": {}

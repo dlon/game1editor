@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import copy
-import pickle
 import sys
 import json
 import os
@@ -11,7 +10,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5 import QtGui
 
 from uiEditor import Ui_EditorWindow
-from mapSurface import MapSurface
+from mapSurface import MapSurface, MapObject, MapTile
 import entities
 import icons_rc
 from objectPreview import QObjectPreview
@@ -75,33 +74,6 @@ class MapTrackable:
 #mt = MapTrackable(Map(), x=0,y=0, w=16,h=16, xOffset=0,yOffset=0)
 #mt.w = 10
 
-class MapObject:
-	def __init__(self, **kwargs):
-		self.x = kwargs['x']
-		self.y = kwargs['y']
-		self.creationCode = kwargs['creationCode']
-	def dump(self):
-		o = {
-			'x': self.x,
-			'y': self.y,
-		}
-		if self.creationCode:
-			o['creationCode'] = self.creationCode
-		return o
-class MapTile:
-	def __init__(self, **kwargs):
-		for k,v in kwargs.items():
-			self.__dict__[k] = v
-	def dump(self):
-		return {
-			'x': self.x,
-			'y': self.y,
-			'w': self.w,
-			'h': self.h,
-			'xOffset': self.xOffset,
-			'yOffset': self.yOffset,
-		}
-
 editState = {
 	'settings': {
 		'width': 100,
@@ -111,7 +83,9 @@ editState = {
 	'tiles': [],
 }
 
-print(MapObject(**{'x':0,'y':0,'creationCode':'hello'}).dump())
+mo=MapObject(**{'editor':None,'x':0,'y':0,'creationCode':'hello'})
+mo.x = 10
+print(mo.dump())
 print(MapTile(x=0,y=0,w=16,h=16,xOffset=0,yOffset=0).dump())
 
 class EditorWindow(QMainWindow):

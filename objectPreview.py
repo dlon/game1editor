@@ -1,11 +1,12 @@
 from PyQt5.QtWidgets import QFrame
-from PyQt5.QtGui import QColor, QPainter, QImage
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor, QPainter, QImage, QDrag, QPixmap
+from PyQt5.QtCore import Qt, QMimeData
 
 class QObjectPreview(QFrame):
 	def __init__(self, parent):
 		super().__init__(parent)
 		self.image = QImage()
+		self.type = ''
 	def setImage(self, treeItem):
 		image = treeItem.data(0, Qt.UserRole)
 		if not image:
@@ -13,6 +14,7 @@ class QObjectPreview(QFrame):
 		# TODO: handle subimages correctly
 		if type(image) == dict:
 			image = image['file']
+		self.type = treeItem.text(0)
 		self.image.load(image)
 		self.repaint()
 	def paintEvent(self, event):
@@ -23,3 +25,26 @@ class QObjectPreview(QFrame):
 			rect.top() + rect.height()/2 - self.image.height()/2,
 			self.image
 		)
+	def mousePressEvent(self, ev):
+		if not self.type:
+			return
+		mimeData = QMimeData()
+		mimeData.setData('application/x-game1dndobject', self.type.encode('latin1'))
+		drag = QDrag(self)
+		drag.setMimeData(mimeData)
+		drag.setPixmap(QPixmap.fromImage(self.image))
+		drag.setHotSpot(self.image.rect().bottomRight()/2)
+		drag.exec(Qt.MoveAction)
+	def dragEnterEvent(self, ev):
+		print('amhere1')
+		if ev.source() == self:
+			ev.setDropAction(Qt.MoveAction)
+		else:
+			ev.ignore()
+	def dragMoveEvent(self, ev):
+		#if ev.mimeData().hasFormat('application/x-game1dndobject')
+		print('amhere')
+		if ev.source() == self:
+			ev.setDropAction(Qt.MoveAction)
+		else:
+			ev.ignore()
