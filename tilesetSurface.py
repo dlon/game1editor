@@ -11,6 +11,8 @@ class QTilesetSurface(QFrame):
 		self.selection = QRect()
 		self.image.load("../data/%s" % treeItem.text(0))
 		self.repaint()
+	def handleMapSurfaceClick(self):
+		print("tileset: clicked map surface")
 	def paintEvent(self, event):
 		super().paintEvent(event)
 		painter = QPainter(self)
