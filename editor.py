@@ -116,6 +116,8 @@ class EditorWindow(QMainWindow):
 
 		self.ui.objectTree.currentItemChanged.connect(self.ui.objectPreviewFrame.setImage)
 		self.ui.tilesetTree.currentItemChanged.connect(self.ui.tilePreviewFrame.setImage)
+		self.ui.widthSetting.textChanged.connect(self.mapSurface.setWidth)
+		self.ui.heightSetting.textChanged.connect(self.mapSurface.setHeight)
 		self.mapSurface.clicked.connect(self.ui.tilePreviewFrame.handleMapSurfaceClick)
 	def closeEvent(self, event):
 		if self.saveIfWants():

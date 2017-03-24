@@ -63,6 +63,18 @@ class MapSurface(QWidget):
 		self.backgroundColor = QColor(255,255,255)
 		self.tiles = []
 		self.objects = []
+	def setWidth(self, width):
+		try:
+			self.setMinimumSize(int(width), self.height())
+			self.setMaximumSize(int(width), self.height())
+		except ValueError:
+			pass
+	def setHeight(self, height):
+		try:
+			self.setMinimumSize(self.width(), int(height))
+			self.setMaximumSize(self.width(), int(height))
+		except ValueError:
+			pass
 	def addTile(self, tile):
 		self.tiles.append(tile)
 		self.repaint()
