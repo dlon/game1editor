@@ -21,15 +21,29 @@ class QTilesetSurface(QFrame):
 		)
 		painter.setPen(QColor(255,0,0))
 		painter.drawRect(self.selection)
+	def mouseMoveEvent(self, e):
+		if not (e.buttons() & Qt.LeftButton):
+			return
+		self.selection.setWidth(min(max(
+			16+16*int(e.x()/16) - self.selection.x(),
+			16,
+		), self.image.width()))
+		self.selection.setHeight(min(max(
+			16+16*int(e.y()/16) - self.selection.y(),
+			16,
+		), self.image.height()))
+		self.update()
 	def mousePressEvent(self, e):
 		if self.image.isNull():
 			return
+		self.selection.setX(16*int(e.x()/16))
+		self.selection.setY(16*int(e.y()/16))
 		self.selection.setWidth(min(
-			16+16*int(e.x()/16),
-			self.image.width(),
+			self.image.width() - 16*int(e.x()/16),
+			16,
 		))
 		self.selection.setHeight(min(
-			16+16*int(e.y()/16),
-			self.image.height(),
+			self.image.height() - 16*int(e.y()/16),
+			16,
 		))
 		self.update()
