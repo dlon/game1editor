@@ -83,11 +83,6 @@ editState = {
 	'tiles': [],
 }
 
-mo=MapObject(**{'editor':None,'x':0,'y':0,'creationCode':'hello'})
-mo.x = 10
-print(mo.dump())
-print(MapTile(x=0,y=0,w=16,h=16,xOffset=0,yOffset=0).dump())
-
 class EditorWindow(QMainWindow):
 	def __init__(self):
 		# set up UI window
@@ -116,6 +111,7 @@ class EditorWindow(QMainWindow):
 		#self.lastSavedState = self.editStates[0]
 
 		self.ui.objectTree.currentItemChanged.connect(self.ui.objectPreviewFrame.setImage)
+		self.ui.tilesetTree.currentItemChanged.connect(self.ui.tilePreviewFrame.setImage)
 	def closeEvent(self, event):
 		if self.saveIfWants():
 			event.accept()

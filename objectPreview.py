@@ -18,6 +18,7 @@ class QObjectPreview(QFrame):
 		self.image.load(image)
 		self.repaint()
 	def paintEvent(self, event):
+		super().paintEvent(event)
 		painter = QPainter(self)
 		rect = self.contentsRect()
 		painter.drawImage(

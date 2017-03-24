@@ -131,7 +131,7 @@
                <property name="orientation">
                 <enum>Qt::Vertical</enum>
                </property>
-               <widget class="QFrame" name="tilePreviewFrame">
+               <widget class="QTilesetSurface" name="tilePreviewFrame">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
                   <horstretch>0</horstretch>
@@ -699,6 +699,12 @@
    <class>QObjectPreview</class>
    <extends>QFrame</extends>
    <header>objectPreview</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QTilesetSurface</class>
+   <extends>QFrame</extends>
+   <header>tilesetSurface</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

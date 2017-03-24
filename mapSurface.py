@@ -9,6 +9,7 @@ class MapObject:
 		self.x = kwargs['x']
 		self.y = kwargs['y']
 		self.creationCode = kwargs['creationCode']
+		self.type = kwargs["type"]
 		self.init = True
 	def __setattr__(self, k, v):
 		if self.init:
@@ -52,5 +53,5 @@ class MapSurface(QWidget):
 		qp.begin(self)
 		qp.fillRect(0,0,self.width(),self.height(), QColor(255,255,255))
 		for object in self.objects:
-			qp.drawImage(0, 0, self.object)
+			qp.drawImage(0, 0, object.image)
 		qp.end()
