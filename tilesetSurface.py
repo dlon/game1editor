@@ -2,17 +2,34 @@ from PyQt5.QtWidgets import QFrame
 from PyQt5.QtGui import QColor, QPainter, QImage, QDrag, QPixmap
 from PyQt5.QtCore import Qt, QMimeData, QRect
 
+from mapSurface import MapTile
+
 class QTilesetSurface(QFrame):
 	def __init__(self, parent):
 		super().__init__(parent)
 		self.image = QImage()
+		self.tileset = ''
 		self.selection = QRect()
 	def setImage(self, treeItem):
 		self.selection = QRect()
 		self.image.load("../data/%s" % treeItem.text(0))
+		self.tileset = treeItem.text(0)
 		self.repaint()
-	def handleMapSurfaceClick(self):
-		print("tileset: clicked map surface")
+	def handleMapSurfaceClick(self, mapSurface, position, selectedObject):
+		if self.image.isNull() or self.selection.isNull():
+			return
+		if not selectedObject:
+			print("tilesetSurface: adding tile to map surface")
+			mapSurface.addTile(self.createTile(position))
+	def createTile(self, position):
+		if self.image.isNull() or self.selection.isNull():
+			return None
+		return MapTile(
+			tilesetPath=self.tileset,
+			tilesetImage=self.image,
+			subImageRect=self.selection,
+			position=position,
+		)
 	def paintEvent(self, event):
 		super().paintEvent(event)
 		painter = QPainter(self)

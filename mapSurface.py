@@ -28,34 +28,53 @@ class MapObject:
 			o['creationCode'] = self.creationCode
 		return o
 class MapTile:
-	def __init__(self, **kwargs):
-		for k,v in kwargs.items():
-			self.__dict__[k] = v
+	def __init__(self,
+		tilesetPath,
+		tilesetImage,
+		subImageRect,
+		position=(0,0),
+		solid=True):
+		self.tileset = tilesetPath
+		self.image = tilesetImage
+		self.position = position
+		self.subImageRect = subImageRect
+		self.solid = solid
 	def dump(self):
 		return {
+			'tileset': self.tileset,
 			'x': self.x,
 			'y': self.y,
 			'w': self.w,
 			'h': self.h,
-			'xOffset': self.xOffset,
-			'yOffset': self.yOffset,
+			'tx': self.subImageRect.x(),
+			'ty': self.subImageRect.y(),
+			'tw': self.subImageRect.width(),
+			'th': self.subImageRect.height(),
+			'solid': self.solid,
 		}
 
 class MapSurface(QWidget):
-	clicked = pyqtSignal()
+	clicked = pyqtSignal([object, tuple, object])
 	def __init__(self, parent):
 		QWidget.__init__(self, parent)
-		#self.setGeometry(300, 300, 200, 200)
+		#self.setGeometry(5, 5, 200, 1000)
 		#self.show()
-		self.image = QImage("player_run.bmp")
+		self.resize(1000,10)
+		self.backgroundColor = QColor(255,255,255)
 		self.tiles = []
 		self.objects = []
+	def addTile(self, tile):
+		self.tiles.append(tile)
 	def paintEvent(self, event):
 		qp = QPainter()
 		qp.begin(self)
-		qp.fillRect(0,0,self.width(),self.height(), QColor(255,255,255))
+		qp.fillRect(0,0,self.width(),self.height(), self.backgroundColor)
 		for object in self.objects:
 			qp.drawImage(0, 0, object.image)
 		qp.end()
 	def mousePressEvent(self, e):
-		self.clicked.emit()
+		self.clicked.emit(
+			self,
+			(e.x(), e.y()),
+			None,
+		)

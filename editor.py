@@ -97,11 +97,15 @@ class EditorWindow(QMainWindow):
 		self.setWindowTitle('untitled[*] - game1 editor')
 
 		# add window surface
-		self.mapSurfaceGrid = QGridLayout(self.ui.mapSurfaceFrame)
-		self.mapSurfaceGrid.setObjectName("mapSurfaceGrid")
-		self.mapSurface = MapSurface(self.ui.mapSurfaceFrame)
-		self.mapSurface.setObjectName("mapSurface")
-		self.mapSurfaceGrid.addWidget(self.mapSurface)
+		#self.mapSurfaceGrid = QGridLayout(self.ui.mapSurfaceFrame)
+		#self.mapSurfaceGrid.setObjectName("mapSurfaceGrid")
+		#self.mapSurface = MapSurface(self.ui.mapSurfaceFrame)
+		#self.mapSurface.setObjectName("mapSurface")
+		#self.mapSurfaceGrid.addWidget(self.mapSurface)
+		self.mapSurface = MapSurface(None)
+		self.mapSurface.setMinimumSize(100,1000)
+		self.mapSurface.setMaximumSize(100,1000)
+		self.ui.scrollArea.setWidget(self.mapSurface)
 
 		# s
 		#self.editStates = [EditState(self)] # list of edit states
