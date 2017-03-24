@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QFrame
 from PyQt5.QtGui import QColor, QPainter, QImage, QDrag, QPixmap
-from PyQt5.QtCore import Qt, QMimeData, QRect
+from PyQt5.QtCore import Qt, QMimeData, QRect, QPoint
 
 from mapSurface import MapTile
 

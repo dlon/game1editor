@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtGui import QPainter, QImage, QBrush, QColor
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QPoint
 import sys
 
 class MapObject:
@@ -32,7 +32,7 @@ class MapTile:
 		tilesetPath,
 		tilesetImage,
 		subImageRect,
-		position=(0,0),
+		position,
 		solid=True):
 		self.tileset = tilesetPath
 		self.image = tilesetImage
@@ -54,7 +54,7 @@ class MapTile:
 		}
 
 class MapSurface(QWidget):
-	clicked = pyqtSignal([object, tuple, object])
+	clicked = pyqtSignal([object, QPoint, object])
 	def __init__(self, parent):
 		QWidget.__init__(self, parent)
 		#self.setGeometry(5, 5, 200, 1000)
@@ -65,16 +65,24 @@ class MapSurface(QWidget):
 		self.objects = []
 	def addTile(self, tile):
 		self.tiles.append(tile)
+		self.repaint()
 	def paintEvent(self, event):
+		super().paintEvent(event)
 		qp = QPainter()
 		qp.begin(self)
 		qp.fillRect(0,0,self.width(),self.height(), self.backgroundColor)
 		for object in self.objects:
 			qp.drawImage(0, 0, object.image)
+		for tile in self.tiles:
+			qp.drawImage(
+				tile.position,
+				tile.image,
+				tile.subImageRect,
+			)
 		qp.end()
 	def mousePressEvent(self, e):
 		self.clicked.emit(
 			self,
-			(e.x(), e.y()),
+			e.pos(),
 			None,
 		)
