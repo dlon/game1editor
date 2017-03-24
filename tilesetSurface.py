@@ -8,6 +8,7 @@ class QTilesetSurface(QFrame):
 		self.image = QImage()
 		self.selection = QRect()
 	def setImage(self, treeItem):
+		self.selection = QRect()
 		self.image.load("../data/%s" % treeItem.text(0))
 		self.repaint()
 	def paintEvent(self, event):
