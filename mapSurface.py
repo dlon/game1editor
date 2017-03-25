@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtGui import QPainter, QImage, QBrush, QColor
-from PyQt5.QtCore import pyqtSignal, QPoint, QRect, QSize
+from PyQt5.QtCore import pyqtSignal, QPoint, QRect, QSize, Qt
 import sys
 
 class MapObject:
@@ -102,6 +102,18 @@ class MapSurface(QWidget):
 			qp.setPen(QColor(255,0,0))
 			qp.drawRect(self.selectedObject.rect)
 		qp.end()
+	def mouseMoveEvent(self, e):
+		if not (e.buttons() & Qt.LeftButton) or \
+			not self.selectedObject:
+			return
+		position = e.pos()
+		if self.window().ui.actionSnap.isChecked():
+			position = QPoint(
+				16*int(position.x() / 16),
+				16*int(position.y() / 16),
+			)
+		self.selectedObject.rect.moveTo(position)
+		self.update()
 	def mousePressEvent(self, e):
 		self.selectedObject = None
 		for tile in self.tiles:
