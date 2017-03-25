@@ -24,6 +24,11 @@ class QTilesetSurface(QFrame):
 	def createTile(self, position):
 		if self.image.isNull() or self.selection.isNull():
 			return None
+		if self.window().ui.actionSnap.isChecked():
+			position = QPoint(
+				16*int(position.x() / 16),
+				16*int(position.y() / 16),
+			)
 		return MapTile(
 			tilesetPath=self.tileset,
 			tilesetImage=self.image,
