@@ -110,7 +110,7 @@ class MapSurface(QWidget):
 		if not (e.buttons() & Qt.LeftButton) or \
 			not self.selectedObject:
 			return
-		position = e.pos()
+		position = e.pos() - self.dragOffset
 		if not (e.modifiers() & Qt.ShiftModifier) and \
 			self.window().ui.actionSnap.isChecked():
 			position = QPoint(
@@ -170,6 +170,8 @@ class MapSurface(QWidget):
 		)
 		if self.selectedObject and e.button() == Qt.RightButton:
 			self.showContextMenu(e.globalPos())
+		if self.selectedObject:
+			self.dragOffset = e.pos() - self.selectedObject.rect.topLeft()
 	def deleteSelected(self):
 		if self.selectedObject:
 			if self.selectedObject in self.objects:
