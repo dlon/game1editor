@@ -111,7 +111,8 @@ class MapSurface(QWidget):
 			not self.selectedObject:
 			return
 		position = e.pos()
-		if self.window().ui.actionSnap.isChecked():
+		if not (e.modifiers() & Qt.ShiftModifier) and \
+			self.window().ui.actionSnap.isChecked():
 			position = QPoint(
 				16*int(position.x() / 16),
 				16*int(position.y() / 16),
