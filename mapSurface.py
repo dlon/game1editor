@@ -16,6 +16,7 @@ class MapObject:
 			),
 		)
 		self.image = image
+		self.creationCode = ""
 	def dump(self):
 		o = {
 			'type': self.type,
@@ -124,7 +125,10 @@ class MapSurface(QWidget):
 		dialog = QDialog(self.window())
 		editor = Ui_CodeEditor()
 		editor.setupUi(dialog)
-		dialog.show()
+		editor.code.setText(self.selectedObject.creationCode)
+		ret = dialog.exec_()
+		if ret == dialog.Accepted:
+			self.selectedObject.creationCode = editor.code.toPlainText()
 	def showContextMenu(self, pos):
 		if not self.selectedObject:
 			return
