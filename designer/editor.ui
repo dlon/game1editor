@@ -729,6 +729,7 @@
  </customwidgets>
  <resources>
   <include location="icons.qrc"/>
+  <include location="editor.qrc"/>
  </resources>
  <connections>
   <connection>

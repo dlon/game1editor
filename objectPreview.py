@@ -8,15 +8,17 @@ class QObjectPreview(QFrame):
 		super().__init__(parent)
 		self.image = QImage()
 		self.type = ''
+		self.unknownImage = QImage(":/editor/unknown.png")
 	def setImage(self, treeItem):
 		image = treeItem.data(0, Qt.UserRole)
 		if not image:
-			return
-		# TODO: handle subimages correctly
-		if type(image) == dict:
-			image = image['file']
+			self.image = self.unknownImage
+		else:
+			# TODO: handle subimages correctly
+			if type(image) == dict:
+				image = image['file']
+			self.image = QImage(image)
 		self.type = treeItem.text(0)
-		self.image.load(image)
 		self.repaint()
 	def paintEvent(self, event):
 		super().paintEvent(event)

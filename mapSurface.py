@@ -14,7 +14,7 @@ class MapObject:
 				image.height(),
 			),
 		)
-		self.image = QImage(image)
+		self.image = image
 	def dump(self):
 		o = {
 			'type': self.type,

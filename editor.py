@@ -142,7 +142,8 @@ class EditorWindow(QMainWindow):
 			item = QTreeWidgetItem(parent,
 				[object, dir['objects'][object]['script']])
 			if type(dir['objects'][object]['image']) == str:
-				dir['objects'][object]['image'] = '../%s' % dir['objects'][object]['image']
+				if dir['objects'][object]['image']:
+					dir['objects'][object]['image'] = '../%s' % dir['objects'][object]['image']
 			else:
 				dir['objects'][object]['image']['file'] = '../%s' % dir['objects'][object]['image']['file']
 			item.setData(0, Qt.UserRole, dir['objects'][object]['image'])
