@@ -35,7 +35,7 @@ class MapTile:
 		position,
 		solid=True):
 		self.tileset = tilesetPath
-		self.image = tilesetImage
+		self.image = tilesetImage.copy(subImageRect)
 		self.rect = QRect(
 			position,
 			QSize(
@@ -96,7 +96,6 @@ class MapSurface(QWidget):
 			qp.drawImage(
 				tile.rect.topLeft(),
 				tile.image,
-				tile.subImageRect,
 			)
 		if self.selectedObject:
 			qp.setPen(QColor(255,0,0))
