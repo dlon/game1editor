@@ -1,28 +1,25 @@
 from PyQt5.QtWidgets import QWidget, QApplication
-from PyQt5.QtGui import QPainter, QImage, QBrush, QColor
+from PyQt5.QtGui import QPainter, QImage, QBrush, QColor, QImage
 from PyQt5.QtCore import pyqtSignal, QPoint, QRect, QSize, Qt
 import sys
 
 class MapObject:
 	init = False
-	def __init__(self, **kwargs):
-		self.editor = kwargs['editor']
-		self.x = kwargs['x']
-		self.y = kwargs['y']
-		self.creationCode = kwargs['creationCode']
-		self.type = kwargs["type"]
-		self.init = True
-	def __setattr__(self, k, v):
-		if self.init:
-			super().__setattr__(k, v)
-			#self.editor.changed()
-			print('MapObject changed')
-		else:
-			super().__setattr__(k, v)
+	def __init__(self, type, position, image):
+		self.type = type
+		self.rect = QRect(
+			position,
+			QSize(
+				image.width(),
+				image.height(),
+			),
+		)
+		self.image = QImage(image)
 	def dump(self):
 		o = {
-			'x': self.x,
-			'y': self.y,
+			'type': self.type,
+			'x': self.position.x(),
+			'y': self.position.y(),
 		}
 		if self.creationCode:
 			o['creationCode'] = self.creationCode
@@ -85,13 +82,19 @@ class MapSurface(QWidget):
 	def addTile(self, tile):
 		self.tiles.append(tile)
 		self.repaint()
+	def addObject(self, obj):
+		self.objects.append(obj)
+		self.repaint()
 	def paintEvent(self, event):
 		super().paintEvent(event)
 		qp = QPainter()
 		qp.begin(self)
 		qp.fillRect(0,0,self.width(),self.height(), self.backgroundColor)
 		for object in self.objects:
-			qp.drawImage(0, 0, object.image)
+			qp.drawImage(
+				object.rect.topLeft(),
+				object.image
+			)
 		for tile in self.tiles:
 			qp.drawImage(
 				tile.rect.topLeft(),
@@ -115,10 +118,15 @@ class MapSurface(QWidget):
 		self.update()
 	def mousePressEvent(self, e):
 		self.selectedObject = None
-		for tile in self.tiles:
-			if tile.rect.contains(e.pos()):
-				self.selectedObject = tile
+		for obj in self.objects:
+			if obj.rect.contains(e.pos()):
+				self.selectedObject = obj
 				break
+		if not self.selectedObject:
+			for tile in self.tiles:
+				if tile.rect.contains(e.pos()):
+					self.selectedObject = tile
+					break
 		self.repaint()
 		self.clicked.emit(
 			self,

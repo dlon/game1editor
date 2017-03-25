@@ -119,6 +119,7 @@ class EditorWindow(QMainWindow):
 		self.ui.widthSetting.textChanged.connect(self.mapSurface.setWidth)
 		self.ui.heightSetting.textChanged.connect(self.mapSurface.setHeight)
 		self.mapSurface.clicked.connect(self.ui.tilePreviewFrame.handleMapSurfaceClick)
+		self.mapSurface.clicked.connect(self.ui.objectPreviewFrame.handleMapSurfaceClick)
 	def closeEvent(self, event):
 		if self.saveIfWants():
 			event.accept()

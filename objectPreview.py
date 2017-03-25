@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QFrame
 from PyQt5.QtGui import QColor, QPainter, QImage, QDrag, QPixmap
-from PyQt5.QtCore import Qt, QMimeData
+from PyQt5.QtCore import Qt, QMimeData, QRect, QPoint
+from mapSurface import MapObject
 
 class QObjectPreview(QFrame):
 	def __init__(self, parent):
@@ -49,3 +50,24 @@ class QObjectPreview(QFrame):
 			ev.setDropAction(Qt.MoveAction)
 		else:
 			ev.ignore()
+	def handleMapSurfaceClick(self, mapSurface, position, selectedObject):
+		if not self.type:
+			return
+		if self.window().ui.tabWidget.currentIndex() != 0:
+			return
+		if not selectedObject:
+			print("objectPreview: adding object to map surface")
+			mapSurface.addObject(self.createObject(position))
+	def createObject(self, position):
+		if not self.type:
+			return None
+		if self.window().ui.actionSnap.isChecked():
+			position = QPoint(
+				16*int(position.x() / 16),
+				16*int(position.y() / 16),
+			)
+		return MapObject(
+			type=self.type,
+			position=position,
+			image=self.image,
+		)
