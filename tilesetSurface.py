@@ -18,6 +18,8 @@ class QTilesetSurface(QFrame):
 	def handleMapSurfaceClick(self, mapSurface, position, selectedObject):
 		if self.image.isNull() or self.selection.isNull():
 			return
+		if self.window().ui.tabWidget.currentIndex() != 1:
+			return
 		if not selectedObject:
 			print("tilesetSurface: adding tile to map surface")
 			mapSurface.addTile(self.createTile(position))
