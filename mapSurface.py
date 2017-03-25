@@ -116,6 +116,22 @@ class MapSurface(QWidget):
 			)
 		self.selectedObject.rect.moveTo(position)
 		self.update()
+	def showContextMenu(self, pos):
+		if not self.selectedObject:
+			return
+		menu = QMenu(self)
+		if isinstance(self.selectedObject, MapTile):
+			solidAction = menu.addAction("&Solid")
+			solidAction.setCheckable(True)
+			solidAction.setChecked(self.selectedObject.solid)
+		menu.addSeparator()
+		deleteAction = menu.addAction("&Delete")
+		action = menu.exec_(pos)
+		if action == deleteAction:
+			self.deleteSelected()
+		if isinstance(self.selectedObject, MapTile):
+			if action == solidAction:
+				self.selectedObject.solid = action.isChecked()
 	def mousePressEvent(self, e):
 		self.selectedObject = None
 		for obj in self.objects:
@@ -134,11 +150,7 @@ class MapSurface(QWidget):
 			self.selectedObject,
 		)
 		if self.selectedObject and e.button() == Qt.RightButton:
-			menu = QMenu(self)
-			deleteAction = menu.addAction("Delete")
-			action = menu.exec_(e.globalPos())
-			if action == deleteAction:
-				self.deleteSelected()
+			self.showContextMenu(e.globalPos())
 	def deleteSelected(self):
 		if self.selectedObject:
 			if self.selectedObject in self.objects:
