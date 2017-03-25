@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QApplication
+from PyQt5.QtWidgets import QWidget, QApplication, QMenu
 from PyQt5.QtGui import QPainter, QImage, QBrush, QColor, QImage
 from PyQt5.QtCore import pyqtSignal, QPoint, QRect, QSize, Qt
 import sys
@@ -133,6 +133,12 @@ class MapSurface(QWidget):
 			e.pos(),
 			self.selectedObject,
 		)
+		if self.selectedObject and e.button() == Qt.RightButton:
+			menu = QMenu(self)
+			deleteAction = menu.addAction("Delete")
+			action = menu.exec_(e.globalPos())
+			if action == deleteAction:
+				self.deleteSelected()
 	def deleteSelected(self):
 		if self.selectedObject:
 			if self.selectedObject in self.objects:
