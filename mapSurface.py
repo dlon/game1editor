@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QWidget, QApplication, QMenu
+from PyQt5.QtWidgets import QWidget, QApplication, QMenu, QDialog
 from PyQt5.QtGui import QPainter, QImage, QBrush, QColor, QImage
 from PyQt5.QtCore import pyqtSignal, QPoint, QRect, QSize, Qt
 import sys
+from uiCodeEditor import Ui_CodeEditor
 
 class MapObject:
 	init = False
@@ -116,6 +117,14 @@ class MapSurface(QWidget):
 			)
 		self.selectedObject.rect.moveTo(position)
 		self.update()
+	def editCode(self):
+		if not self.selectedObject or \
+			not isinstance(self.selectedObject, MapObject):
+			return
+		dialog = QDialog(self.window())
+		editor = Ui_CodeEditor()
+		editor.setupUi(dialog)
+		dialog.show()
 	def showContextMenu(self, pos):
 		if not self.selectedObject:
 			return
@@ -124,6 +133,8 @@ class MapSurface(QWidget):
 			solidAction = menu.addAction("&Solid")
 			solidAction.setCheckable(True)
 			solidAction.setChecked(self.selectedObject.solid)
+		elif isinstance(self.selectedObject, MapObject):
+			creationCodeAction = menu.addAction("&Creation code")
 		menu.addSeparator()
 		deleteAction = menu.addAction("&Delete")
 		action = menu.exec_(pos)
@@ -132,6 +143,9 @@ class MapSurface(QWidget):
 		if isinstance(self.selectedObject, MapTile):
 			if action == solidAction:
 				self.selectedObject.solid = action.isChecked()
+		elif isinstance(self.selectedObject, MapObject):
+			if action == creationCodeAction:
+				self.editCode()
 	def mousePressEvent(self, e):
 		self.selectedObject = None
 		for obj in self.objects:
