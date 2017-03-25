@@ -36,6 +36,7 @@ class QTilesetSurface(QFrame):
 			tilesetImage=self.image,
 			subImageRect=self.selection,
 			position=position,
+			solid=self.window().ui.actionSolidTile.isChecked(),
 		)
 	def paintEvent(self, event):
 		super().paintEvent(event)

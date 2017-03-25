@@ -120,6 +120,13 @@
              <string>Tileset</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_3">
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="solidCheckbox">
+               <property name="text">
+                <string>Solid</string>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="0">
               <widget class="QSplitter" name="splitter_3">
                <property name="sizePolicy">
@@ -712,6 +719,14 @@
     <string>F5</string>
    </property>
   </action>
+  <action name="actionSolidTile">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Solid tile</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -745,6 +760,22 @@
     <hint type="destinationlabel">
      <x>399</x>
      <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>solidCheckbox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>actionSolidTile</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>356</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>
