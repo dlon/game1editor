@@ -125,3 +125,11 @@ class MapSurface(QWidget):
 			e.pos(),
 			self.selectedObject,
 		)
+	def deleteSelected(self):
+		if self.selectedObject:
+			if self.selectedObject in self.objects:
+				self.objects.remove(self.selectedObject)
+			elif self.selectedObject in self.tiles:
+				self.tiles.remove(self.selectedObject)
+			self.selectedObject = None
+			self.update()

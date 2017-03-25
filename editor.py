@@ -130,6 +130,10 @@ class EditorWindow(QMainWindow):
 		self.ui.actionSave.triggered.connect(self.save)
 		self.ui.actionSaveAs.triggered.connect(self.saveAs)
 		#self.ui.actionQuit.triggered.connect(self.quitIfWants)
+	def keyPressEvent(self, e):
+		super().keyPressEvent(e)
+		if e.key() == Qt.Key_Delete:
+			self.mapSurface.deleteSelected()
 	def _addObjectTreeDir(self, dir, parent=None):
 		if not parent:
 			parent = self.ui.objectTree
