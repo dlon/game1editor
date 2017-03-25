@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtGui import QPainter, QImage, QBrush, QColor
-from PyQt5.QtCore import pyqtSignal, QPoint
+from PyQt5.QtCore import pyqtSignal, QPoint, QRect, QSize
 import sys
 
 class MapObject:
@@ -36,16 +36,22 @@ class MapTile:
 		solid=True):
 		self.tileset = tilesetPath
 		self.image = tilesetImage
-		self.position = position
+		self.rect = QRect(
+			position,
+			QSize(
+				subImageRect.width() - subImageRect.x(),
+				subImageRect.height() - subImageRect.y(),
+			),
+		)
 		self.subImageRect = subImageRect
 		self.solid = solid
 	def dump(self):
 		return {
 			'tileset': self.tileset,
-			'x': self.x,
-			'y': self.y,
-			'w': self.w,
-			'h': self.h,
+			'x': self.rect.x(),
+			'y': self.rect.y(),
+			'w': self.rect.width(),
+			'h': self.rect.height(),
 			'tx': self.subImageRect.x(),
 			'ty': self.subImageRect.y(),
 			'tw': self.subImageRect.width(),
@@ -87,14 +93,20 @@ class MapSurface(QWidget):
 			qp.drawImage(0, 0, object.image)
 		for tile in self.tiles:
 			qp.drawImage(
-				tile.position,
+				tile.rect.topLeft(),
 				tile.image,
 				tile.subImageRect,
 			)
 		qp.end()
 	def mousePressEvent(self, e):
+		selectedObject = None
+		for tile in self.tiles:
+			if tile.rect.contains(e.pos()):
+				selectedObject = tile
+				print("clicked a tile!")
+				break
 		self.clicked.emit(
 			self,
 			e.pos(),
-			None,
+			selectedObject,
 		)
