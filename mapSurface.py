@@ -39,8 +39,8 @@ class MapTile:
 		self.rect = QRect(
 			position,
 			QSize(
-				subImageRect.width() - subImageRect.x(),
-				subImageRect.height() - subImageRect.y(),
+				subImageRect.width(),
+				subImageRect.height(),
 			),
 		)
 		self.subImageRect = subImageRect
@@ -69,6 +69,7 @@ class MapSurface(QWidget):
 		self.backgroundColor = QColor(255,255,255)
 		self.tiles = []
 		self.objects = []
+		self.selectedObject = None
 	def setWidth(self, width):
 		try:
 			self.setMinimumSize(int(width), self.height())
@@ -97,16 +98,19 @@ class MapSurface(QWidget):
 				tile.image,
 				tile.subImageRect,
 			)
+		if self.selectedObject:
+			qp.setPen(QColor(255,0,0))
+			qp.drawRect(self.selectedObject.rect)
 		qp.end()
 	def mousePressEvent(self, e):
-		selectedObject = None
+		self.selectedObject = None
 		for tile in self.tiles:
 			if tile.rect.contains(e.pos()):
-				selectedObject = tile
-				print("clicked a tile!")
+				self.selectedObject = tile
 				break
+		self.repaint()
 		self.clicked.emit(
 			self,
 			e.pos(),
-			selectedObject,
+			self.selectedObject,
 		)
