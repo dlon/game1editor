@@ -127,6 +127,12 @@ class MapSurface(QWidget):
 		editor = Ui_CodeEditor()
 		editor.setupUi(dialog)
 		editor.code.setText(self.selectedObject.creationCode)
+		dialog.setWindowTitle(
+			"Creation code - object #{}, {}".format(
+				self.objects.index(self.selectedObject),
+				self.selectedObject.type,
+			)
+		)
 		ret = dialog.exec_()
 		if ret == dialog.Accepted:
 			self.selectedObject.creationCode = editor.code.toPlainText()
