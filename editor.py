@@ -11,6 +11,7 @@ from PyQt5 import QtGui
 
 from uiEditor import Ui_EditorWindow
 from mapSurface import MapSurface, MapObject, MapTile
+from uiCodeEditor import Ui_CodeEditor
 import entities
 import icons_rc
 from objectPreview import QObjectPreview
@@ -94,6 +95,7 @@ class EditorWindow(QMainWindow):
 		self._initSignals()
 
 		self.mapFile = ''
+		self.creationCode = ''
 		self.setWindowTitle('untitled[*] - game1 editor')
 
 		# add window surface
@@ -122,10 +124,20 @@ class EditorWindow(QMainWindow):
 		self.mapSurface.clicked.connect(self.ui.objectPreviewFrame.handleMapSurfaceClick)
 
 		self.ui.buttonBackgroundColor.clicked.connect(self.setBackgroundColor)
+		self.ui.buttonCreationCode.clicked.connect(self.setCreationCode)
 	def setBackgroundColor(self):
 		dialog = QColorDialog()
 		if dialog.exec_() == dialog.Accepted:
 			self.mapSurface.setBackgroundColor(dialog.selectedColor())
+	def setCreationCode(self):
+		dialog = QDialog(self.window())
+		editor = Ui_CodeEditor()
+		editor.setupUi(dialog)
+		editor.code.setText(self.creationCode)
+		dialog.setWindowTitle("Map creation code")
+		ret = dialog.exec_()
+		if ret == dialog.Accepted:
+			self.creationCode = editor.code.toPlainText()
 	def closeEvent(self, event):
 		if self.saveIfWants():
 			event.accept()

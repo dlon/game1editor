@@ -373,7 +373,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="buttonCreationCode">
             <property name="text">
              <string>&amp;Creation code...</string>
             </property>
