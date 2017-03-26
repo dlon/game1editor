@@ -218,7 +218,8 @@ class MapSurface(QWidget):
 		if self.selectedObject:
 			if e.button() == Qt.RightButton:
 				self.showContextMenu(e.globalPos())
-			self.dragOffset = e.pos() - self.selectedObject.rect.topLeft()
+			else:
+				self.dragOffset = e.pos() - self.selectedObject.rect.topLeft()
 	def deleteSelected(self):
 		if self.selectedObject:
 			if self.selectedObject in self.objects:
