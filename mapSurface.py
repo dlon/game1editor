@@ -46,6 +46,9 @@ class MapTile:
 		self.subImageRect = subImageRect
 		self.solid = solid
 		self.layerWidget = layerWidget
+	@property
+	def depth(self):
+		return int(self.layerWidget.text(1))
 	def dump(self):
 		return {
 			'tileset': self.tileset,
@@ -58,7 +61,7 @@ class MapTile:
 			'tw': self.subImageRect.width(),
 			'th': self.subImageRect.height(),
 			'solid': self.solid,
-			'depth': int(self.layerWidget.text(1)),
+			'depth': self.depth,
 		}
 
 class MapSurface(QWidget):
@@ -97,18 +100,15 @@ class MapSurface(QWidget):
 		self.repaint()
 	def paintEvent(self, event):
 		super().paintEvent(event)
+		drawables = self.tiles + self.objects
+		drawables.sort(key = lambda d: getattr(d, 'depth', 0))
 		qp = QPainter()
 		qp.begin(self)
 		qp.fillRect(0,0,self.width(),self.height(), self.backgroundColor)
-		for object in self.objects:
+		for object in drawables:
 			qp.drawImage(
 				object.rect.topLeft(),
 				object.image
-			)
-		for tile in self.tiles:
-			qp.drawImage(
-				tile.rect.topLeft(),
-				tile.image,
 			)
 		if self.selectedObject:
 			qp.setPen(QColor(255,0,0))
