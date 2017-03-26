@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QFrame
+from PyQt5.QtWidgets import QFrame, QMessageBox
 from PyQt5.QtGui import QColor, QPainter, QImage, QDrag, QPixmap
 from PyQt5.QtCore import Qt, QMimeData, QRect, QPoint
 
@@ -20,11 +20,23 @@ class QTilesetSurface(QFrame):
 			return
 		if self.window().ui.tabWidget.currentIndex() != 1:
 			return
-		if not selectedObject:
+		tile = self.createTile(position)
+		if not selectedObject and tile:
 			print("tilesetSurface: adding tile to map surface")
-			mapSurface.addTile(self.createTile(position))
+			mapSurface.addTile(tile)
 	def createTile(self, position):
 		if self.image.isNull() or self.selection.isNull():
+			return None
+		currentItem = self.window().ui.layerTree.currentItem()
+		if not currentItem:
+			msg = QMessageBox(
+				QMessageBox.Information,
+				"Tile layer",
+				"You must select a layer",
+				QMessageBox.Ok,
+				self,
+			)
+			msg.show()
 			return None
 		if self.window().ui.actionSnap.isChecked():
 			position = QPoint(
