@@ -70,7 +70,6 @@ class MapSurface(QWidget):
 		QWidget.__init__(self, parent)
 		#self.setGeometry(5, 5, 200, 1000)
 		#self.show()
-		self.resize(1000,10)
 		self.backgroundColor = QColor(255,255,255)
 		self.tiles = []
 		self.objects = []

@@ -105,8 +105,6 @@ class EditorWindow(QMainWindow):
 		#self.mapSurface.setObjectName("mapSurface")
 		#self.mapSurfaceGrid.addWidget(self.mapSurface)
 		self.mapSurface = MapSurface(None)
-		self.mapSurface.setMinimumSize(100,1000)
-		self.mapSurface.setMaximumSize(100,1000)
 		self.ui.scrollArea.setWidget(self.mapSurface)
 
 		# s
@@ -120,6 +118,8 @@ class EditorWindow(QMainWindow):
 		self.ui.tilesetTree.currentItemChanged.connect(self.ui.tilePreviewFrame.setImage)
 		self.ui.widthSetting.textChanged.connect(self.mapSurface.setWidth)
 		self.ui.heightSetting.textChanged.connect(self.mapSurface.setHeight)
+		self.ui.widthSetting.setText("640")
+		self.ui.heightSetting.setText("480")
 		self.mapSurface.clicked.connect(self.ui.tilePreviewFrame.handleMapSurfaceClick)
 		self.mapSurface.clicked.connect(self.ui.objectPreviewFrame.handleMapSurfaceClick)
 
