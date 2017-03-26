@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QMenu, QDialog, QColorDialog
-from PyQt5.QtGui import QPainter, QImage, QBrush, QColor, QCursor
+from PyQt5.QtGui import QPainter, QImage, QBrush, QColor, QCursor, QTransform
 from PyQt5.QtCore import pyqtSignal, QPoint, QRect, QSize, Qt
 import sys
 from uiCodeEditor import Ui_CodeEditor
@@ -107,10 +107,11 @@ class MapSurface(QWidget):
 		qp.begin(self)
 		qp.fillRect(0,0,self.width(),self.height(), self.backgroundColor)
 		for object in drawables:
-			qp.drawImage(
-				object.rect.topLeft(),
-				object.image
-			)
+			brush = QBrush(object.image)
+			transform = QTransform()
+			transform.translate(object.rect.left(), object.rect.top())
+			brush.setTransform(transform)
+			qp.fillRect(object.rect, brush)
 		if self.selectedObject:
 			qp.setPen(QColor(255,0,0))
 			qp.drawRect(self.selectedObject.rect)
