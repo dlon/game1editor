@@ -120,6 +120,12 @@ class EditorWindow(QMainWindow):
 		self.ui.heightSetting.textChanged.connect(self.mapSurface.setHeight)
 		self.mapSurface.clicked.connect(self.ui.tilePreviewFrame.handleMapSurfaceClick)
 		self.mapSurface.clicked.connect(self.ui.objectPreviewFrame.handleMapSurfaceClick)
+
+		self.ui.buttonBackgroundColor.clicked.connect(self.setBackgroundColor)
+	def setBackgroundColor(self):
+		dialog = QColorDialog()
+		if dialog.exec_() == dialog.Accepted:
+			self.mapSurface.setBackgroundColor(dialog.selectedColor())
 	def closeEvent(self, event):
 		if self.saveIfWants():
 			event.accept()

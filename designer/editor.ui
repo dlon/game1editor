@@ -329,7 +329,7 @@
            <x>31</x>
            <y>33</y>
            <width>193</width>
-           <height>92</height>
+           <height>127</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -364,6 +364,13 @@
              </layout>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="buttonBackgroundColor">
+            <property name="text">
+             <string>Set &amp;background color...</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton">

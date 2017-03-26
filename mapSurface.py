@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QApplication, QMenu, QDialog
+from PyQt5.QtWidgets import QWidget, QApplication, QMenu, QDialog, QColorDialog
 from PyQt5.QtGui import QPainter, QImage, QBrush, QColor, QImage
 from PyQt5.QtCore import pyqtSignal, QPoint, QRect, QSize, Qt
 import sys
@@ -69,6 +69,9 @@ class MapSurface(QWidget):
 		self.tiles = []
 		self.objects = []
 		self.selectedObject = None
+	def setBackgroundColor(self, color):
+		self.backgroundColor = color
+		self.repaint()
 	def setWidth(self, width):
 		try:
 			self.setMinimumSize(int(width), self.height())
