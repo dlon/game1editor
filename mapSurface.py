@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QMenu, QDialog, QColorDialog
-from PyQt5.QtGui import QPainter, QImage, QBrush, QColor, QImage
+from PyQt5.QtGui import QPainter, QImage, QBrush, QColor, QCursor
 from PyQt5.QtCore import pyqtSignal, QPoint, QRect, QSize, Qt
 import sys
 from uiCodeEditor import Ui_CodeEditor
@@ -74,6 +74,8 @@ class MapSurface(QWidget):
 		self.tiles = []
 		self.objects = []
 		self.selectedObject = None
+		self.tileResizeHover = False
+		self.setMouseTracking(True)
 	def setBackgroundColor(self, color):
 		self.backgroundColor = color
 		self.repaint()
@@ -113,19 +115,46 @@ class MapSurface(QWidget):
 			qp.setPen(QColor(255,0,0))
 			qp.drawRect(self.selectedObject.rect)
 		qp.end()
+	def resetCursor(self):
+		if self.tileResizeHover:
+			self.setCursor(QCursor(Qt.ArrowCursor))
+			self.tileResizeHover = False
 	def mouseMoveEvent(self, e):
-		if not (e.buttons() & Qt.LeftButton) or \
-			not self.selectedObject:
+		if not self.selectedObject:
+			self.resetCursor()
 			return
-		position = e.pos() - self.dragOffset
+		if not self.resizeDrag and isinstance(self.selectedObject, MapTile):
+			bottomRight = QRect(
+				self.selectedObject.rect.bottomRight(),
+				QSize(5,5),
+			)
+			bottomRight.translate(-2,-2)
+			if bottomRight.contains(e.pos()):
+				self.setCursor(QCursor(Qt.SizeFDiagCursor))
+				self.tileResizeHover = True
+			elif self.tileResizeHover:
+				self.resetCursor()
+		if not (e.buttons() & Qt.LeftButton):
+			return
+		position = e.pos()
+		if not self.resizeDrag:
+			position -= self.dragOffset
 		if not (e.modifiers() & Qt.ShiftModifier) and \
 			self.window().ui.actionSnap.isChecked():
 			position = QPoint(
 				16*int(position.x() / 16),
 				16*int(position.y() / 16),
 			)
-		self.selectedObject.rect.moveTo(position)
+		if self.resizeDrag:
+			self.selectedObject.rect.setSize(QSize(
+				position.x()-self.selectedObject.rect.x(),
+				position.y()-self.selectedObject.rect.y(),
+			))
+		else:
+			self.selectedObject.rect.moveTo(position)
 		self.update()
+	def mouseReleaseEvent(self, e):
+		self.resizeDrag = False
 	def editCode(self):
 		if not self.selectedObject or \
 			not isinstance(self.selectedObject, MapObject):
@@ -165,25 +194,29 @@ class MapSurface(QWidget):
 			if action == creationCodeAction:
 				self.editCode()
 	def mousePressEvent(self, e):
-		self.selectedObject = None
-		for obj in self.objects:
-			if obj.rect.contains(e.pos()):
-				self.selectedObject = obj
-				break
-		if not self.selectedObject:
-			for tile in self.tiles:
-				if tile.rect.contains(e.pos()):
-					self.selectedObject = tile
+		if self.tileResizeHover:
+			self.resizeDrag = True
+		else:
+			self.resizeDrag = False
+			self.selectedObject = None
+			for obj in self.objects:
+				if obj.rect.contains(e.pos()):
+					self.selectedObject = obj
 					break
+			if not self.selectedObject:
+				for tile in self.tiles:
+					if tile.rect.contains(e.pos()):
+						self.selectedObject = tile
+						break
 		self.repaint()
 		self.clicked.emit(
 			self,
 			e.pos(),
 			self.selectedObject,
 		)
-		if self.selectedObject and e.button() == Qt.RightButton:
-			self.showContextMenu(e.globalPos())
 		if self.selectedObject:
+			if e.button() == Qt.RightButton:
+				self.showContextMenu(e.globalPos())
 			self.dragOffset = e.pos() - self.selectedObject.rect.topLeft()
 	def deleteSelected(self):
 		if self.selectedObject:

@@ -57,6 +57,8 @@ class QObjectPreview(QFrame):
 			return
 		if self.window().ui.tabWidget.currentIndex() != 0:
 			return
+		if mapSurface.tileResizeHover:
+			return
 		if not selectedObject:
 			print("objectPreview: adding object to map surface")
 			mapSurface.addObject(self.createObject(position))

@@ -12,13 +12,15 @@ class QTilesetSurface(QFrame):
 		self.selection = QRect()
 	def setImage(self, treeItem):
 		self.selection = QRect()
-		self.image.load("../data/%s" % treeItem.text(0))
+		self.image = QImage("../data/%s" % treeItem.text(0))
 		self.tileset = treeItem.text(0)
 		self.repaint()
 	def handleMapSurfaceClick(self, mapSurface, position, selectedObject):
 		if self.image.isNull() or self.selection.isNull():
 			return
 		if self.window().ui.tabWidget.currentIndex() != 1:
+			return
+		if mapSurface.tileResizeHover:
 			return
 		tile = self.createTile(position)
 		if not selectedObject and tile:
