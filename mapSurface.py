@@ -86,9 +86,11 @@ class MapSurface(QWidget):
 			pass
 	def addTile(self, tile):
 		self.tiles.append(tile)
+		self.selectedObject = tile
 		self.repaint()
 	def addObject(self, obj):
 		self.objects.append(obj)
+		self.selectedObject = obj
 		self.repaint()
 	def paintEvent(self, event):
 		super().paintEvent(event)
