@@ -32,7 +32,8 @@ class MapTile:
 		tilesetImage,
 		subImageRect,
 		position,
-		solid=True):
+		layerWidget,
+		solid=True,):
 		self.tileset = tilesetPath
 		self.image = tilesetImage.copy(subImageRect)
 		self.rect = QRect(
@@ -44,6 +45,7 @@ class MapTile:
 		)
 		self.subImageRect = subImageRect
 		self.solid = solid
+		self.layerWidget = layerWidget
 	def dump(self):
 		return {
 			'tileset': self.tileset,
@@ -56,6 +58,7 @@ class MapTile:
 			'tw': self.subImageRect.width(),
 			'th': self.subImageRect.height(),
 			'solid': self.solid,
+			'depth': int(self.layerWidget.text(1)),
 		}
 
 class MapSurface(QWidget):

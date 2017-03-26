@@ -27,8 +27,8 @@ class QTilesetSurface(QFrame):
 	def createTile(self, position):
 		if self.image.isNull() or self.selection.isNull():
 			return None
-		currentItem = self.window().ui.layerTree.currentItem()
-		if not currentItem:
+		layerWidget = self.window().ui.layerTree.currentItem()
+		if not layerWidget:
 			msg = QMessageBox(
 				QMessageBox.Information,
 				"Tile layer",
@@ -49,6 +49,7 @@ class QTilesetSurface(QFrame):
 			subImageRect=self.selection,
 			position=position,
 			solid=self.window().ui.actionSolidTile.isChecked(),
+			layerWidget=layerWidget,
 		)
 	def paintEvent(self, event):
 		super().paintEvent(event)
