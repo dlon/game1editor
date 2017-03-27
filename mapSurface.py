@@ -28,13 +28,13 @@ class MapObject:
 		return o
 class MapTile:
 	def __init__(self,
-		tilesetPath,
+		tilesetWidget,
 		tilesetImage,
 		subImageRect,
 		position,
 		layerWidget,
 		solid=True,):
-		self.tileset = tilesetPath
+		self.tileset = tilesetWidget
 		self.image = tilesetImage.copy(subImageRect)
 		self.rect = QRect(
 			position,
@@ -51,7 +51,7 @@ class MapTile:
 		return int(self.layerWidget.text(1))
 	def dump(self):
 		return {
-			'tileset': self.tileset,
+			'tileset': self.tileset.data(0, Qt.UserRole),
 			'x': self.rect.x(),
 			'y': self.rect.y(),
 			'w': self.rect.width(),

@@ -9,11 +9,13 @@ class QTilesetSurface(QFrame):
 		super().__init__(parent)
 		self.image = QImage()
 		self.tileset = ''
+		self.tilesetWidget = None
 		self.selection = QRect()
 	def setImage(self, treeItem):
 		self.selection = QRect()
 		self.image = QImage("../data/%s" % treeItem.text(0))
 		self.tileset = treeItem.text(0)
+		self.tilesetWidget = treeItem
 		self.repaint()
 	def handleMapSurfaceClick(self, mapSurface, position, selectedObject):
 		if self.image.isNull() or self.selection.isNull():
@@ -46,7 +48,7 @@ class QTilesetSurface(QFrame):
 				16*int(position.y() / 16),
 			)
 		return MapTile(
-			tilesetPath=self.tileset,
+			tilesetWidget=self.tilesetWidget,
 			tilesetImage=self.image,
 			subImageRect=self.selection,
 			position=position,

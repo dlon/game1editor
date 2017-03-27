@@ -3,6 +3,7 @@ import copy
 import sys
 import json
 import os
+import subprocess
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
@@ -138,19 +139,37 @@ class EditorWindow(QMainWindow):
 		ret = dialog.exec_()
 		if ret == dialog.Accepted:
 			self.creationCode = editor.code.toPlainText()
+	def generateData(self):
+		return {
+			"settings": {
+				"width": self.mapSurface.width(),
+				"height": self.mapSurface.height(),
+				"background": (
+					self.mapSurface.backgroundColor.red(),
+					self.mapSurface.backgroundColor.green(),
+					self.mapSurface.backgroundColor.blue(),
+				),
+			},
+			"objects": [obj.dump() for obj in self.mapSurface.objects],
+			"tiles": [tile.dump() for tile in self.mapSurface.tiles],
+		}
 	def editData(self):
 		dialog = QDialog(self)
 		editor = Ui_CodeEditor()
 		editor.setupUi(dialog)
 		# TODO: add settings
-		editor.code.setText(json.dumps({
-			"objects": [obj.dump() for obj in self.mapSurface.objects],
-			"tiles": [tile.dump() for tile in self.mapSurface.tiles],
-		}, indent=4))
+		editor.code.setText(json.dumps(self.generateData(), indent=4))
 		dialog.setWindowTitle("Map data")
 		ret = dialog.exec_()
 		if ret == dialog.Accepted:
 			print("TODO: rebuild data based on input")
+	def run(self):
+		os.chdir("..")
+		subprocess.Popen([
+			"python3","main.py",
+			"-data",json.dumps(self.generateData()),
+		])
+		os.chdir("editor")
 	def closeEvent(self, event):
 		if self.saveIfWants():
 			event.accept()
@@ -163,6 +182,7 @@ class EditorWindow(QMainWindow):
 		self.ui.actionSaveAs.triggered.connect(self.saveAs)
 		#self.ui.actionQuit.triggered.connect(self.quitIfWants)
 		self.ui.actionData.triggered.connect(self.editData)
+		self.ui.actionRun.triggered.connect(self.run)
 	def keyPressEvent(self, e):
 		super().keyPressEvent(e)
 		if e.key() == Qt.Key_Delete:
@@ -191,8 +211,9 @@ class EditorWindow(QMainWindow):
 		with open("tilesets.json") as f:
 			tilesetTree = json.load(f)
 		for tileset in tilesetTree:
-			QTreeWidgetItem(self.ui.tilesetTree,
+			item = QTreeWidgetItem(self.ui.tilesetTree,
 				[tilesetTree[tileset]])
+			item.setData(0, Qt.UserRole, tileset)
 		self.ui.tilesetTree.expandAll()
 	def mapTitle(self):
 		return self.mapFile if self.mapFile else 'untitled'
