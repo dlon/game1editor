@@ -138,6 +138,19 @@ class EditorWindow(QMainWindow):
 		ret = dialog.exec_()
 		if ret == dialog.Accepted:
 			self.creationCode = editor.code.toPlainText()
+	def editData(self):
+		dialog = QDialog(self)
+		editor = Ui_CodeEditor()
+		editor.setupUi(dialog)
+		# TODO: add settings
+		editor.code.setText(json.dumps({
+			"objects": [obj.dump() for obj in self.mapSurface.objects],
+			"tiles": [tile.dump() for tile in self.mapSurface.tiles],
+		}, indent=4))
+		dialog.setWindowTitle("Map data")
+		ret = dialog.exec_()
+		if ret == dialog.Accepted:
+			print("TODO: rebuild data based on input")
 	def closeEvent(self, event):
 		if self.saveIfWants():
 			event.accept()
@@ -149,6 +162,7 @@ class EditorWindow(QMainWindow):
 		self.ui.actionSave.triggered.connect(self.save)
 		self.ui.actionSaveAs.triggered.connect(self.saveAs)
 		#self.ui.actionQuit.triggered.connect(self.quitIfWants)
+		self.ui.actionData.triggered.connect(self.editData)
 	def keyPressEvent(self, e):
 		super().keyPressEvent(e)
 		if e.key() == Qt.Key_Delete:

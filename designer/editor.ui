@@ -453,6 +453,8 @@
     <addaction name="actionPaste"/>
     <addaction name="actionDelete"/>
     <addaction name="separator"/>
+    <addaction name="actionData"/>
+    <addaction name="separator"/>
     <addaction name="actionRun"/>
    </widget>
    <widget class="QMenu" name="menu_View">
@@ -732,6 +734,11 @@
    </property>
    <property name="text">
     <string>&amp;Solid tile</string>
+   </property>
+  </action>
+  <action name="actionData">
+   <property name="text">
+    <string>D&amp;ata...</string>
    </property>
   </action>
  </widget>

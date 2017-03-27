@@ -20,8 +20,8 @@ class MapObject:
 	def dump(self):
 		o = {
 			'type': self.type,
-			'x': self.position.x(),
-			'y': self.position.y(),
+			'x': self.rect.x(),
+			'y': self.rect.y(),
 		}
 		if self.creationCode:
 			o['creationCode'] = self.creationCode
