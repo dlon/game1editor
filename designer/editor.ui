@@ -538,7 +538,7 @@
     <string>Show grid on map surface</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+G</string>
+    <string>Ctrl+F</string>
    </property>
   </action>
   <action name="actionSnap">
@@ -560,6 +560,9 @@
    </property>
    <property name="statusTip">
     <string>Snap objects and tiles to the grid</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
    </property>
   </action>
   <action name="actionOpen">
@@ -739,6 +742,9 @@
   <action name="actionData">
    <property name="text">
     <string>D&amp;ata...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
  </widget>
