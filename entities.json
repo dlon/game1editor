@@ -10,7 +10,7 @@
         },
         "LiftableGrass": {
             "image": "",
-            "script": "entities/happyPlanet.py"
+            "script": "entities/grass.py"
         },
         "MovingPlatform": {
             "image": "",

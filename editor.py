@@ -93,7 +93,6 @@ class EditorWindow(QMainWindow):
 		self.ui.setupUi(self)
 
 		self._initTrees()
-		self._initSignals()
 
 		self.mapFile = ''
 		self.creationCode = ''
@@ -126,6 +125,8 @@ class EditorWindow(QMainWindow):
 
 		self.ui.buttonBackgroundColor.clicked.connect(self.setBackgroundColor)
 		self.ui.buttonCreationCode.clicked.connect(self.setCreationCode)
+
+		self._initSignals()
 	def setBackgroundColor(self):
 		dialog = QColorDialog()
 		if dialog.exec_() == dialog.Accepted:
@@ -183,6 +184,8 @@ class EditorWindow(QMainWindow):
 		#self.ui.actionQuit.triggered.connect(self.quitIfWants)
 		self.ui.actionData.triggered.connect(self.editData)
 		self.ui.actionRun.triggered.connect(self.run)
+		self.ui.actionCopy.triggered.connect(self.mapSurface.setCopyReference)
+		self.ui.actionPaste.triggered.connect(self.mapSurface.copyReferenced)
 	def keyPressEvent(self, e):
 		super().keyPressEvent(e)
 		if e.key() == Qt.Key_Delete:

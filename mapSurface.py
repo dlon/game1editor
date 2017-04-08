@@ -3,10 +3,11 @@ from PyQt5.QtGui import QPainter, QImage, QBrush, QColor, QCursor, QTransform
 from PyQt5.QtCore import pyqtSignal, QPoint, QRect, QSize, Qt
 import sys
 from uiCodeEditor import Ui_CodeEditor
+import copy
 
 class MapObject:
 	init = False
-	def __init__(self, type, position, image):
+	def __init__(self, type, position, image, creationCode=""):
 		self.type = type
 		self.rect = QRect(
 			position,
@@ -26,6 +27,13 @@ class MapObject:
 		if self.creationCode:
 			o['creationCode'] = self.creationCode
 		return o
+	def copy(self):
+		return MapObject(
+			self.type,
+			self.rect.topLeft(),
+			self.image,
+			self.creationCode,
+		)
 class MapTile:
 	def __init__(self,
 		tilesetWidget,
@@ -63,6 +71,15 @@ class MapTile:
 			'solid': self.solid,
 			'depth': self.depth,
 		}
+	def copy(self):
+		return MapTile(
+			self.tileset,
+			self.image,
+			self.subImageRect,
+			self.rect.topLeft(),
+			self.layerWidget,
+			self.solid,
+		)
 
 class MapSurface(QWidget):
 	clicked = pyqtSignal([object, QPoint, object])
@@ -74,8 +91,21 @@ class MapSurface(QWidget):
 		self.tiles = []
 		self.objects = []
 		self.selectedObject = None
+		self.copyReference = None
 		self.tileResizeHover = False
 		self.setMouseTracking(True)
+	def setCopyReference(self):
+		self.copyReference = self.selectedObject
+	def copyReferenced(self):
+		if self.copyReference:
+			self.selectedObject = self.copyReference.copy()
+			if isinstance(self.selectedObject, MapTile):
+				self.tiles.append(self.selectedObject)
+			else:
+				self.objects.append(self.selectedObject)
+			self.selectedObject.rect.translate(16,16)
+			self.copyReference = self.selectedObject
+			self.repaint()
 	def setBackgroundColor(self, color):
 		self.backgroundColor = color
 		self.repaint()
