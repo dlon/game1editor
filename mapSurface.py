@@ -51,7 +51,7 @@ class MapTile:
 				subImageRect.height(),
 			),
 		)
-		self.subImageRect = subImageRect
+		self.subImageRect = subImageRect.translated(0,0)
 		self.solid = solid
 		self.layerWidget = layerWidget
 	@property

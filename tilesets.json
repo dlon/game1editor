@@ -2,6 +2,7 @@
     "castle": "tileset1.png",
     "electronics": "tilesetElectronics.png",
     "happy": "tileset0.png",
+    "lab": "tilesetLab.png",
     "overworld": "tilesetOverworld.png",
     "room16": "tilesetRoom16.png",
     "shop": "tilesetShop.png"
