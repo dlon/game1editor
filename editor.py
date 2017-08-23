@@ -283,9 +283,22 @@ class EditorWindow(QMainWindow):
 		# keep a copy of the current state
 		copy.deepcopy(editState)
 
+import traceback
+
+errorMessage = None
+def handleErrors(type, val, tb):
+	errorMessage.setIcon(QMessageBox.Warning)
+	errorMessage.setWindowTitle("Exception")
+	errorStr = ''.join(line for line in traceback.TracebackException(type, val, tb).format())
+	errorMessage.setDetailedText(errorStr)
+	errorMessage.show()
+	traceback.print_exception(type, val, tb)
+
 # create Qt application
 if __name__ == '__main__':
+	sys.excepthook = handleErrors
 	app = QApplication(sys.argv)
+	errorMessage = QMessageBox()
 	editor = EditorWindow()
 	editor.show()
 	sys.exit(app.exec_())
