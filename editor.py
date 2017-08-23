@@ -16,6 +16,7 @@ from uiCodeEditor import Ui_CodeEditor
 import entities
 import icons_rc
 from objectPreview import QObjectPreview
+import pprint
 
 class EditorException(Exception):
 	pass
@@ -159,7 +160,13 @@ class EditorWindow(QMainWindow):
 		editor = Ui_CodeEditor()
 		editor.setupUi(dialog)
 		# TODO: add settings
-		editor.code.setText(json.dumps(self.generateData(), indent=4))
+		'''pp = pprint.PrettyPrinter(compact=False, width=1)
+		editor.code.setText(
+			pp.pformat(self.generateData())
+		)'''
+		editor.code.setText(
+			json.dumps(self.generateData(), indent=4)
+		)
 		dialog.setWindowTitle("Map data")
 		ret = dialog.exec_()
 		if ret == dialog.Accepted:
@@ -227,7 +234,7 @@ class EditorWindow(QMainWindow):
 			self.setWindowModified(False)
 	def open(self):
 		if self.saveIfWants():
-			path, _ = QFileDialog.getOpenFileName(caption = "Open map", filter = "game1 maps (*.map)")
+			path, _ = QFileDialog.getOpenFileName(caption = "Open map", filter = "game1 maps (*.json)")
 			if path:
 				return self.loadFile(path)
 		return False
@@ -236,7 +243,7 @@ class EditorWindow(QMainWindow):
 			return self.saveFile(self.mapFile)
 		return self.saveAs()
 	def saveAs(self):
-		file, _ = QFileDialog.getSaveFileName(caption = "Save map", filter = "game1 maps (*.map)")
+		file, _ = QFileDialog.getSaveFileName(caption = "Save map", filter = "game1 maps (*.json)")
 		if not file:
 			return False
 		return self.saveFile(file)
@@ -261,10 +268,7 @@ class EditorWindow(QMainWindow):
 		return True
 	def saveFile(self, path):
 		with open(path,'w') as f:
-			json.put({
-				'objects': objects,
-				
-			}, f)
+			json.dump(self.generateData(), f, indent=4)
 		self.setPath(path)
 		return True
 	def isModified(self):

@@ -1,40 +1,68 @@
 {
     "objects": {
+        "Crane": {
+            "image": "",
+            "script": "../entities/happyPlanet.py"
+        },
         "Falltrap": {
             "image": "",
-            "script": "entities/falltrap.py"
+            "script": "../entities/falltrap.py"
         },
         "Lava": {
             "image": "",
-            "script": "entities/lava.py"
+            "script": "../entities/lava.py"
         },
         "LiftableGrass": {
             "image": "",
-            "script": "entities/grass.py"
+            "script": "../entities/grass.py"
         },
         "MovingPlatform": {
             "image": "",
-            "script": "entities/movingPlatform.py"
+            "script": "../entities/movingPlatform.py"
+        },
+        "NpcHp1": {
+            "image": "",
+            "script": "../entities/happyPlanet.py"
+        },
+        "NpcHp2": {
+            "image": "",
+            "script": "../entities/happyPlanet.py"
+        },
+        "Palm0": {
+            "image": "",
+            "script": "../entities/happyPlanet.py"
+        },
+        "Palm1": {
+            "image": "",
+            "script": "../entities/happyPlanet.py"
+        },
+        "Pillar": {
+            "image": "",
+            "script": "../entities/happyPlanet.py"
+        },
+        "PinkFlower": {
+            "image": "",
+            "script": "../entities/happyPlanet.py"
         },
         "Player": {
             "image": "data\\playerStill.png",
-            "script": "entities/player.py"
+            "script": "../entities/player.py"
         },
         "SwitchLeft": {
             "image": "",
-            "script": "entities/switch.py"
+            "script": "../entities/switch.py"
         },
         "SwitchRight": {
             "image": "",
-            "script": "entities/switch.py"
+            "script": "../entities/switch.py"
         },
         "Teleporter": {
             "image": "",
-            "script": "entities/teleporter.py"
+            "script": "../entities/teleporter.py"
         },
         "Water": {
             "image": "",
-            "script": "entities/water.py"
+            "script": "../entities/water.py"
         }
     },
     "subdirs": {
@@ -42,7 +70,11 @@
             "objects": {
                 "Enemy0": {
                     "image": "",
-                    "script": "entities/enemies/enemy0.py"
+                    "script": "../entities/enemies/enemy0.py"
+                },
+                "Flutter": {
+                    "image": "",
+                    "script": "../entities/enemies/flutter.py"
                 }
             },
             "subdirs": {}
