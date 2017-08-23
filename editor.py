@@ -232,6 +232,7 @@ class EditorWindow(QMainWindow):
 			# create new project
 			self.mapFile = ''
 			self.setWindowModified(False)
+			self.mapSurface.clear()
 	def open(self):
 		if self.saveIfWants():
 			path, _ = QFileDialog.getOpenFileName(caption = "Open map", filter = "game1 maps (*.json)")

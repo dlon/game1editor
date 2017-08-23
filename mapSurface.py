@@ -87,13 +87,16 @@ class MapSurface(QWidget):
 		QWidget.__init__(self, parent)
 		#self.setGeometry(5, 5, 200, 1000)
 		#self.show()
-		self.backgroundColor = QColor(255,255,255)
+		self.clear()
+	def clear(self):
+		self.backgroundColor = QColor(255, 255, 255)
 		self.tiles = []
 		self.objects = []
 		self.selectedObject = None
 		self.copyReference = None
 		self.tileResizeHover = False
 		self.setMouseTracking(True)
+		self.repaint()
 	def setCopyReference(self):
 		self.copyReference = self.selectedObject
 	def copyReferenced(self):
