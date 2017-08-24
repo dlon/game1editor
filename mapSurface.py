@@ -17,7 +17,7 @@ class MapObject:
 			),
 		)
 		self.image = image
-		self.creationCode = ""
+		self.creationCode = creationCode
 	def dump(self):
 		o = {
 			'type': self.type,

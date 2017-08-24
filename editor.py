@@ -280,6 +280,7 @@ class EditorWindow(QMainWindow):
 				type=obj['type'],
 				position=QtCore.QPoint(obj['x'], obj['y']),
 				image=self.ui.objectPreviewFrame.unknownImage, # TODO: load appropriate image
+				creationCode=obj.get("creationCode") or ''
 			))
 		# tiles
 		tilesets = {}
