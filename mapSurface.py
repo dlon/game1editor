@@ -131,6 +131,7 @@ class MapSurface(QWidget):
 	def addObject(self, obj):
 		self.objects.append(obj)
 		self.selectedObject = obj
+		self.resizeDrag = False
 		self.repaint()
 	def paintEvent(self, event):
 		super().paintEvent(event)

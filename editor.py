@@ -6,6 +6,7 @@ import os
 import subprocess
 
 from PyQt5.QtCore import Qt
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtGui
@@ -264,7 +265,24 @@ class EditorWindow(QMainWindow):
 		self.setWindowTitle('%s[*] - game1 editor' % path)
 		self.setWindowModified(False)
 	def loadFile(self, path):
-		print("open data here")
+		with open(path) as f:
+			data = json.load(f)
+		self.mapSurface.clear()
+		# settings
+		self.mapSurface.setWidth(data["settings"]["width"])
+		self.mapSurface.setHeight(data["settings"]["width"])
+		self.mapSurface.setBackgroundColor(
+			QtGui.QColor(*data["settings"]["background"])
+		)
+		# objects
+		for obj in data["objects"]:
+			self.mapSurface.addObject(MapObject(
+				type=obj['type'],
+				position=QtCore.QPoint(obj['x'], obj['y']),
+				image=self.ui.objectPreviewFrame.unknownImage, # TODO: load appropriate image
+			))
+		# TODO: load tiles
+		self.mapSurface.selectedObject = None
 		self.setPath(path)
 		return True
 	def saveFile(self, path):
