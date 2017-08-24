@@ -106,7 +106,7 @@ class EditorWindow(QMainWindow):
 		#self.mapSurface = MapSurface(self.ui.mapSurfaceFrame)
 		#self.mapSurface.setObjectName("mapSurface")
 		#self.mapSurfaceGrid.addWidget(self.mapSurface)
-		self.mapSurface = MapSurface(None)
+		self.mapSurface = MapSurface(None, self)
 		self.ui.scrollArea.setWidget(self.mapSurface)
 
 		# s

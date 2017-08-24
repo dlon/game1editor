@@ -83,8 +83,9 @@ class MapTile:
 
 class MapSurface(QWidget):
 	clicked = pyqtSignal([object, QPoint, object])
-	def __init__(self, parent):
+	def __init__(self, parent, editor):
 		QWidget.__init__(self, parent)
+		self.editor = editor
 		#self.setGeometry(5, 5, 200, 1000)
 		#self.show()
 		self.clear()
@@ -155,6 +156,10 @@ class MapSurface(QWidget):
 			self.setCursor(QCursor(Qt.ArrowCursor))
 			self.tileResizeHover = False
 	def mouseMoveEvent(self, e):
+		position = e.pos()
+		self.editor.ui.statusbar.showMessage(
+			"%sx%s" % (position.x(), position.y())
+		)
 		if not self.selectedObject:
 			self.resetCursor()
 			return
@@ -171,7 +176,6 @@ class MapSurface(QWidget):
 				self.resetCursor()
 		if not (e.buttons() & Qt.LeftButton):
 			return
-		position = e.pos()
 		if not self.resizeDrag:
 			position -= self.dragOffset
 		if not (e.modifiers() & Qt.ShiftModifier) and \
