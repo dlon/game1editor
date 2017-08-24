@@ -281,7 +281,37 @@ class EditorWindow(QMainWindow):
 				position=QtCore.QPoint(obj['x'], obj['y']),
 				image=self.ui.objectPreviewFrame.unknownImage, # TODO: load appropriate image
 			))
-		# TODO: load tiles
+		# tiles
+		tilesets = {}
+		for i in range(self.ui.tilesetTree.topLevelItemCount()):
+			widget = self.ui.tilesetTree.topLevelItem(i)
+			tilesets[widget.data(0, Qt.UserRole)] = {
+				"treeItem": widget,
+				"image": QtGui.QImage("../data/%s" % widget.text(0)),
+			}
+		layers = {}
+		for i in range(self.ui.layerTree.topLevelItemCount()):
+			widget = self.ui.layerTree.topLevelItem(i)
+			depth = int(widget.text(1))
+			#if depth in layers:
+			#	raise EditorException("layer depths must be unique")
+			layers[depth] = widget
+		for tile in data["tiles"]:
+			position = QtCore.QPoint(tile['x'], tile['y'])
+			subimageRect = QtCore.QRect(
+				QtCore.QPoint(tile['tx'], tile['ty']),
+				QtCore.QSize(tile['tw'], tile['th']),
+			)
+			mapTile = MapTile(
+				tilesets[tile["tileset"]]["treeItem"],
+				tilesets[tile["tileset"]]["image"],
+				subimageRect,
+				position,
+				layers[tile['depth']],
+				tile['solid'],
+			)
+			mapTile.rect.setSize(QtCore.QSize(tile['w'], tile['h']))
+			self.mapSurface.addTile(mapTile)
 		self.mapSurface.selectedObject = None
 		self.setPath(path)
 		return True
