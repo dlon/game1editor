@@ -285,20 +285,35 @@ class EditorWindow(QMainWindow):
 
 import traceback
 
-errorMessage = None
+class QTracebackDialog(QDialog):
+	def __init__(self, type, val, tb):
+		super().__init__()
+		self.tbExcept = traceback.TracebackException(type, val, tb)
+		errorStr = ''.join(line for line in self.tbExcept.format())
+		self.layout = QVBoxLayout()
+		self.tbArea = QTextEdit()
+		self.tbArea.setText(errorStr)
+		self.tbArea.setReadOnly(True)
+		self.layout.addWidget(self.tbArea)
+		self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok)
+		self.buttonBox.clicked.connect(self.accept)
+		self.layout.addWidget(self.buttonBox)
+		self.setWindowTitle("Exception")
+		self.setSizeGripEnabled(True)
+		self.setLayout(self.layout)
+	def accept(self):
+		super().accept()
+
 def handleErrors(type, val, tb):
-	errorMessage.setIcon(QMessageBox.Warning)
-	errorMessage.setWindowTitle("Exception")
-	errorStr = ''.join(line for line in traceback.TracebackException(type, val, tb).format())
-	errorMessage.setDetailedText(errorStr)
-	errorMessage.show()
+	# print traceback
 	traceback.print_exception(type, val, tb)
+	# display stacktrace in dialog
+	QTracebackDialog(type, val, tb).exec()
 
 # create Qt application
 if __name__ == '__main__':
-	sys.excepthook = handleErrors
 	app = QApplication(sys.argv)
-	errorMessage = QMessageBox()
+	sys.excepthook = handleErrors
 	editor = EditorWindow()
 	editor.show()
 	sys.exit(app.exec_())
