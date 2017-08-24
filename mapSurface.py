@@ -158,7 +158,10 @@ class MapSurface(QWidget):
 	def mouseMoveEvent(self, e):
 		position = e.pos()
 		self.editor.ui.statusbar.showMessage(
-			"%sx%s" % (position.x(), position.y())
+			"%sx%s [%sx%s]" % (
+				position.x(), position.y(),
+				int(position.x()/16)*16, int(position.y()/16)*16,
+			)
 		)
 		if not self.selectedObject:
 			self.resetCursor()
