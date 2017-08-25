@@ -81,6 +81,22 @@ class MapTile:
 			self.solid,
 		)
 
+class SelectionMenu(QMenu):
+	def __init__(self, mapSurface, obj):
+		super().__init__()
+		self.obj = obj
+		self.mapSurface = mapSurface
+		if isinstance(obj, MapTile):
+			self.solidAction = self.addAction("&Solid", self.setSolid)
+			self.solidAction.setCheckable(True)
+			self.solidAction.setChecked(obj.solid)
+		elif isinstance(obj, MapObject):
+			creationCodeAction = self.addAction("&Creation code", mapSurface.editCode)
+		self.addSeparator()
+		deleteAction = self.addAction("&Delete", mapSurface.deleteSelected)
+	def setSolid(self):
+		self.obj.solid = self.solidAction.isChecked()
+
 class MapSurface(QWidget):
 	clicked = pyqtSignal([object, QPoint, object])
 	def __init__(self, parent, editor):
@@ -222,26 +238,8 @@ class MapSurface(QWidget):
 		if ret == dialog.Accepted:
 			self.selectedObject.creationCode = editor.code.toPlainText()
 	def showContextMenu(self, pos):
-		if not self.selectedObject:
-			return
-		menu = QMenu(self)
-		if isinstance(self.selectedObject, MapTile):
-			solidAction = menu.addAction("&Solid")
-			solidAction.setCheckable(True)
-			solidAction.setChecked(self.selectedObject.solid)
-		elif isinstance(self.selectedObject, MapObject):
-			creationCodeAction = menu.addAction("&Creation code")
-		menu.addSeparator()
-		deleteAction = menu.addAction("&Delete")
-		action = menu.exec_(pos)
-		if action == deleteAction:
-			self.deleteSelected()
-		if isinstance(self.selectedObject, MapTile):
-			if action == solidAction:
-				self.selectedObject.solid = action.isChecked()
-		elif isinstance(self.selectedObject, MapObject):
-			if action == creationCodeAction:
-				self.editCode()
+		if self.selectedObject:
+			SelectionMenu(self, self.selectedObject).exec(pos)
 	def mousePressEvent(self, e):
 		if self.tileResizeHover:
 			self.resizeDrag = True
