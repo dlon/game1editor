@@ -8,7 +8,6 @@ import subprocess
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QIcon
 from PyQt5 import QtGui
 
 from uiEditor import Ui_EditorWindow
@@ -100,35 +99,25 @@ class EditorWindow(QMainWindow):
 		self.creationCode = ''
 		self.setWindowTitle('untitled[*] - game1 editor')
 
+		self._initSettings()
+
 		# add window surface
-		#self.mapSurfaceGrid = QGridLayout(self.ui.mapSurfaceFrame)
-		#self.mapSurfaceGrid.setObjectName("mapSurfaceGrid")
-		#self.mapSurface = MapSurface(self.ui.mapSurfaceFrame)
-		#self.mapSurface.setObjectName("mapSurface")
-		#self.mapSurfaceGrid.addWidget(self.mapSurface)
 		self.mapSurface = MapSurface(None, self)
 		self.ui.scrollArea.setWidget(self.mapSurface)
 
 		# s
 		#self.editStates = [EditState(self)] # list of edit states
 		# an edit state contains options that can be undone (Ctrl-Z)
-
 		#self.currentState = self.editStates[0]
 		#self.lastSavedState = self.editStates[0]
 
-		self.ui.objectTree.currentItemChanged.connect(self.ui.objectPreviewFrame.setImage)
-		self.ui.tilesetTree.currentItemChanged.connect(self.ui.tilePreviewFrame.setImage)
-		self.ui.widthSetting.textChanged.connect(self.mapSurface.setWidth)
-		self.ui.heightSetting.textChanged.connect(self.mapSurface.setHeight)
-		self.ui.widthSetting.setText("640")
-		self.ui.heightSetting.setText("480")
-		self.mapSurface.clicked.connect(self.ui.tilePreviewFrame.handleMapSurfaceClick)
-		self.mapSurface.clicked.connect(self.ui.objectPreviewFrame.handleMapSurfaceClick)
-
-		self.ui.buttonBackgroundColor.clicked.connect(self.setBackgroundColor)
-		self.ui.buttonCreationCode.clicked.connect(self.setCreationCode)
-
 		self._initSignals()
+	def _initSettings(self):
+		QtCore.QCoreApplication.setOrganizationName("dlon")
+		QtCore.QCoreApplication.setOrganizationDomain("dlon.github.io")
+		QtCore.QCoreApplication.setApplicationName("game1editor")
+		self.settings = QtCore.QSettings()
+		self.openDirectory = self.settings.value("openDirectory", "")
 	def setBackgroundColor(self):
 		dialog = QColorDialog()
 		if dialog.exec_() == dialog.Accepted:
@@ -160,16 +149,11 @@ class EditorWindow(QMainWindow):
 		dialog = QDialog(self)
 		editor = Ui_CodeEditor()
 		editor.setupUi(dialog)
-		# TODO: add settings
-		'''pp = pprint.PrettyPrinter(compact=False, width=1)
-		editor.code.setText(
-			pp.pformat(self.generateData())
-		)'''
 		editor.code.setText(
 			json.dumps(self.generateData(), indent=4)
 		)
 		dialog.setWindowTitle("Map data")
-		ret = dialog.exec_()
+		ret = dialog.exec()
 		if ret == dialog.Accepted:
 			print("TODO: rebuild data based on input")
 	def run(self):
@@ -185,6 +169,18 @@ class EditorWindow(QMainWindow):
 		else:
 			event.ignore()
 	def _initSignals(self):
+		self.ui.objectTree.currentItemChanged.connect(self.ui.objectPreviewFrame.setImage)
+		self.ui.tilesetTree.currentItemChanged.connect(self.ui.tilePreviewFrame.setImage)
+		self.ui.widthSetting.textChanged.connect(self.mapSurface.setWidth)
+		self.ui.heightSetting.textChanged.connect(self.mapSurface.setHeight)
+		self.ui.widthSetting.setText("640")
+		self.ui.heightSetting.setText("480")
+		self.mapSurface.clicked.connect(self.ui.tilePreviewFrame.handleMapSurfaceClick)
+		self.mapSurface.clicked.connect(self.ui.objectPreviewFrame.handleMapSurfaceClick)
+
+		self.ui.buttonBackgroundColor.clicked.connect(self.setBackgroundColor)
+		self.ui.buttonCreationCode.clicked.connect(self.setCreationCode)
+
 		self.ui.actionNew.triggered.connect(self.new)
 		self.ui.actionOpen.triggered.connect(self.open)
 		self.ui.actionSave.triggered.connect(self.save)
@@ -236,8 +232,15 @@ class EditorWindow(QMainWindow):
 			self.mapSurface.clear()
 	def open(self):
 		if self.saveIfWants():
-			path, _ = QFileDialog.getOpenFileName(caption = "Open map", filter = "game1 maps (*.json)")
+			path, _ = QFileDialog.getOpenFileName(
+				caption = "Open map",
+				filter = "game1 maps (*.json)",
+				directory = self.openDirectory,
+			)
 			if path:
+				dir = QtCore.QFileInfo(path)
+				self.settings.setValue("openDirectory", dir.absolutePath())
+				self.openDirectory = ''
 				return self.loadFile(path)
 		return False
 	def save(self):
@@ -245,8 +248,15 @@ class EditorWindow(QMainWindow):
 			return self.saveFile(self.mapFile)
 		return self.saveAs()
 	def saveAs(self):
-		file, _ = QFileDialog.getSaveFileName(caption = "Save map", filter = "game1 maps (*.json)")
+		file, _ = QFileDialog.getSaveFileName(
+			caption = "Save map",
+			filter = "game1 maps (*.json)",
+			directory=self.openDirectory,
+		)
 		if not file:
+			dir = QtCore.QFileInfo(file)
+			self.settings.setValue("openDirectory", dir.absolutePath())
+			self.openDirectory = ''
 			return False
 		return self.saveFile(file)
 	def saveIfWants(self):
