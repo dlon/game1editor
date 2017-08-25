@@ -5,6 +5,8 @@ import sys
 from uiCodeEditor import Ui_CodeEditor
 import copy
 
+from PyQt5 import QtWidgets, QtCore
+
 class MapObject:
 	init = False
 	def __init__(self, type, position, image, creationCode=""):
@@ -82,6 +84,58 @@ class MapTile:
 		)
 
 class SelectionMenu(QMenu):
+	class PositionDialog(QDialog):
+		def __init__(self, parent):
+			super().__init__(parent=parent)
+			self.layout = QtWidgets.QVBoxLayout()
+			self._parent = parent
+			# desc
+			if isinstance(parent.obj, MapObject):
+				description = "#{}, {}, {}x{}".format(
+					parent.mapSurface.objects.index(parent.obj),
+					parent.obj.type,
+					parent.obj.rect.x(), parent.obj.rect.y(),
+				)
+				self.setWindowTitle("Object position - {}".format(description))
+			else:
+				description = "#{}, {}x{}".format(
+					parent.mapSurface.tiles.index(parent.obj),
+					parent.obj.rect.x(), parent.obj.rect.y(),
+				)
+				self.setWindowTitle("Tile position - {}".format(description))
+			self.label = QtWidgets.QLabel(description)
+			self.label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+			self.layout.addWidget(self.label)
+			# x-coordinate
+			self.xLayout = QtWidgets.QHBoxLayout()
+			self.labelX = QtWidgets.QLabel("X:")
+			self.xLayout.addWidget(self.labelX)
+			self.objectX = QtWidgets.QLineEdit(str(parent.obj.rect.x()))
+			self.xLayout.addWidget(self.objectX)
+			self.layout.addLayout(self.xLayout)
+			# y-coordinate
+			self.yLayout = QtWidgets.QHBoxLayout()
+			self.labelY = QtWidgets.QLabel("Y:")
+			self.yLayout.addWidget(self.labelY)
+			self.objectY = QtWidgets.QLineEdit(str(parent.obj.rect.y()))
+			self.yLayout.addWidget(self.objectY)
+			self.layout.addLayout(self.yLayout)
+			# accept/cancel
+			self.buttonBox = QtWidgets.QDialogButtonBox(
+				QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel,
+				parent = self
+			)
+			self.buttonBox.accepted.connect(self.accept)
+			self.buttonBox.rejected.connect(self.reject)
+			self.layout.addWidget(self.buttonBox)
+			self.setLayout(self.layout)
+			self.objectX.selectAll()  # FIXME: does not work
+		def accept(self):
+			self._parent.obj.rect.moveTo(
+				int(self.objectX.text()),
+				int(self.objectY.text())
+			)
+			super().accept()
 	def __init__(self, mapSurface, obj):
 		super().__init__()
 		self.obj = obj
@@ -91,11 +145,15 @@ class SelectionMenu(QMenu):
 			self.solidAction.setCheckable(True)
 			self.solidAction.setChecked(obj.solid)
 		elif isinstance(obj, MapObject):
-			creationCodeAction = self.addAction("&Creation code", mapSurface.editCode)
+			self.addAction("&Creation code", mapSurface.editCode)
+		self.addAction("Set &position", self.showPositionDialog)
 		self.addSeparator()
-		deleteAction = self.addAction("&Delete", mapSurface.deleteSelected)
+		self.addAction("&Delete", mapSurface.deleteSelected)
 	def setSolid(self):
 		self.obj.solid = self.solidAction.isChecked()
+	def showPositionDialog(self):
+		dialog = self.PositionDialog(self)
+		dialog.exec()
 
 class MapSurface(QWidget):
 	clicked = pyqtSignal([object, QPoint, object])
