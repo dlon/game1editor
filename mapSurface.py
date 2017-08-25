@@ -229,15 +229,38 @@ class MapSurface(QWidget):
 		if self.tileResizeHover:
 			self.setCursor(QCursor(Qt.ArrowCursor))
 			self.tileResizeHover = False
+	def updateHoverInfo(self, position):
+		hoverObject = None
+		message = ""
+		for i, obj in enumerate(self.objects):
+			if obj.rect.contains(position):
+				hoverObject = obj
+				message = "Object #{} ({}, {}x{})".format(
+					i,
+					hoverObject.type,
+					hoverObject.rect.x(), hoverObject.rect.y(),
+				)
+				break
+		if not hoverObject:
+			for i, tile in enumerate(self.tiles):
+				if tile.rect.contains(position):
+					hoverObject = tile
+					message = "Tile #{} ({}x{})".format(
+						i,
+						hoverObject.rect.x(), hoverObject.rect.y(),
+					)
+					break
+		self.editor.ui.statusbar.setHoverInfo(message)
 	def mouseMoveEvent(self, e):
 		position = e.pos()
 		if not self.selectedObject or not (e.buttons() & Qt.LeftButton):
-			self.editor.ui.statusbar.showMessage(
+			self.editor.ui.statusbar.setPositionInfo(
 				"%sx%s [%sx%s]" % (
 					position.x(), position.y(),
 					int(position.x()/16)*16, int(position.y()/16)*16,
 				)
 			)
+		self.updateHoverInfo(position)
 		if not self.selectedObject:
 			self.resetCursor()
 			return
@@ -269,7 +292,7 @@ class MapSurface(QWidget):
 			))
 		else:
 			self.selectedObject.rect.moveTo(position)
-		self.editor.ui.statusbar.showMessage(
+		self.editor.ui.statusbar.setPositionInfo(
 			"%sx%s [%sx%s] (selection)" % (
 				position.x(), position.y(),
 				int(position.x() / 16) * 16, int(position.y() / 16) * 16,

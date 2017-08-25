@@ -86,6 +86,18 @@ editState = {
 	'tiles': [],
 }
 
+class EditorStatusBar(QStatusBar):
+	def __init__(self, parent):
+		super().__init__(parent)
+		self.mousePositionLabel = QLabel()
+		self.objectInfoLabel = QLabel()
+		self.addPermanentWidget(self.mousePositionLabel, 1)
+		self.addPermanentWidget(self.objectInfoLabel)
+	def setPositionInfo(self, text):
+		self.mousePositionLabel.setText(text)
+	def setHoverInfo(self, text):
+		self.objectInfoLabel.setText(text)
+
 class EditorWindow(QMainWindow):
 	def __init__(self):
 		# set up UI window

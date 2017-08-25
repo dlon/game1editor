@@ -468,7 +468,7 @@
    <addaction name="menu_Edit"/>
    <addaction name="menu_View"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="EditorStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>
@@ -760,6 +760,11 @@
    <extends>QFrame</extends>
    <header>tilesetSurface</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EditorStatusBar</class>
+   <extends>QStatusBar</extends>
+   <header>editor</header>
   </customwidget>
  </customwidgets>
  <resources>
