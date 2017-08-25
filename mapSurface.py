@@ -157,12 +157,13 @@ class MapSurface(QWidget):
 			self.tileResizeHover = False
 	def mouseMoveEvent(self, e):
 		position = e.pos()
-		self.editor.ui.statusbar.showMessage(
-			"%sx%s [%sx%s]" % (
-				position.x(), position.y(),
-				int(position.x()/16)*16, int(position.y()/16)*16,
+		if not self.selectedObject or not (e.buttons() & Qt.LeftButton):
+			self.editor.ui.statusbar.showMessage(
+				"%sx%s [%sx%s]" % (
+					position.x(), position.y(),
+					int(position.x()/16)*16, int(position.y()/16)*16,
+				)
 			)
-		)
 		if not self.selectedObject:
 			self.resetCursor()
 			return
@@ -194,6 +195,12 @@ class MapSurface(QWidget):
 			))
 		else:
 			self.selectedObject.rect.moveTo(position)
+		self.editor.ui.statusbar.showMessage(
+			"%sx%s [%sx%s] (selection)" % (
+				position.x(), position.y(),
+				int(position.x() / 16) * 16, int(position.y() / 16) * 16,
+			)
+		)
 		self.update()
 	def mouseReleaseEvent(self, e):
 		self.resizeDrag = False
