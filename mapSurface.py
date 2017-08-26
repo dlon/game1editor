@@ -173,7 +173,8 @@ class SelectionMenu(QMenu):
 			self.layout.addWidget(self.buttonBox)
 			self.setLayout(self.layout)
 		def newItem(self):
-			print("Hello!")
+			item = self.addProperty("", "")
+			self.propertyTree.editItem(item, 0)
 		def removeItem(self):
 			item = self.propertyTree.selectedItems()[0]
 			self.propertyTree.takeTopLevelItem(
@@ -185,6 +186,7 @@ class SelectionMenu(QMenu):
 				(k, v)
 			)
 			item.setFlags(item.flags() | Qt.ItemIsEditable)
+			return item
 		def createTree(self):
 			self.propertyTree = QtWidgets.QTreeWidget(self)
 			self.propertyTree.setRootIsDecorated(False)
