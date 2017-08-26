@@ -199,12 +199,17 @@ class SelectionMenu(QMenu):
 			self.addProperty("x", str(self._parent.obj.rect.x()))
 			self.addProperty("y", str(self._parent.obj.rect.y()))
 			for prop, val in self._parent.obj.customProperties.items():
-				self.addProperty(prop, val)
+				self.addProperty(prop, str(val))
 		def accept(self):
 			properties = {
 				self.propertyTree.topLevelItem(i).text(0) : self.propertyTree.topLevelItem(i).text(1)
 				for i in range(self.propertyTree.topLevelItemCount())
 			}
+			for k in properties:
+				try:
+					properties[k] = int(properties[k])
+				except ValueError:
+					properties[k] = properties[k]
 			self._parent.obj.rect.moveTo(
 				int(properties['x']),
 				int(properties['y']),
