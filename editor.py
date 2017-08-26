@@ -291,8 +291,8 @@ class EditorWindow(QMainWindow):
 			data = json.load(f)
 		self.mapSurface.clear()
 		# settings
-		self.mapSurface.setWidth(data["settings"]["width"])
-		self.mapSurface.setHeight(data["settings"]["width"])
+		self.mapSurface.setWidth(data["settings"]["width"], updateForm=True)
+		self.mapSurface.setHeight(data["settings"]["height"], updateForm=True)
 		self.mapSurface.setBackgroundColor(
 			QtGui.QColor(*data["settings"]["background"])
 		)

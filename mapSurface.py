@@ -277,16 +277,20 @@ class MapSurface(QWidget):
 	def setBackgroundColor(self, color):
 		self.backgroundColor = color
 		self.repaint()
-	def setWidth(self, width):
+	def setWidth(self, width, updateForm=False):
 		try:
 			self.setMinimumSize(int(width), self.height())
 			self.setMaximumSize(int(width), self.height())
+			if updateForm:
+				self.editor.ui.widthSetting.setText(str(width))
 		except ValueError:
 			pass
-	def setHeight(self, height):
+	def setHeight(self, height, updateForm=False):
 		try:
 			self.setMinimumSize(self.width(), int(height))
 			self.setMaximumSize(self.width(), int(height))
+			if updateForm:
+				self.editor.ui.heightSetting.setText(str(height))
 		except ValueError:
 			pass
 	def addTile(self, tile):
