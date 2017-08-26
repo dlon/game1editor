@@ -182,7 +182,24 @@ class SelectionMenu(QMenu):
 			self.addProperty("x", str(self._parent.obj.rect.x()))
 			self.addProperty("y", str(self._parent.obj.rect.y()))
 			for prop, val in self._parent.obj.customProperties.items():
-				self.addProperty(prop, str(val))
+				self.addProperty(prop, val)
+		def accept(self):
+			properties = {
+				self.propertyTree.topLevelItem(i).text(0) : self.propertyTree.topLevelItem(i).text(1)
+				for i in range(self.propertyTree.topLevelItemCount())
+			}
+			self._parent.obj.rect.moveTo(
+				int(properties['x']),
+				int(properties['y']),
+			)
+			self._parent.obj.type = properties['type']
+			for k in ('x','y','type'):
+				try:
+					properties.pop(k)
+				except KeyError:
+					pass
+			self._parent.obj.customProperties = properties
+			super().accept()
 	def __init__(self, mapSurface, obj):
 		super().__init__()
 		self.obj = obj
