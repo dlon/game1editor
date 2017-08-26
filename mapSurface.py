@@ -136,6 +136,42 @@ class SelectionMenu(QMenu):
 				int(self.objectY.text())
 			)
 			super().accept()
+	class CustomPropertiesDialog(QDialog):
+		def __init__(self, parent):
+			super().__init__(parent=parent)
+			self.layout = QtWidgets.QVBoxLayout()
+			self._parent = parent
+			description = "Object #{}, {}, {}x{}".format(
+				parent.mapSurface.objects.index(parent.obj),
+				parent.obj.type,
+				parent.obj.rect.x(), parent.obj.rect.y(),
+			)
+			self.setWindowTitle("Object properties - {}".format(description))
+			self.label = QtWidgets.QLabel(description)
+			self.label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+			self.layout.addWidget(self.label)
+			self.createTree()
+			self.layout.addWidget(self.propertyTree)
+			# accept/cancel
+			self.buttonBox = QtWidgets.QDialogButtonBox(
+				QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel,
+				parent=self
+			)
+			self.buttonBox.accepted.connect(self.accept)
+			self.buttonBox.rejected.connect(self.reject)
+			self.layout.addWidget(self.buttonBox)
+			self.setLayout(self.layout)
+		def createTree(self):
+			self.propertyTree = QtWidgets.QTreeWidget(self)
+			self.propertyTree.setRootIsDecorated(False)
+			self.propertyTree.setItemsExpandable(False)
+			self.propertyTree.setHeaderLabels(["Variable", "Value"])
+			self.propertyTree.setColumnCount(2)
+			item = QtWidgets.QTreeWidgetItem(
+				self.propertyTree,
+				["test", 'asdf']
+			)
+			item.setFlags(item.flags() | Qt.ItemIsEditable)
 	def __init__(self, mapSurface, obj):
 		super().__init__()
 		self.obj = obj
@@ -146,6 +182,7 @@ class SelectionMenu(QMenu):
 			self.solidAction.setChecked(obj.solid)
 		elif isinstance(obj, MapObject):
 			self.addAction("&Creation code", mapSurface.editCode)
+			self.addAction("&Edit properties", self.showPropertiesDialog)
 		self.addAction("Set &position", self.showPositionDialog)
 		self.addSeparator()
 		self.addAction("&Delete", mapSurface.deleteSelected)
@@ -153,6 +190,9 @@ class SelectionMenu(QMenu):
 		self.obj.solid = self.solidAction.isChecked()
 	def showPositionDialog(self):
 		dialog = self.PositionDialog(self)
+		dialog.exec()
+	def showPropertiesDialog(self):
+		dialog = self.CustomPropertiesDialog(self)
 		dialog.exec()
 
 class MapSurface(QWidget):
