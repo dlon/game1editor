@@ -139,7 +139,7 @@ class SelectionMenu(QMenu):
 				int(self.objectY.text())
 			)
 			super().accept()
-	class CustomPropertiesDialog(QDialog):
+	class PropertiesDialog(QDialog):
 		def __init__(self, parent):
 			super().__init__(parent=parent)
 			self.layout = QtWidgets.QGridLayout()
@@ -164,17 +164,25 @@ class SelectionMenu(QMenu):
 			self.buttonBox.rejected.connect(self.reject)
 			self.layout.addWidget(self.buttonBox)
 			self.setLayout(self.layout)
+		def addProperty(self, k, v):
+			item = QtWidgets.QTreeWidgetItem(
+				self.propertyTree,
+				(k, v)
+			)
+			item.setFlags(item.flags() | Qt.ItemIsEditable)
 		def createTree(self):
 			self.propertyTree = QtWidgets.QTreeWidget(self)
 			self.propertyTree.setRootIsDecorated(False)
 			self.propertyTree.setItemsExpandable(False)
 			self.propertyTree.setHeaderLabels(["Variable", "Value"])
 			self.propertyTree.setColumnCount(2)
-			item = QtWidgets.QTreeWidgetItem(
-				self.propertyTree,
-				["test", 'asdf']
-			)
-			item.setFlags(item.flags() | Qt.ItemIsEditable)
+			self.propertyTree.setSortingEnabled(True)
+			# add items
+			self.addProperty("type", self._parent.obj.type)
+			self.addProperty("x", str(self._parent.obj.rect.x()))
+			self.addProperty("y", str(self._parent.obj.rect.y()))
+			for prop, val in self._parent.obj.customProperties.items():
+				self.addProperty(prop, str(val))
 	def __init__(self, mapSurface, obj):
 		super().__init__()
 		self.obj = obj
@@ -195,7 +203,7 @@ class SelectionMenu(QMenu):
 		dialog = self.PositionDialog(self)
 		dialog.exec()
 	def showPropertiesDialog(self):
-		dialog = self.CustomPropertiesDialog(self)
+		dialog = self.PropertiesDialog(self)
 		dialog.exec()
 
 class MapSurface(QWidget):
