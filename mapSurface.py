@@ -339,9 +339,10 @@ class MapSurface(QWidget):
 			for i, tile in enumerate(self.tiles):
 				if tile.rect.contains(position):
 					hoverObject = tile
-					message = "Tile #{} ({}x{})".format(
+					message = "Tile #{} ({}x{}, size: {}x{})".format(
 						i,
 						hoverObject.rect.x(), hoverObject.rect.y(),
+						hoverObject.rect.width(), hoverObject.rect.height(),
 					)
 					break
 		self.editor.ui.statusbar.setHoverInfo(message)
