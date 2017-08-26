@@ -155,7 +155,15 @@ class SelectionMenu(QMenu):
 			self.layout.addWidget(self.label)
 			self.createTree()
 			self.layout.addWidget(self.propertyTree)
-			# accept/cancel
+			# buttons
+			self.modButtons = QtWidgets.QHBoxLayout()
+			self.addItemButton = QtWidgets.QPushButton("+")
+			self.removeItemButton = QtWidgets.QPushButton("-")
+			self.modButtons.addWidget(self.addItemButton)
+			self.modButtons.addWidget(self.removeItemButton)
+			self.layout.addItem(self.modButtons)
+			self.addItemButton.clicked.connect(self.newItem)
+			self.removeItemButton.clicked.connect(self.removeItem)
 			self.buttonBox = QtWidgets.QDialogButtonBox(
 				QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel,
 				parent=self
@@ -164,6 +172,13 @@ class SelectionMenu(QMenu):
 			self.buttonBox.rejected.connect(self.reject)
 			self.layout.addWidget(self.buttonBox)
 			self.setLayout(self.layout)
+		def newItem(self):
+			print("Hello!")
+		def removeItem(self):
+			item = self.propertyTree.selectedItems()[0]
+			self.propertyTree.takeTopLevelItem(
+				self.propertyTree.indexOfTopLevelItem(item)
+			)
 		def addProperty(self, k, v):
 			item = QtWidgets.QTreeWidgetItem(
 				self.propertyTree,
