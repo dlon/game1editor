@@ -9,7 +9,7 @@ from PyQt5 import QtWidgets, QtCore
 
 class MapObject:
 	init = False
-	def __init__(self, type, position, image, creationCode=""):
+	def __init__(self, type, position, image, creationCode="", customProperties={}):
 		self.type = type
 		self.rect = QRect(
 			position,
@@ -20,12 +20,14 @@ class MapObject:
 		)
 		self.image = image
 		self.creationCode = creationCode
+		self.customProperties = customProperties.copy()
 	def dump(self):
 		o = {
 			'type': self.type,
 			'x': self.rect.x(),
 			'y': self.rect.y(),
 		}
+		o.update(self.customProperties)
 		if self.creationCode:
 			o['creationCode'] = self.creationCode
 		return o
@@ -35,6 +37,7 @@ class MapObject:
 			self.rect.topLeft(),
 			self.image,
 			self.creationCode,
+			self.customProperties
 		)
 class MapTile:
 	def __init__(self,
@@ -139,7 +142,7 @@ class SelectionMenu(QMenu):
 	class CustomPropertiesDialog(QDialog):
 		def __init__(self, parent):
 			super().__init__(parent=parent)
-			self.layout = QtWidgets.QVBoxLayout()
+			self.layout = QtWidgets.QGridLayout()
 			self._parent = parent
 			description = "Object #{}, {}, {}x{}".format(
 				parent.mapSurface.objects.index(parent.obj),

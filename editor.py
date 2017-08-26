@@ -298,11 +298,18 @@ class EditorWindow(QMainWindow):
 		)
 		# objects
 		for obj in data["objects"]:
+			customProp = obj.copy()
+			for k in ('x','y','type','creationCode'):
+				try:
+					customProp.pop(k)
+				except KeyError:
+					pass
 			self.mapSurface.addObject(MapObject(
 				type=obj['type'],
 				position=QtCore.QPoint(obj['x'], obj['y']),
 				image=self.ui.objectPreviewFrame.unknownImage, # TODO: load appropriate image
-				creationCode=obj.get("creationCode") or ''
+				creationCode=obj.get("creationCode") or '',
+				customProperties=customProp,
 			))
 		# tiles
 		tilesets = {}
