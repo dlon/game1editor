@@ -7,6 +7,8 @@ import copy
 
 from PyQt5 import QtWidgets, QtCore
 
+import editor
+
 class MapObject:
 	init = False
 	def __init__(self, type, position, image, creationCode="", customProperties={}):
@@ -62,6 +64,20 @@ class MapTile:
 	@property
 	def depth(self):
 		return int(self.layerWidget.text(1))
+	@depth.setter
+	def depth(self, value):
+		layers = {}
+		layerTree = self.layerWidget.treeWidget()
+		for i in range(layerTree.topLevelItemCount()):
+			widget = layerTree.topLevelItem(i)
+			depth = int(widget.text(1))
+			# if depth in layers:
+			#	raise EditorException("layer depths must be unique")
+			layers[depth] = widget
+		if value in layers:
+			self.layerWidget = layers[value]
+		else:
+			raise editor.EditorException("no such layer")
 	def dump(self):
 		return {
 			'tileset': self.tileset.data(0, Qt.UserRole),
@@ -109,20 +125,13 @@ class SelectionMenu(QMenu):
 			self.label = QtWidgets.QLabel(description)
 			self.label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 			self.layout.addWidget(self.label)
-			# x-coordinate
-			self.xLayout = QtWidgets.QHBoxLayout()
-			self.labelX = QtWidgets.QLabel("X:")
-			self.xLayout.addWidget(self.labelX)
-			self.objectX = QtWidgets.QLineEdit(str(parent.obj.rect.x()))
-			self.xLayout.addWidget(self.objectX)
-			self.layout.addLayout(self.xLayout)
-			# y-coordinate
-			self.yLayout = QtWidgets.QHBoxLayout()
-			self.labelY = QtWidgets.QLabel("Y:")
-			self.yLayout.addWidget(self.labelY)
-			self.objectY = QtWidgets.QLineEdit(str(parent.obj.rect.y()))
-			self.yLayout.addWidget(self.objectY)
-			self.layout.addLayout(self.yLayout)
+			# dimensions
+			self.objectX = self.addOption("X", parent.obj.rect.x())
+			self.objectY = self.addOption("Y", parent.obj.rect.y())
+			if isinstance(parent.obj, MapTile):
+				self.objectW = self.addOption("Width", parent.obj.rect.width())
+				self.objectH = self.addOption("Height", parent.obj.rect.height())
+				self.objectDepth = self.addOption("Depth", parent.obj.depth)
 			# accept/cancel
 			self.buttonBox = QtWidgets.QDialogButtonBox(
 				QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel,
@@ -133,11 +142,25 @@ class SelectionMenu(QMenu):
 			self.layout.addWidget(self.buttonBox)
 			self.setLayout(self.layout)
 			self.objectX.selectAll()  # FIXME: does not work
+		def addOption(self, name, value):
+			layout = QtWidgets.QHBoxLayout()
+			label = QtWidgets.QLabel("{}:".format(name))
+			layout.addWidget(label)
+			lineEdit = QtWidgets.QLineEdit(str(value))
+			layout.addWidget(lineEdit)
+			self.layout.addLayout(layout)
+			return lineEdit
 		def accept(self):
 			self._parent.obj.rect.moveTo(
 				int(self.objectX.text()),
 				int(self.objectY.text())
 			)
+			if isinstance(self._parent.obj, MapTile):
+				self._parent.obj.rect.setSize(QSize(
+					int(self.objectW.text()),
+					int(self.objectH.text())
+				))
+				self._parent.obj.depth = int(self.objectDepth.text())
 			super().accept()
 	class PropertiesDialog(QDialog):
 		def __init__(self, parent):
@@ -230,10 +253,11 @@ class SelectionMenu(QMenu):
 			self.solidAction = self.addAction("&Solid", self.setSolid)
 			self.solidAction.setCheckable(True)
 			self.solidAction.setChecked(obj.solid)
+			self.addAction("Set &properties", self.showPositionDialog)
 		elif isinstance(obj, MapObject):
 			self.addAction("&Creation code", mapSurface.editCode)
 			self.addAction("&Edit properties", self.showPropertiesDialog)
-		self.addAction("Set &position", self.showPositionDialog)
+			self.addAction("Set &position", self.showPositionDialog)
 		self.addSeparator()
 		self.addAction("&Delete", mapSurface.deleteSelected)
 	def setSolid(self):

@@ -4,13 +4,25 @@
             "image": "",
             "script": "../entities/happyPlanet.py"
         },
+        "Elevator": {
+            "image": "",
+            "script": "../entities/elevator.py"
+        },
         "Falltrap": {
             "image": "",
             "script": "../entities/falltrap.py"
         },
+        "LaserBox": {
+            "image": "",
+            "script": "../entities/happyPlanet.py"
+        },
         "Lava": {
             "image": "",
             "script": "../entities/lava.py"
+        },
+        "LiftableBox": {
+            "image": "",
+            "script": "../entities/happyPlanet.py"
         },
         "LiftableGrass": {
             "image": "",
@@ -47,6 +59,10 @@
         "Player": {
             "image": "data\\playerStill.png",
             "script": "../entities/player.py"
+        },
+        "SlideDoor": {
+            "image": "",
+            "script": "../map/lab.py"
         },
         "SwitchLeft": {
             "image": "",
