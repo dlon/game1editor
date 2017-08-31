@@ -332,6 +332,18 @@ class EditorWindow(QMainWindow):
 				QtCore.QPoint(tile['tx'], tile['ty']),
 				QtCore.QSize(tile['tw'], tile['th']),
 			)
+			if tile['depth'] not in layers:
+				# TODO: add new layer more properly
+				widget = QTreeWidgetItem(
+					self.ui.layerTree,
+					(
+						"Layer{}".format(tile['depth']),
+						str(tile['depth']),
+						"1",
+					 )
+				)
+				layers[tile['depth']] = widget
+				widget.setFlags(widget.flags() | Qt.ItemIsEditable)
 			mapTile = MapTile(
 				tilesets[tile["tileset"]]["treeItem"],
 				tilesets[tile["tileset"]]["image"],
