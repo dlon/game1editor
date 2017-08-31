@@ -230,8 +230,8 @@ class SelectionMenu(QMenu):
 			}
 			for k in properties:
 				try:
-					properties[k] = int(properties[k])
-				except ValueError:
+					properties[k] = eval(properties[k])
+				except NameError:
 					properties[k] = properties[k]
 			self._parent.obj.rect.moveTo(
 				int(properties['x']),
