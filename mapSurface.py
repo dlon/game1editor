@@ -42,20 +42,23 @@ class MapObject:
 			self.customProperties
 		)
 class MapTile:
-	def __init__(self,
-		tilesetWidget,
-		tilesetImage,
-		subImageRect,
-		position,
-		layerWidget,
-		solid=True,):
+	def __init__(
+			self,
+			tilesetWidget,
+			tilesetImage,
+			subImageRect,
+			position,
+			layerWidget,
+			solid=True,
+			surfaceWidth=0,
+			surfaceHeight=0):
 		self.tileset = tilesetWidget
 		self.image = tilesetImage.copy(subImageRect)
 		self.rect = QRect(
 			position,
 			QSize(
-				subImageRect.width(),
-				subImageRect.height(),
+				subImageRect.width() if not surfaceWidth else surfaceWidth,
+				subImageRect.height() if not surfaceHeight else surfaceHeight,
 			),
 		)
 		self.subImageRect = subImageRect.translated(0,0)
@@ -100,6 +103,8 @@ class MapTile:
 			self.rect.topLeft(),
 			self.layerWidget,
 			self.solid,
+			self.rect.width(),
+			self.rect.height(),
 		)
 
 class SelectionMenu(QMenu):

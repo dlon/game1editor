@@ -60,6 +60,10 @@
             "image": "data\\playerStill.png",
             "script": "../entities/player.py"
         },
+        "Slide": {
+            "image": "",
+            "script": "../entities/slide.py"
+        },
         "SlideDoor": {
             "image": "",
             "script": "../map/lab.py"
