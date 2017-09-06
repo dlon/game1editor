@@ -119,78 +119,83 @@
             <property name="title">
              <string>Tileset</string>
             </property>
-            <widget class="QWidget" name="">
-             <property name="geometry">
-              <rect>
-               <x>12</x>
-               <y>28</y>
-               <width>258</width>
-               <height>229</height>
-              </rect>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_3">
-              <item row="0" column="0">
-               <widget class="QSplitter" name="splitter_3">
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <widget class="QSplitter" name="splitter_3">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <widget class="QTilesetSurface" name="tilePreviewFrame">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
                   <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
+                  <verstretch>40</verstretch>
                  </sizepolicy>
                 </property>
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
                 </property>
-                <widget class="QTilesetSurface" name="tilePreviewFrame">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-                   <horstretch>0</horstretch>
-                   <verstretch>40</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Plain</enum>
-                 </property>
-                </widget>
-                <widget class="QTreeWidget" name="tilesetTree">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-                   <horstretch>0</horstretch>
-                   <verstretch>2</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <column>
-                  <property name="text">
-                   <string>Tileset</string>
-                  </property>
-                 </column>
-                </widget>
+                <property name="frameShadow">
+                 <enum>QFrame::Plain</enum>
+                </property>
                </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QSplitter" name="splitter_4">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+               <widget class="QTreeWidget" name="tilesetTree">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+                  <horstretch>0</horstretch>
+                  <verstretch>2</verstretch>
+                 </sizepolicy>
                 </property>
+                <column>
+                 <property name="text">
+                  <string>Tileset</string>
+                 </property>
+                </column>
+               </widget>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
                 <widget class="QCheckBox" name="solidCheckbox">
                  <property name="text">
                   <string>Solid</string>
                  </property>
                 </widget>
-                <widget class="QPushButton" name="solidDirectionsButton">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="text">
-                  <string>Directions...</string>
-                 </property>
-                </widget>
-               </widget>
-              </item>
-             </layout>
-            </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_2">
+                 <item>
+                  <widget class="QPushButton" name="solidDirectionsButton">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                   <property name="text">
+                    <string>Directions...</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="solidLabel">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+            </layout>
            </widget>
            <widget class="QGroupBox" name="groupBox_2">
             <property name="sizePolicy">

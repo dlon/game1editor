@@ -125,6 +125,7 @@ class EditorWindow(QMainWindow):
 		#self.lastSavedState = self.editStates[0]
 
 		self._initSignals()
+		self.updateSolidDirectionsLabel()
 	def _initSettings(self):
 		QtCore.QCoreApplication.setOrganizationName("dlon")
 		QtCore.QCoreApplication.setOrganizationDomain("dlon.github.io")
@@ -169,6 +170,23 @@ class EditorWindow(QMainWindow):
 		ret = dialog.exec()
 		if ret == dialog.Accepted:
 			print("TODO: rebuild data based on input")
+	def updateSolidDirectionsLabel(self):
+		strs = []
+		if MapTile.solidFlag & 0x04:
+			strs += ["U"]
+		if MapTile.solidFlag & 0x08:
+			strs += ["D"]
+		if MapTile.solidFlag & 0x01:
+			strs += ["L"]
+		if MapTile.solidFlag & 0x02:
+			strs += ["R"]
+		self.ui.solidLabel.setText(
+			" | ".join(strs)
+		)
+		if not strs or not self.ui.solidCheckbox.isChecked():
+			self.ui.solidLabel.setVisible(False)
+		else:
+			self.ui.solidLabel.setVisible(True)
 	def setSolidDirections(self):
 		dialog = QDialog(self, Qt.Tool)
 		solidDlg = uiSolidDirections.Ui_Dialog()
@@ -183,6 +201,7 @@ class EditorWindow(QMainWindow):
 			(0x02 if solidDlg.rightCheck.isChecked() else 0) | \
 			(0x04 if solidDlg.upCheck.isChecked() else 0) | \
 			(0x08 if solidDlg.downCheck.isChecked() else 0)
+		self.updateSolidDirectionsLabel()
 	def run(self):
 		os.chdir("..")
 		subprocess.Popen([
@@ -208,6 +227,7 @@ class EditorWindow(QMainWindow):
 		self.ui.buttonBackgroundColor.clicked.connect(self.setBackgroundColor)
 		self.ui.buttonCreationCode.clicked.connect(self.setCreationCode)
 		self.ui.solidDirectionsButton.clicked.connect(self.setSolidDirections)
+		self.ui.solidCheckbox.toggled.connect(self.updateSolidDirectionsLabel)
 
 		self.ui.actionNew.triggered.connect(self.new)
 		self.ui.actionOpen.triggered.connect(self.open)
@@ -306,6 +326,7 @@ class EditorWindow(QMainWindow):
 		with open(path) as f:
 			data = json.load(f)
 		self.mapSurface.clear()
+		MapTile.solidFlag = 0xFF
 		# settings
 		self.mapSurface.setWidth(data["settings"]["width"], updateForm=True)
 		self.mapSurface.setHeight(data["settings"]["height"], updateForm=True)
