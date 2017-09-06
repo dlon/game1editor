@@ -101,7 +101,8 @@ class MapTile:
 			'solid': self.solid,
 			'depth': self.depth,
 		}
-		if self.solid and self.solidFlag != 0xFF:
+		if self.solid and self.solidFlag != 0xFF and self.solidFlag != 15:
+			# FIXME: assuming 15 is default
 			obj['solidDirections'] = self.solidFlag
 		return obj
 	def copy(self):

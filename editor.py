@@ -388,6 +388,7 @@ class EditorWindow(QMainWindow):
 				position,
 				layers[tile['depth']],
 				tile['solid'],
+				solidFlag=tile.get('solidDirections') or -1,
 			)
 			mapTile.rect.setSize(QtCore.QSize(tile['w'], tile['h']))
 			self.mapSurface.addTile(mapTile)
