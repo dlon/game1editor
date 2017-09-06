@@ -147,6 +147,13 @@ class SelectionMenu(QMenu):
 				self.objectW = self.addOption("Width", parent.obj.rect.width())
 				self.objectH = self.addOption("Height", parent.obj.rect.height())
 				self.objectDepth = self.addOption("Depth", parent.obj.depth)
+				if parent.obj.solid:
+					self.solidFlagsLayout = QtWidgets.QHBoxLayout()
+					self.solidU = self.addCheckBox("U", self.solidFlagsLayout, parent.obj.solidFlag & 0x04 != 0)
+					self.solidD = self.addCheckBox("D", self.solidFlagsLayout, parent.obj.solidFlag & 0x08 != 0)
+					self.solidR = self.addCheckBox("R", self.solidFlagsLayout, parent.obj.solidFlag & 0x02 != 0)
+					self.solidL = self.addCheckBox("L", self.solidFlagsLayout, parent.obj.solidFlag & 0x01 != 0)
+					self.layout.addLayout(self.solidFlagsLayout)
 			# accept/cancel
 			self.buttonBox = QtWidgets.QDialogButtonBox(
 				QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel,
@@ -157,6 +164,13 @@ class SelectionMenu(QMenu):
 			self.layout.addWidget(self.buttonBox)
 			self.setLayout(self.layout)
 			self.objectX.selectAll()  # FIXME: does not work
+		def addCheckBox(self, name, layout, checked):
+			label = QtWidgets.QLabel(name)
+			check = QtWidgets.QCheckBox()
+			check.setChecked(checked)
+			layout.addWidget(label)
+			layout.addWidget(check)
+			return check
 		def addOption(self, name, value):
 			layout = QtWidgets.QHBoxLayout()
 			label = QtWidgets.QLabel("{}:".format(name))
@@ -176,6 +190,12 @@ class SelectionMenu(QMenu):
 					int(self.objectH.text())
 				))
 				self._parent.obj.depth = int(self.objectDepth.text())
+				if self._parent.obj.solid:
+					self._parent.obj.solidFlag = \
+						(0x08 if self.solidD.isChecked() else 0) | \
+						(0x04 if self.solidU.isChecked() else 0) | \
+						(0x02 if self.solidR.isChecked() else 0) | \
+						(0x01 if self.solidL.isChecked() else 0)
 			super().accept()
 	class PropertiesDialog(QDialog):
 		def __init__(self, parent):
