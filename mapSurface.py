@@ -52,7 +52,8 @@ class MapTile:
 			layerWidget,
 			solid=True,
 			surfaceWidth=0,
-			surfaceHeight=0):
+			surfaceHeight=0,
+			solidFlag=-1):
 		self.tileset = tilesetWidget
 		self.image = tilesetImage.copy(subImageRect)
 		self.rect = QRect(
@@ -62,7 +63,10 @@ class MapTile:
 				subImageRect.height() if not surfaceHeight else surfaceHeight,
 			),
 		)
-		self.solidFlag = self.solidFlag
+		if solidFlag > 0:
+			self.solidFlag = solidFlag
+		else:
+			self.solidFlag = self.solidFlag
 		self.subImageRect = subImageRect.translated(0,0)
 		self.solid = solid
 		self.layerWidget = layerWidget
@@ -84,7 +88,7 @@ class MapTile:
 		else:
 			raise editor.EditorException("no such layer")
 	def dump(self):
-		return {
+		obj = {
 			'tileset': self.tileset.data(0, Qt.UserRole),
 			'x': self.rect.x(),
 			'y': self.rect.y(),
@@ -97,6 +101,9 @@ class MapTile:
 			'solid': self.solid,
 			'depth': self.depth,
 		}
+		if self.solid and self.solidFlag != 0xFF:
+			obj['solidDirections'] = self.solidFlag
+		return obj
 	def copy(self):
 		return MapTile(
 			self.tileset,
@@ -107,6 +114,7 @@ class MapTile:
 			self.solid,
 			self.rect.width(),
 			self.rect.height(),
+			self.solidFlag,
 		)
 
 class SelectionMenu(QMenu):
