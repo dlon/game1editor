@@ -1,5 +1,9 @@
 {
     "objects": {
+        "BlockView": {
+            "image": "",
+            "script": "../entities/utils/__init__.py"
+        },
         "Crane": {
             "image": "",
             "script": "../entities/happyPlanet.py"
@@ -11,6 +15,10 @@
         "Falltrap": {
             "image": "",
             "script": "../entities/falltrap.py"
+        },
+        "FixateView": {
+            "image": "",
+            "script": "../entities/utils/__init__.py"
         },
         "LaserBox": {
             "image": "",
@@ -80,6 +88,10 @@
             "image": "",
             "script": "../entities/teleporter.py"
         },
+        "Trigger": {
+            "image": "",
+            "script": "../entities/utils/__init__.py"
+        },
         "Water": {
             "image": "",
             "script": "../entities/water.py"
@@ -95,6 +107,27 @@
                 "Flutter": {
                     "image": "",
                     "script": "../entities/enemies/flutter.py"
+                },
+                "Piranha": {
+                    "image": "",
+                    "script": "../entities/enemies/piranha.py"
+                }
+            },
+            "subdirs": {}
+        },
+        "level2": {
+            "objects": {
+                "FragileGlass": {
+                    "image": "",
+                    "script": "../map/level2/puzzle.py"
+                },
+                "RopeDoor": {
+                    "image": "",
+                    "script": "../map/level2/puzzle.py"
+                },
+                "TimedGlass": {
+                    "image": "",
+                    "script": "../map/level2/puzzle.py"
                 }
             },
             "subdirs": {}

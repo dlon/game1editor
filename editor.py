@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
 
 from uiEditor import Ui_EditorWindow
+import uiSolidDirections
 from mapSurface import MapSurface, MapObject, MapTile
 from uiCodeEditor import Ui_CodeEditor
 import entities
@@ -168,6 +169,20 @@ class EditorWindow(QMainWindow):
 		ret = dialog.exec()
 		if ret == dialog.Accepted:
 			print("TODO: rebuild data based on input")
+	def setSolidDirections(self):
+		dialog = QDialog(self, Qt.Tool)
+		solidDlg = uiSolidDirections.Ui_Dialog()
+		solidDlg.setupUi(dialog)
+		dialog.setWindowTitle("Solid directions")
+		solidDlg.leftCheck.setChecked(MapTile.solidFlag & 0x01)
+		solidDlg.rightCheck.setChecked(MapTile.solidFlag & 0x02)
+		solidDlg.upCheck.setChecked(MapTile.solidFlag & 0x04)
+		solidDlg.downCheck.setChecked(MapTile.solidFlag & 0x08)
+		dialog.exec()
+		MapTile.solidFlag = (0x01 if solidDlg.leftCheck.isChecked() else 0) | \
+			(0x02 if solidDlg.rightCheck.isChecked() else 0) | \
+			(0x04 if solidDlg.upCheck.isChecked() else 0) | \
+			(0x08 if solidDlg.downCheck.isChecked() else 0)
 	def run(self):
 		os.chdir("..")
 		subprocess.Popen([
@@ -192,6 +207,7 @@ class EditorWindow(QMainWindow):
 
 		self.ui.buttonBackgroundColor.clicked.connect(self.setBackgroundColor)
 		self.ui.buttonCreationCode.clicked.connect(self.setCreationCode)
+		self.ui.solidDirectionsButton.clicked.connect(self.setSolidDirections)
 
 		self.ui.actionNew.triggered.connect(self.new)
 		self.ui.actionOpen.triggered.connect(self.open)

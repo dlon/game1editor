@@ -42,6 +42,7 @@ class MapObject:
 			self.customProperties
 		)
 class MapTile:
+	solidFlag = 0xFF
 	def __init__(
 			self,
 			tilesetWidget,
@@ -61,6 +62,7 @@ class MapTile:
 				subImageRect.height() if not surfaceHeight else surfaceHeight,
 			),
 		)
+		self.solidFlag = self.solidFlag
 		self.subImageRect = subImageRect.translated(0,0)
 		self.solid = solid
 		self.layerWidget = layerWidget
