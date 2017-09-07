@@ -307,16 +307,20 @@ class SelectionMenu(QMenu):
 
 class MapSurface(QWidget):
 	clicked = pyqtSignal([object, QPoint, object])
+	zoomed = pyqtSignal([float, float, QPoint])
 	def __init__(self, parent, editor):
 		QWidget.__init__(self, parent)
 		self.editor = editor
 		#self.setGeometry(5, 5, 200, 1000)
 		#self.show()
+		self.surfaceWidth = self.width()
+		self.surfaceHeight = self.height()
 		self.clear()
 	def clear(self):
 		self.backgroundColor = QColor(255, 255, 255)
 		self.tiles = []
 		self.objects = []
+		self.zoom = 1
 		self.selectedObject = None
 		self.copyReference = None
 		self.tileResizeHover = False
@@ -339,16 +343,18 @@ class MapSurface(QWidget):
 		self.repaint()
 	def setWidth(self, width, updateForm=False):
 		try:
-			self.setMinimumSize(int(width), self.height())
-			self.setMaximumSize(int(width), self.height())
+			self.setMinimumSize(int(self.zoom*int(width)), self.height())
+			self.setMaximumSize(int(self.zoom*int(width)), self.height())
+			self.surfaceWidth = width
 			if updateForm:
 				self.editor.ui.widthSetting.setText(str(width))
 		except ValueError:
 			pass
 	def setHeight(self, height, updateForm=False):
 		try:
-			self.setMinimumSize(self.width(), int(height))
-			self.setMaximumSize(self.width(), int(height))
+			self.setMinimumSize(self.width(), int(self.zoom*int(height)))
+			self.setMaximumSize(self.width(), int(self.zoom*int(height)))
+			self.surfaceHeight = height
 			if updateForm:
 				self.editor.ui.heightSetting.setText(str(height))
 		except ValueError:
@@ -368,7 +374,8 @@ class MapSurface(QWidget):
 		drawables.sort(key = lambda d: getattr(d, 'depth', 0))
 		qp = QPainter()
 		qp.begin(self)
-		qp.fillRect(0,0,self.width(),self.height(), self.backgroundColor)
+		qp.scale(self.zoom, self.zoom)
+		qp.fillRect(0, 0, float(self.surfaceWidth), float(self.surfaceHeight), self.backgroundColor)
 		for object in drawables:
 			brush = QBrush(object.image)
 			transform = QTransform()
@@ -456,6 +463,20 @@ class MapSurface(QWidget):
 		self.update()
 	def mouseReleaseEvent(self, e):
 		self.resizeDrag = False
+	def wheelEvent(self, wheelEvent):
+		if wheelEvent.modifiers() & Qt.ControlModifier:
+			prev = self.zoom
+			if wheelEvent.angleDelta().y() > 0:
+				self.zoom += 0.1
+			else:
+				self.zoom -= 0.1
+			self.setWidth(self.surfaceWidth)
+			self.setHeight(self.surfaceHeight)
+			self.zoomed.emit(self.zoom, self.zoom - prev, wheelEvent.pos())
+			self.repaint()
+			wheelEvent.accept()
+		else:
+			super().wheelEvent(wheelEvent)
 	def editCode(self):
 		if not self.selectedObject or \
 			not isinstance(self.selectedObject, MapObject):

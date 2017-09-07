@@ -214,6 +214,16 @@ class EditorWindow(QMainWindow):
 			event.accept()
 		else:
 			event.ignore()
+	def _updateScrollPosition(self, zoom, delta, mousePos):
+		hsb = self.ui.scrollArea.horizontalScrollBar()
+		vsb = self.ui.scrollArea.verticalScrollBar()
+		#hsb.setValue(
+		#	hsb.minimum() + mousePos.x() / self.mapSurface.rect().width() * (hsb.maximum() - hsb.minimum())
+		#)
+		#vsb.setValue(
+		#	vsb.minimum() + mousePos.y() / self.mapSurface.rect().height() * (vsb.maximum() - vsb.minimum())
+		#)
+		pass
 	def _initSignals(self):
 		self.ui.objectTree.currentItemChanged.connect(self.ui.objectPreviewFrame.setImage)
 		self.ui.tilesetTree.currentItemChanged.connect(self.ui.tilePreviewFrame.setImage)
@@ -223,6 +233,7 @@ class EditorWindow(QMainWindow):
 		self.ui.heightSetting.setText("480")
 		self.mapSurface.clicked.connect(self.ui.tilePreviewFrame.handleMapSurfaceClick)
 		self.mapSurface.clicked.connect(self.ui.objectPreviewFrame.handleMapSurfaceClick)
+		self.mapSurface.zoomed.connect(self._updateScrollPosition)
 
 		self.ui.buttonBackgroundColor.clicked.connect(self.setBackgroundColor)
 		self.ui.buttonCreationCode.clicked.connect(self.setCreationCode)
