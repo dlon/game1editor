@@ -423,8 +423,11 @@ class QTracebackDialog(QDialog):
 		self.tbArea.setText(errorStr)
 		self.tbArea.setReadOnly(True)
 		self.layout.addWidget(self.tbArea)
-		self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok)
-		self.buttonBox.clicked.connect(self.accept)
+		self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Abort)
+		self.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.accept)
+		self.buttonBox.button(QDialogButtonBox.Abort).clicked.connect(
+			lambda: sys.exit(1)
+		)
 		self.layout.addWidget(self.buttonBox)
 		self.setWindowTitle("Exception")
 		self.setSizeGripEnabled(True)
