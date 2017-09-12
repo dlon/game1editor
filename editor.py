@@ -377,7 +377,17 @@ class EditorWindow(QMainWindow):
 			#if depth in layers:
 			#	raise EditorException("layer depths must be unique")
 			layers[depth] = widget
-		for tile in data["tiles"]:
+		tile = {
+			'tileset': 'happy',
+			'tx': 0, 'ty': 0,
+			'tw': 16, 'th': 16,
+			'x': 0, 'y': 0,
+			'w': 16, 'h': 16,
+			'solid': True,
+			'depth': 0,
+		}
+		for tileCurrent in data["tiles"]:
+			tile.update(tileCurrent)
 			position = QtCore.QPoint(tile['x'], tile['y'])
 			subimageRect = QtCore.QRect(
 				QtCore.QPoint(tile['tx'], tile['ty']),
