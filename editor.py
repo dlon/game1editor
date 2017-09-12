@@ -169,7 +169,8 @@ class EditorWindow(QMainWindow):
 		dialog.setWindowTitle("Map data")
 		ret = dialog.exec()
 		if ret == dialog.Accepted:
-			print("TODO: rebuild data based on input")
+			# TODO: revert if an exception is thrown
+			self.loadData(json.loads(editor.code.toPlainText()))
 	def updateSolidDirectionsLabel(self):
 		strs = []
 		if MapTile.solidFlag & 0x04:
@@ -335,7 +336,9 @@ class EditorWindow(QMainWindow):
 		self.setWindowModified(False)
 	def loadFile(self, path):
 		with open(path) as f:
-			data = json.load(f)
+			self.loadData(json.load(f))
+			self.setPath(path)
+	def loadData(self, data):
 		self.mapSurface.clear()
 		MapTile.solidFlag = 0xFF
 		# settings
@@ -404,7 +407,6 @@ class EditorWindow(QMainWindow):
 			mapTile.rect.setSize(QtCore.QSize(tile['w'], tile['h']))
 			self.mapSurface.addTile(mapTile)
 		self.mapSurface.selectedObject = None
-		self.setPath(path)
 		return True
 	def saveFile(self, path):
 		with open(path,'w') as f:

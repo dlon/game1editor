@@ -1,13 +1,5 @@
 {
     "objects": {
-        "BlockView": {
-            "image": "",
-            "script": "../entities/utils/__init__.py"
-        },
-        "Crane": {
-            "image": "",
-            "script": "../entities/happyPlanet.py"
-        },
         "Elevator": {
             "image": "",
             "script": "../entities/elevator.py"
@@ -16,21 +8,9 @@
             "image": "",
             "script": "../entities/falltrap.py"
         },
-        "FixateView": {
-            "image": "",
-            "script": "../entities/utils/__init__.py"
-        },
-        "LaserBox": {
-            "image": "",
-            "script": "../entities/happyPlanet.py"
-        },
         "Lava": {
             "image": "",
             "script": "../entities/lava.py"
-        },
-        "LiftableBox": {
-            "image": "",
-            "script": "../entities/happyPlanet.py"
         },
         "LiftableGrass": {
             "image": "",
@@ -39,30 +19,6 @@
         "MovingPlatform": {
             "image": "",
             "script": "../entities/movingPlatform.py"
-        },
-        "NpcHp1": {
-            "image": "",
-            "script": "../entities/happyPlanet.py"
-        },
-        "NpcHp2": {
-            "image": "",
-            "script": "../entities/happyPlanet.py"
-        },
-        "Palm0": {
-            "image": "",
-            "script": "../entities/happyPlanet.py"
-        },
-        "Palm1": {
-            "image": "",
-            "script": "../entities/happyPlanet.py"
-        },
-        "Pillar": {
-            "image": "",
-            "script": "../entities/happyPlanet.py"
-        },
-        "PinkFlower": {
-            "image": "",
-            "script": "../entities/happyPlanet.py"
         },
         "Player": {
             "image": "data\\playerStill.png",
@@ -76,21 +32,9 @@
             "image": "",
             "script": "../map/lab.py"
         },
-        "SwitchLeft": {
-            "image": "",
-            "script": "../entities/switch.py"
-        },
-        "SwitchRight": {
-            "image": "",
-            "script": "../entities/switch.py"
-        },
         "Teleporter": {
             "image": "",
             "script": "../entities/teleporter.py"
-        },
-        "Trigger": {
-            "image": "",
-            "script": "../entities/utils/__init__.py"
         },
         "Water": {
             "image": "",
@@ -115,19 +59,107 @@
             },
             "subdirs": {}
         },
-        "level2": {
+        "happyPlanet": {
             "objects": {
-                "FragileGlass": {
+                "Crane": {
                     "image": "",
-                    "script": "../map/level2/puzzle.py"
+                    "script": "../entities/happyPlanet.py"
                 },
-                "RopeDoor": {
+                "GlassDoor": {
                     "image": "",
-                    "script": "../map/level2/puzzle.py"
+                    "script": "../entities/happyPlanet.py"
                 },
-                "TimedGlass": {
+                "HpKey": {
                     "image": "",
-                    "script": "../map/level2/puzzle.py"
+                    "script": "../entities/happyPlanet.py"
+                },
+                "LaserBox": {
+                    "image": "",
+                    "script": "../entities/happyPlanet.py"
+                },
+                "LiftableBox": {
+                    "image": "",
+                    "script": "../entities/happyPlanet.py"
+                },
+                "NpcHp1": {
+                    "image": "",
+                    "script": "../entities/happyPlanet.py"
+                },
+                "NpcHp2": {
+                    "image": "",
+                    "script": "../entities/happyPlanet.py"
+                },
+                "NpcHpGrass": {
+                    "image": "",
+                    "script": "../entities/happyPlanet.py"
+                },
+                "Palm0": {
+                    "image": "",
+                    "script": "../entities/happyPlanet.py"
+                },
+                "Palm1": {
+                    "image": "",
+                    "script": "../entities/happyPlanet.py"
+                },
+                "Pillar": {
+                    "image": "",
+                    "script": "../entities/happyPlanet.py"
+                },
+                "PinkFlower": {
+                    "image": "",
+                    "script": "../entities/happyPlanet.py"
+                }
+            },
+            "subdirs": {}
+        },
+        "level2": {
+            "objects": {},
+            "subdirs": {
+                "puzzle": {
+                    "objects": {
+                        "FragileGlass": {
+                            "image": "",
+                            "script": "../map/level2/puzzle.py"
+                        },
+                        "RopeDoor": {
+                            "image": "",
+                            "script": "../map/level2/puzzle.py"
+                        },
+                        "TimedGlass": {
+                            "image": "",
+                            "script": "../map/level2/puzzle.py"
+                        }
+                    },
+                    "subdirs": {}
+                }
+            }
+        },
+        "switch": {
+            "objects": {
+                "SwitchLeft": {
+                    "image": "",
+                    "script": "../entities/switch.py"
+                },
+                "SwitchRight": {
+                    "image": "",
+                    "script": "../entities/switch.py"
+                }
+            },
+            "subdirs": {}
+        },
+        "utils": {
+            "objects": {
+                "BlockView": {
+                    "image": "",
+                    "script": "../entities/utils/__init__.py"
+                },
+                "FixateView": {
+                    "image": "",
+                    "script": "../entities/utils/__init__.py"
+                },
+                "Trigger": {
+                    "image": "",
+                    "script": "../entities/utils/__init__.py"
                 }
             },
             "subdirs": {}
