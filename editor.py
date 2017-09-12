@@ -146,7 +146,7 @@ class EditorWindow(QMainWindow):
 		if ret == dialog.Accepted:
 			self.creationCode = editor.code.toPlainText()
 	def generateData(self):
-		return {
+		ret = {
 			"settings": {
 				"width": self.mapSurface.width(),
 				"height": self.mapSurface.height(),
@@ -159,6 +159,11 @@ class EditorWindow(QMainWindow):
 			"objects": [obj.dump() for obj in self.mapSurface.objects],
 			"tiles": [tile.dump() for tile in self.mapSurface.tiles],
 		}
+		if self.creationCode:
+			ret["settings"].update({
+				"creationCode": self.creationCode
+			})
+		return ret
 	def editData(self):
 		dialog = QDialog(self)
 		editor = Ui_CodeEditor()
@@ -347,6 +352,7 @@ class EditorWindow(QMainWindow):
 		self.mapSurface.setBackgroundColor(
 			QtGui.QColor(*data["settings"]["background"])
 		)
+		self.creationCode = data["settings"].get("creationCode", None)
 		# objects
 		for obj in data["objects"]:
 			customProp = obj.copy()

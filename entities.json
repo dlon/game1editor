@@ -134,6 +134,39 @@
                 }
             }
         },
+        "overworld": {
+            "objects": {
+                "WmCastle": {
+                    "image": "",
+                    "script": "../map/overworld.py"
+                },
+                "WmChasm": {
+                    "image": "",
+                    "script": "../map/overworld.py"
+                },
+                "WmLevel": {
+                    "image": "",
+                    "script": "../entities/overworld.py"
+                },
+                "WmLevel0": {
+                    "image": "",
+                    "script": "../map/overworld.py"
+                },
+                "WmLevelShop": {
+                    "image": "",
+                    "script": "../map/overworld.py"
+                },
+                "WmLevelTutorial": {
+                    "image": "",
+                    "script": "../map/overworld.py"
+                },
+                "WmPlayer": {
+                    "image": "",
+                    "script": "../entities/overworld.py"
+                }
+            },
+            "subdirs": {}
+        },
         "switch": {
             "objects": {
                 "SwitchLeft": {
