@@ -24,6 +24,10 @@
             "image": "data\\playerStill.png",
             "script": "../entities/player.py"
         },
+        "Sign": {
+            "image": "",
+            "script": "../entities/sign.py"
+        },
         "Slide": {
             "image": "",
             "script": "../entities/slide.py"
@@ -186,11 +190,19 @@
                     "image": "",
                     "script": "../entities/utils/__init__.py"
                 },
+                "Checkpoint": {
+                    "image": "",
+                    "script": "../entities/utils/__init__.py"
+                },
                 "FixateView": {
                     "image": "",
                     "script": "../entities/utils/__init__.py"
                 },
                 "Trigger": {
+                    "image": "",
+                    "script": "../entities/utils/__init__.py"
+                },
+                "VerticalBounds": {
                     "image": "",
                     "script": "../entities/utils/__init__.py"
                 }
