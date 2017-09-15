@@ -1,6 +1,7 @@
 {
     "castle": "tileset1.png",
     "electronics": "tilesetElectronics.png",
+    "floating": "tilesetFloating.png",
     "happy": "tileset0.png",
     "lab": "tilesetLab.png",
     "overworld": "tilesetOverworld.png",
