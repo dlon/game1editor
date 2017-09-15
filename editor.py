@@ -292,7 +292,7 @@ class EditorWindow(QMainWindow):
 	def new(self):
 		if self.saveIfWants():
 			# create new project
-			self.mapFile = ''
+			self.setPath('')
 			self.setWindowModified(False)
 			self.mapSurface.clear()
 	def open(self):
@@ -337,7 +337,7 @@ class EditorWindow(QMainWindow):
 		return True
 	def setPath(self, path):
 		self.mapFile = path
-		self.setWindowTitle('%s[*] - game1 editor' % path)
+		self.setWindowTitle('%s[*] - game1 editor' % self.mapTitle())
 		self.setWindowModified(False)
 	def loadFile(self, path):
 		with open(path) as f:

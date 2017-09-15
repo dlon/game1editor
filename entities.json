@@ -167,6 +167,10 @@
                 "WmPlayer": {
                     "image": "",
                     "script": "../entities/overworld.py"
+                },
+                "WmTunnel": {
+                    "image": "",
+                    "script": "../entities/overworld.py"
                 }
             },
             "subdirs": {}
