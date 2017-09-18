@@ -4,6 +4,7 @@
     "floating": "tilesetFloating.png",
     "happy": "tileset0.png",
     "lab": "tilesetLab.png",
+    "maze": "tileset2.png",
     "overworld": "tilesetOverworld.png",
     "room16": "tilesetRoom16.png",
     "shop": "tilesetShop.png"

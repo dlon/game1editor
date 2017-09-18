@@ -22,71 +22,6 @@ import pprint
 class EditorException(Exception):
 	pass
 
-class TrackedStruct:
-	def __init__(self, ds, observer):
-		self._ds = ds
-		self._observer = observer
-	def __len__(self):
-		return len(self._ds)
-	def __contains__(self, i):
-		return i in self._ds
-	def __getitem__(self, k):
-		return self._ds[k]
-	def __setitem__(self, k, v):
-		oldds = self._ds.copy()
-		self._ds[k] = v
-		self._observer.onChange(self._ds, oldds)
-	def __delitem__(self, k):
-		oldds = self._ds.copy()
-		del self._ds[k]
-		self._observer.onChange(self._ds, oldds)
-	def append(self, item):
-		oldds = self._ds.copy()
-		self._ds.append(item)
-		self._observer.onChange(self._ds, oldds)
-
-class Map:
-	def __init__(self):
-		tiles = TrackedStruct([], self)
-		objects = TrackedStruct([], self)
-		settings = TrackedStruct({
-			'width':100,
-			'height':100,
-		}, self)
-	def onChange(self, ds, oldds):
-		print('change observed!', ds, oldds)
-	def onchange(self, obj):
-		print('onchange')
-	def addTile(self, tile):
-		pass
-	def export(self):
-		return {
-			'settings': {},
-		}
-
-class MapTrackable:
-	map = None
-	def __init__(self, map, *args):
-		for k in args:
-			setattr(self, k, args[k])
-		self.map = map
-	def __setattr__(self, k, v):
-		self.__dict__[k] = v
-		if self.map:
-			self.map.onchange(self)
-
-#mt = MapTrackable(Map(), x=0,y=0, w=16,h=16, xOffset=0,yOffset=0)
-#mt.w = 10
-
-editState = {
-	'settings': {
-		'width': 100,
-		'height': 100,
-	},
-	'objects': [],
-	'tiles': [],
-}
-
 class EditorStatusBar(QStatusBar):
 	def __init__(self, parent):
 		super().__init__(parent)
@@ -431,14 +366,6 @@ class EditorWindow(QMainWindow):
 		return True
 	def isModified(self):
 		return not self.currentState.equals(self.lastSavedState)
-	#def canRedo(self):
-	#	return self.editStates[-1] != self.currentState
-	def stateBeforeChange(self, editState, name, val):
-		print("recorded change (EditState):", name, '=', val)
-		if editState != self.currentState:
-			raise EditorException("trying to edit a non-current state")
-		# keep a copy of the current state
-		copy.deepcopy(editState)
 
 import traceback
 
