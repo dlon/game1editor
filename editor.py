@@ -26,6 +26,7 @@ import game
 import map
 import entities
 import generateMetadata
+import importlib
 
 class EditorException(Exception):
 	pass
@@ -69,6 +70,12 @@ class EditorWindow(QMainWindow):
 
 		self._initSignals()
 		self.updateSolidDirectionsLabel()
+		self._pollSetup()
+	def _pollSetup(self):
+		#self.pollTimer = QtCore.QTimer(self)
+		#self.pollTimer.setInterval(1000)
+		self.metaWatcher = QtCore.QFileSystemWatcher(["../entities", "../map", "../data"], self)
+		self.metaWatcher.directoryChanged.connect(self._initTrees)
 	def _initSettings(self):
 		QtCore.QCoreApplication.setOrganizationName("dlon")
 		QtCore.QCoreApplication.setOrganizationDomain("dlon.github.io")
@@ -219,6 +226,16 @@ class EditorWindow(QMainWindow):
 			self._addObjectTreeDir(dir['subdirs'][subdir],
 				subNode)
 	def _initTrees(self):
+		try:
+			importlib.reload(entities)
+			for m in sys.modules:
+				if m.startswith('entities.'):
+					importlib.reload(sys.modules[m])
+			importlib.reload(map)
+		except:
+			return
+		self.ui.objectTree.clear()
+		self.ui.tilesetTree.clear()
 		self._addObjectTreeDir(generateMetadata.generateEntityTable())
 		self.ui.objectTree.expandAll()
 		for tileset in map.Map.tilesets:
