@@ -227,11 +227,11 @@ class EditorWindow(QMainWindow):
 				subNode)
 	def _initTrees(self):
 		try:
+			importlib.reload(map)
 			importlib.reload(entities)
 			for m in sys.modules:
 				if m.startswith('entities.'):
 					importlib.reload(sys.modules[m])
-			importlib.reload(map)
 		except:
 			return
 		self.ui.objectTree.clear()
