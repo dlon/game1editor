@@ -14,10 +14,18 @@ from uiEditor import Ui_EditorWindow
 import uiSolidDirections
 from mapSurface import MapSurface, MapObject, MapTile
 from uiCodeEditor import Ui_CodeEditor
-import entities
 import icons_rc
 from objectPreview import QObjectPreview
 import pprint
+
+sys.path.insert(
+	0,
+	os.path.dirname(os.path.dirname(__file__))
+)
+import game
+import map
+import entities
+import generateMetadata
 
 class EditorException(Exception):
 	pass
@@ -211,15 +219,13 @@ class EditorWindow(QMainWindow):
 			self._addObjectTreeDir(dir['subdirs'][subdir],
 				subNode)
 	def _initTrees(self):
-		with open("entities.json") as f:
-			objectTree = json.load(f)
-		self._addObjectTreeDir(objectTree)
+		self._addObjectTreeDir(generateMetadata.generateEntityTable())
 		self.ui.objectTree.expandAll()
-		with open("tilesets.json") as f:
-			tilesetTree = json.load(f)
-		for tileset in tilesetTree:
-			item = QTreeWidgetItem(self.ui.tilesetTree,
-				[tilesetTree[tileset]])
+		for tileset in map.Map.tilesets:
+			item = QTreeWidgetItem(
+				self.ui.tilesetTree,
+				[map.Map.tilesets[tileset]]
+			)
 			item.setData(0, Qt.UserRole, tileset)
 		self.ui.tilesetTree.expandAll()
 	def mapTitle(self):
