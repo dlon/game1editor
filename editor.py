@@ -160,10 +160,14 @@ class EditorWindow(QMainWindow):
 		self.updateSolidDirectionsLabel()
 	def run(self):
 		os.chdir("..")
-		p = subprocess.Popen(["python3","main.py","-data"], stdin=subprocess.PIPE)
-		#input, err = p.communicate(input=json.dumps(self.generateData()).encode())
-		p.stdin.write(json.dumps(self.generateData()).encode())
-		p.stdin.close()
+		try:
+			p = subprocess.Popen(["python3","main.py","-data"], stdin=subprocess.PIPE)
+			# input, err = p.communicate(input=json.dumps(self.generateData()).encode())
+			p.stdin.write(json.dumps(self.generateData()).encode())
+			p.stdin.close()
+		except:
+			#traceback.print_exc()
+			handleErrors(*sys.exc_info())
 		os.chdir("editor")
 	def closeEvent(self, event):
 		if self.saveIfWants():
