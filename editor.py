@@ -235,15 +235,19 @@ class EditorWindow(QMainWindow):
 		except:
 			return
 		self.ui.objectTree.clear()
-		self.ui.tilesetTree.clear()
 		self._addObjectTreeDir(generateMetadata.generateEntityTable())
 		self.ui.objectTree.expandAll()
+		tilesetWidgets = {}
+		for i in range(self.ui.tilesetTree.topLevelItemCount()):
+			widget = self.ui.tilesetTree.topLevelItem(i)
+			tilesetWidgets[widget.data(0, Qt.UserRole)] = widget
 		for tileset in map.Map.tilesets:
-			item = QTreeWidgetItem(
-				self.ui.tilesetTree,
-				[map.Map.tilesets[tileset]]
-			)
-			item.setData(0, Qt.UserRole, tileset)
+			if tileset not in tilesetWidgets:
+				item = QTreeWidgetItem(
+					self.ui.tilesetTree,
+					[map.Map.tilesets[tileset]]
+				)
+				item.setData(0, Qt.UserRole, tileset)
 		self.ui.tilesetTree.expandAll()
 	def mapTitle(self):
 		return self.mapFile if self.mapFile else 'untitled'
