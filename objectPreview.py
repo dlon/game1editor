@@ -10,6 +10,11 @@ class QObjectPreview(QFrame):
 		self.type = ''
 		self.unknownImage = QImage(":/editor/unknown.png")
 	def setImage(self, treeItem):
+		if not treeItem:
+			self.image = QImage()
+			self.type = ''
+			self.repaint()
+			return
 		image = treeItem.data(0, Qt.UserRole)
 		if not image:
 			self.image = self.unknownImage
