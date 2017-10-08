@@ -3,3 +3,4 @@ pyrcc5 -o ../editor_rc.py editor.qrc
 call pyuic5 -o ../uiEditor.py editor.ui
 call pyuic5 -o ../uiCodeEditor.py codeEditor.ui
 call pyuic5 -o ../uiSolidDirections.py solidDirections.ui
+call pyuic5 -o ../uiResizeDialog.py resizeDialog.ui

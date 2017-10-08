@@ -14,6 +14,7 @@ from uiEditor import Ui_EditorWindow
 import uiSolidDirections
 from mapSurface import MapSurface, MapObject, MapTile
 from uiCodeEditor import Ui_CodeEditor
+from uiResizeDialog import Ui_ResizeDialog
 import icons_rc
 from objectPreview import QObjectPreview
 import pprint
@@ -126,6 +127,14 @@ class EditorWindow(QMainWindow):
 		if ret == dialog.Accepted:
 			# TODO: revert if an exception is thrown
 			self.loadData(json.loads(editor.code.toPlainText()))
+	def setSize(self):
+		dialog = QDialog(self)
+		resizeDlg = Ui_ResizeDialog()
+		resizeDlg.setupUi(dialog)
+
+		ret = dialog.exec()
+		if ret == dialog.Accepted:
+			pass
 	def updateSolidDirectionsLabel(self):
 		strs = []
 		if MapTile.solidFlag & 0x04:
@@ -209,6 +218,8 @@ class EditorWindow(QMainWindow):
 		self.ui.actionRun.triggered.connect(self.run)
 		self.ui.actionCopy.triggered.connect(self.mapSurface.setCopyReference)
 		self.ui.actionPaste.triggered.connect(self.mapSurface.copyReferenced)
+
+		self.ui.buttonResize.clicked.connect(self.setSize)
 	def keyPressEvent(self, e):
 		super().keyPressEvent(e)
 		if e.key() == Qt.Key_Delete:
