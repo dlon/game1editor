@@ -12,3 +12,4 @@ class ResizeDialog(QtWidgets.QDialog):
         resizeDlg.heightEdit.setText(
             str(editorWindow.mapSurface.surfaceHeight)
         )
+        resizeDlg.widthEdit.selectAll()
