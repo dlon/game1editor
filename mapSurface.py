@@ -309,6 +309,13 @@ class SelectionMenu(QMenu):
 class MapSurface(QWidget):
 	clicked = pyqtSignal([object, QPoint, object])
 	zoomed = pyqtSignal([float, float, QPoint])
+
+	Left = 0
+	Center = 1
+	Right = 2
+	Top = 4
+	Bottom = 8
+
 	def __init__(self, parent, editor):
 		QWidget.__init__(self, parent)
 		self.editor = editor
@@ -342,22 +349,46 @@ class MapSurface(QWidget):
 	def setBackgroundColor(self, color):
 		self.backgroundColor = color
 		self.repaint()
-	def setWidth(self, width, updateForm=False):
+	def setWidth(self, width, updateForm=False, align = Left):
 		try:
+			dx = int(width) - self.surfaceWidth
 			self.setMinimumSize(int(self.zoom*int(width)), self.height())
 			self.setMaximumSize(int(self.zoom*int(width)), self.height())
-			self.surfaceWidth = width
+			self.surfaceWidth = int(width)
 			if updateForm:
 				self.editor.ui.widthSetting.setText(str(width))
+
+			if align == self.Center:
+				for object in self.objects:
+					object.rect.translate(dx / 2, 0)
+				for tile in self.tiles:
+					tile.rect.translate(dx / 2, 0)
+			elif align == self.Right:
+				for object in self.objects:
+					object.rect.translate(dx, 0)
+				for tile in self.tiles:
+					tile.rect.translate(dx, 0)
 		except ValueError:
 			pass
-	def setHeight(self, height, updateForm=False):
+	def setHeight(self, height, updateForm=False, align = Top):
 		try:
+			dx = int(height) - self.surfaceHeight
 			self.setMinimumSize(self.width(), int(self.zoom*int(height)))
 			self.setMaximumSize(self.width(), int(self.zoom*int(height)))
-			self.surfaceHeight = height
+			self.surfaceHeight = int(height)
 			if updateForm:
 				self.editor.ui.heightSetting.setText(str(height))
+
+			if align == self.Center:
+				for object in self.objects:
+					object.rect.translate(0, dx / 2)
+				for tile in self.tiles:
+					tile.rect.translate(0, dx / 2)
+			elif align == self.Bottom:
+				for object in self.objects:
+					object.rect.translate(0, dx)
+				for tile in self.tiles:
+					tile.rect.translate(0, dx)
 		except ValueError:
 			pass
 	def addTile(self, tile):
