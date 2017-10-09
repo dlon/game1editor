@@ -15,6 +15,26 @@ class ResizeDialog(QtWidgets.QDialog):
         )
         self.resizeDlg.widthEdit.selectAll()
 
+        self.buttons = [
+            self.resizeDlg.buttonTopLeft,
+            self.resizeDlg.buttonTop,
+            self.resizeDlg.buttonTopRight,
+            self.resizeDlg.buttonLeft,
+            self.resizeDlg.buttonCenter,
+            self.resizeDlg.buttonRight,
+            self.resizeDlg.buttonBottomLeft,
+            self.resizeDlg.buttonBottom,
+            self.resizeDlg.buttonBottomRight,
+        ]
+        for button in self.buttons:
+            button.released.connect(self.handleAlignmentButton)
+        self.resizeDlg.buttonTopLeft.setChecked(True)
+
+    def handleAlignmentButton(self):
+        for button in self.buttons:
+            if button != self.sender():
+                button.setChecked(False)
+
     def accept(self):
         self.editorWindow.mapSurface.setWidth(
             int(self.resizeDlg.widthEdit.text()), True
