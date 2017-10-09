@@ -24,7 +24,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="widthEdit"/>
      </item>
     </layout>
    </item>
@@ -33,7 +33,7 @@
      <item>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="buttonTopLeft">
          <property name="text">
           <string/>
          </property>
@@ -43,7 +43,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="buttonTop">
          <property name="text">
           <string/>
          </property>
@@ -53,7 +53,7 @@
         </widget>
        </item>
        <item row="0" column="2">
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="buttonTopRight">
          <property name="text">
           <string/>
          </property>
@@ -63,7 +63,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QPushButton" name="pushButton_6">
+        <widget class="QPushButton" name="buttonLeft">
          <property name="text">
           <string/>
          </property>
@@ -73,7 +73,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QPushButton" name="pushButton_5">
+        <widget class="QPushButton" name="buttonCenter">
          <property name="text">
           <string/>
          </property>
@@ -83,7 +83,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="buttonRight">
          <property name="text">
           <string/>
          </property>
@@ -93,7 +93,7 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QPushButton" name="pushButton_9">
+        <widget class="QPushButton" name="buttonBottomLeft">
          <property name="text">
           <string/>
          </property>
@@ -103,7 +103,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QPushButton" name="pushButton_8">
+        <widget class="QPushButton" name="buttonBottom">
          <property name="text">
           <string/>
          </property>
@@ -113,7 +113,7 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QPushButton" name="pushButton_7">
+        <widget class="QPushButton" name="buttonBottomRight">
          <property name="text">
           <string/>
          </property>
@@ -149,7 +149,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_2"/>
+      <widget class="QLineEdit" name="heightEdit"/>
      </item>
     </layout>
    </item>
@@ -165,6 +165,19 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>widthEdit</tabstop>
+  <tabstop>heightEdit</tabstop>
+  <tabstop>buttonTopLeft</tabstop>
+  <tabstop>buttonTop</tabstop>
+  <tabstop>buttonTopRight</tabstop>
+  <tabstop>buttonLeft</tabstop>
+  <tabstop>buttonCenter</tabstop>
+  <tabstop>buttonRight</tabstop>
+  <tabstop>buttonBottomLeft</tabstop>
+  <tabstop>buttonBottom</tabstop>
+  <tabstop>buttonBottomRight</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

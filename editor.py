@@ -14,7 +14,7 @@ from uiEditor import Ui_EditorWindow
 import uiSolidDirections
 from mapSurface import MapSurface, MapObject, MapTile
 from uiCodeEditor import Ui_CodeEditor
-from uiResizeDialog import Ui_ResizeDialog
+from resizeDialog import ResizeDialog
 import icons_rc
 from objectPreview import QObjectPreview
 import pprint
@@ -128,10 +128,7 @@ class EditorWindow(QMainWindow):
 			# TODO: revert if an exception is thrown
 			self.loadData(json.loads(editor.code.toPlainText()))
 	def setSize(self):
-		dialog = QDialog(self)
-		resizeDlg = Ui_ResizeDialog()
-		resizeDlg.setupUi(dialog)
-
+		dialog = ResizeDialog(self)
 		ret = dialog.exec()
 		if ret == dialog.Accepted:
 			pass
