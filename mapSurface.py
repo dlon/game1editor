@@ -296,7 +296,26 @@ class SelectionMenu(QMenu):
 			self.addAction("&Edit properties", self.showPropertiesDialog)
 			self.addAction("Set &position", self.showPositionDialog)
 		self.addSeparator()
+		self.addAction("Send to the &top", self.sendToTop)
+		self.addAction("Send to the &bottom", self.sendToBottom)
+		self.addSeparator()
 		self.addAction("&Delete", mapSurface.deleteSelected)
+	def sendToTop(self):
+		if isinstance(self.obj, MapObject):
+			self.mapSurface.objects.remove(self.obj)
+			self.mapSurface.objects.append(self.obj)
+		else:
+			self.mapSurface.tiles.remove(self.obj)
+			self.mapSurface.tiles.append(self.obj)
+		self.mapSurface.update()
+	def sendToBottom(self):
+		if isinstance(self.obj, MapObject):
+			self.mapSurface.objects.remove(self.obj)
+			self.mapSurface.objects.insert(0, self.obj)
+		else:
+			self.mapSurface.tiles.remove(self.obj)
+			self.mapSurface.tiles.insert(0, self.obj)
+		self.mapSurface.update()
 	def setSolid(self):
 		self.obj.solid = self.solidAction.isChecked()
 	def showPositionDialog(self):
