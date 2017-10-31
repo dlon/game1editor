@@ -120,7 +120,7 @@ class EditorWindow(QMainWindow):
 		editor = Ui_CodeEditor()
 		editor.setupUi(dialog)
 		editor.code.setText(
-			json.dumps(self.generateData(), indent=4)
+			json.dumps(self.generateData(), indent=4, sort_keys=True)
 		)
 		dialog.setWindowTitle("Map data")
 		ret = dialog.exec()
@@ -400,7 +400,7 @@ class EditorWindow(QMainWindow):
 		return True
 	def saveFile(self, path):
 		with open(path,'w') as f:
-			json.dump(self.generateData(), f, indent=4)
+			json.dump(self.generateData(), f, indent=4, sort_keys=True)
 		self.setPath(path)
 		return True
 	def isModified(self):
