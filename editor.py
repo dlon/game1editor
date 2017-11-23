@@ -329,7 +329,14 @@ class EditorWindow(QMainWindow):
 		with open(path) as f:
 			self.loadData(json.load(f))
 			self.setPath(path)
-	def _processTileData(self, tiles, tilesets, layersDepthWidgets, layerWidget=None):
+	def _processTileData(self,
+						 tiles,
+						 tilesets,
+						 layersDepthWidgets,
+						 layerWidget=None,
+						 tileDefaults={}):
+		if not tiles:
+			return
 		tile = {
 			'tileset': 'happy',
 			'tx': 0, 'ty': 0,
@@ -339,6 +346,7 @@ class EditorWindow(QMainWindow):
 			'solid': True,
 			'depth': 0,
 		}
+		tile.update(tileDefaults)
 		for tileCurrent in tiles:
 			tile.update(tileCurrent)
 			position = QtCore.QPoint(tile['x'], tile['y'])
@@ -407,6 +415,7 @@ class EditorWindow(QMainWindow):
 				"treeItem": widget,
 				"image": QtGui.QImage("../data/%s" % widget.text(0)),
 			}
+
 		layersDepthWidgets = {}
 		for i in range(self.ui.layerTree.topLevelItemCount()):
 			widget = self.ui.layerTree.topLevelItem(i)
@@ -414,7 +423,26 @@ class EditorWindow(QMainWindow):
 			#if depth in layers:
 			#	raise EditorException("layer depths must be unique")
 			layersDepthWidgets[depth] = widget
-		self._processTileData(data['tiles'], tilesets, layersDepthWidgets)
+		self._processTileData(data.get('tiles'), tilesets, layersDepthWidgets)
+
+		# layers
+		layers = data.get('layers') or []
+		for layer in layers:
+			tile = {
+				'depth': layers[layer]['depth'],
+			}
+			layerWidget = self.createLayer(
+				layer,
+				layers[layer]['depth'],
+			)
+			self._processTileData(
+				layers[layer]['tiles'],
+				tilesets,
+				None,
+				layerWidget,
+				tile,
+			)
+
 		self.mapSurface.selectedObject = None
 		return True
 	def saveFile(self, path):
