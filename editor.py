@@ -28,6 +28,7 @@ import map
 import entities
 import generateMetadata
 import importlib
+import random
 
 class EditorException(Exception):
 	pass
@@ -229,6 +230,11 @@ class EditorWindow(QMainWindow):
 		self.ui.actionPaste.triggered.connect(self.mapSurface.copyReferenced)
 
 		self.ui.buttonResize.clicked.connect(self.setSize)
+
+		def addNewLayer():
+			widget = self.createLayer('Layer' + str(random.random()))
+			self.ui.layerTree.editItem(widget)
+		self.ui.actionAddLayer.triggered.connect(addNewLayer)
 	def keyPressEvent(self, e):
 		super().keyPressEvent(e)
 		if e.key() == Qt.Key_Delete:
