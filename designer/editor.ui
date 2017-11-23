@@ -782,6 +782,22 @@
     <string>Ctrl+E</string>
    </property>
   </action>
+  <action name="actionAddLayer">
+   <property name="text">
+    <string>&amp;Add</string>
+   </property>
+   <property name="toolTip">
+    <string>New layer</string>
+   </property>
+  </action>
+  <action name="actionDeleteLayer">
+   <property name="text">
+    <string>&amp;Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete layer</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -852,6 +868,38 @@
     <hint type="destinationlabel">
      <x>174</x>
      <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addLayerButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionAddLayer</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>99</x>
+     <y>627</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>deleteLayerButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionDeleteLayer</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>232</x>
+     <y>627</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>
