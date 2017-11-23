@@ -99,7 +99,6 @@ class MapTile:
 			'tw': self.subImageRect.width(),
 			'th': self.subImageRect.height(),
 			'solid': self.solid,
-			'depth': self.depth,
 		}
 		if self.solid and self.solidFlag != 0xFF:
 			obj['solidDirections'] = self.solidFlag

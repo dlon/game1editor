@@ -97,6 +97,18 @@ class EditorWindow(QMainWindow):
 		if ret == dialog.Accepted:
 			self.creationCode = editor.code.toPlainText()
 	def generateData(self):
+		layers = {}
+		for i in range(self.ui.layerTree.topLevelItemCount()):
+			widget = self.ui.layerTree.topLevelItem(i)
+			depth = int(widget.text(1))
+			layers[widget.text(0)] = {
+				'depth': depth,
+				'tiles': [],
+			}
+		for tile in self.mapSurface.tiles:
+			layers[tile.layerWidget.text(0)]['tiles'].append(
+				tile.dump()
+			)
 		ret = {
 			"settings": {
 				"width": self.mapSurface.width(),
@@ -108,7 +120,7 @@ class EditorWindow(QMainWindow):
 				),
 			},
 			"objects": [obj.dump() for obj in self.mapSurface.objects],
-			"tiles": [tile.dump() for tile in self.mapSurface.tiles],
+			"layers": layers,
 		}
 		if self.creationCode:
 			ret["settings"].update({
