@@ -235,6 +235,16 @@ class EditorWindow(QMainWindow):
 			widget = self.createLayer('Layer' + str(random.random()))
 			self.ui.layerTree.editItem(widget)
 		self.ui.actionAddLayer.triggered.connect(addNewLayer)
+		def deleteLayer():
+			msg = QMessageBox.question(
+				self,
+				"Confirm",
+				"Delete layer?",
+				QMessageBox.Yes | QMessageBox.No,
+			)
+			if msg == QMessageBox.Yes:
+				self.deleteLayerWidget()
+		self.ui.actionDeleteLayer.triggered.connect(deleteLayer)
 	def keyPressEvent(self, e):
 		super().keyPressEvent(e)
 		if e.key() == Qt.Key_Delete:
@@ -387,6 +397,23 @@ class EditorWindow(QMainWindow):
 		)
 		widget.setFlags(widget.flags() | Qt.ItemIsEditable)
 		return widget
+	def deleteLayerWidget(self, widget = None):
+		if not widget:
+			widgets = self.ui.layerTree.selectedItems()
+			if not widgets:
+				return
+			widget = widgets[0]
+		for tile in reversed(self.mapSurface.tiles):
+			if widget == tile.layerWidget:
+				self.mapSurface.deleteObject(tile)
+		i = self.ui.layerTree.indexOfTopLevelItem(widget)
+		self.ui.layerTree.takeTopLevelItem(i)
+	def deleteLayer(self, name = None):
+		for i in range(self.ui.layerTree.topLevelItemCount()):
+			widget = self.ui.layerTree.topLevelItem(i)
+			if widget.text(0) == name:
+				self.deleteLayerWidget(widget)
+				break
 	def loadData(self, data):
 		self.mapSurface.clear()
 		MapTile.solidFlag = 0xFF

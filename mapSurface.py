@@ -573,6 +573,15 @@ class MapSurface(QWidget):
 				self.showContextMenu(e.globalPos())
 			else:
 				self.dragOffset = e.pos() - self.selectedObject.rect.topLeft()
+	def deleteObject(self, objectOrTile):
+		if objectOrTile:
+			if objectOrTile in self.objects:
+				self.objects.remove(objectOrTile)
+			elif objectOrTile in self.tiles:
+				self.tiles.remove(objectOrTile)
+			if objectOrTile == self.selectedObject:
+				self.selectedObject = None
+			self.update()
 	def deleteSelected(self):
 		if self.selectedObject:
 			if self.selectedObject in self.objects:
