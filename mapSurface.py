@@ -72,21 +72,12 @@ class MapTile:
 		self.layerWidget = layerWidget
 	@property
 	def depth(self):
+		if getattr(self, '_depth', None):
+			return getattr(self, '_depth', None)
 		return int(self.layerWidget.text(1))
 	@depth.setter
 	def depth(self, value):
-		layers = {}
-		layerTree = self.layerWidget.treeWidget()
-		for i in range(layerTree.topLevelItemCount()):
-			widget = layerTree.topLevelItem(i)
-			depth = int(widget.text(1))
-			# if depth in layers:
-			#	raise EditorException("layer depths must be unique")
-			layers[depth] = widget
-		if value in layers:
-			self.layerWidget = layers[value]
-		else:
-			raise editor.EditorException("no such layer")
+		self._depth = value
 	def dump(self):
 		obj = {
 			'tileset': self.tileset.data(0, Qt.UserRole),
@@ -100,6 +91,8 @@ class MapTile:
 			'th': self.subImageRect.height(),
 			'solid': self.solid,
 		}
+		if self.depth != int(self.layerWidget.text(1)):
+			obj['depth'] = self.depth
 		if self.solid and self.solidFlag != 0xFF:
 			obj['solidDirections'] = self.solidFlag
 		else:
@@ -204,6 +197,13 @@ class SelectionMenu(QMenu):
 					int(self.objectW.text()),
 					int(self.objectH.text())
 				))
+				layerTree = self._parent.mapSurface.editor.ui.layerTree
+				layerName = self.objectLayer.currentText()
+				for i in range(layerTree.topLevelItemCount()):
+					widget = layerTree.topLevelItem(i)
+					if widget.text(0) == layerName:
+						break
+				self._parent.obj.layerWidget = widget
 				self._parent.obj.depth = int(self.objectDepth.text())
 				if self._parent.obj.solid:
 					self._parent.obj.solidFlag = \
