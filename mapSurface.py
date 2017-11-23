@@ -148,6 +148,7 @@ class SelectionMenu(QMenu):
 				self.objectW = self.addOption("Width", parent.obj.rect.width())
 				self.objectH = self.addOption("Height", parent.obj.rect.height())
 				self.objectDepth = self.addOption("Depth", parent.obj.depth)
+				self.objectLayer = self.addLayerList(parent.obj.layerWidget)
 				if parent.obj.solid:
 					self.solidFlagsLayout = QtWidgets.QHBoxLayout()
 					self.solidU = self.addCheckBox("U", self.solidFlagsLayout, parent.obj.solidFlag & 0x04 != 0)
@@ -180,6 +181,19 @@ class SelectionMenu(QMenu):
 			layout.addWidget(lineEdit)
 			self.layout.addLayout(layout)
 			return lineEdit
+		def addLayerList(self, value):
+			layout = QtWidgets.QHBoxLayout()
+			label = QtWidgets.QLabel("Layer:")
+			layout.addWidget(label)
+			layers = QtWidgets.QComboBox()
+			layerTree = self._parent.mapSurface.editor.ui.layerTree
+			for i in range(layerTree.topLevelItemCount()):
+				widget = layerTree.topLevelItem(i)
+				layers.addItem(widget.text(0))
+			layers.setCurrentText(value.text(0))
+			layout.addWidget(layers)
+			self.layout.addLayout(layout)
+			return layers
 		def accept(self):
 			self._parent.obj.rect.moveTo(
 				int(self.objectX.text()),
