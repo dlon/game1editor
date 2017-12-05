@@ -297,6 +297,12 @@ class EditorWindow(QMainWindow):
 			self.setPath('')
 			self.setWindowModified(False)
 			self.mapSurface.clear()
+			self.creationCode = ''
+			self.mapSurface.setWidth(320, updateForm=True)
+			self.mapSurface.setHeight(240, updateForm=True)
+			self.mapSurface.setBackgroundColor(
+				QtGui.QColor(255, 255, 255, 255)
+			)
 	def open(self):
 		if self.saveIfWants():
 			path, _ = QFileDialog.getOpenFileName(
