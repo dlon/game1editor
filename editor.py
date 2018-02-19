@@ -85,7 +85,7 @@ class EditorWindow(QMainWindow):
 		self.settings = QtCore.QSettings()
 		self.openDirectory = self.settings.value("openDirectory", "")
 	def setBackgroundColor(self):
-		dialog = QColorDialog()
+		dialog = QColorDialog(self.mapSurface.backgroundColor)
 		if dialog.exec_() == dialog.Accepted:
 			self.mapSurface.setBackgroundColor(dialog.selectedColor())
 	def setCreationCode(self):
