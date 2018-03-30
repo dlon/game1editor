@@ -41,6 +41,7 @@ class MapObject:
 			self.creationCode,
 			self.customProperties
 		)
+
 class MapTile:
 	solidFlag = 0xFF
 	def __init__(
@@ -55,7 +56,8 @@ class MapTile:
 			surfaceHeight=0,
 			solidFlag=-1):
 		self.tileset = tilesetWidget
-		self.image = tilesetImage.copy(subImageRect)
+		if tilesetImage:
+			self.image = tilesetImage.copy(subImageRect)
 		self.rect = QRect(
 			position,
 			QSize(
@@ -99,9 +101,9 @@ class MapTile:
 			obj['solidDirections'] = 15
 		return obj
 	def copy(self):
-		return MapTile(
+		ret = MapTile(
 			self.tileset,
-			self.image,
+			None,
 			self.subImageRect,
 			self.rect.topLeft(),
 			self.layerWidget,
@@ -110,6 +112,8 @@ class MapTile:
 			self.rect.height(),
 			self.solidFlag,
 		)
+		ret.image = self.image.copy()
+		return ret
 
 class SelectionMenu(QMenu):
 	class PositionDialog(QDialog):
