@@ -54,7 +54,9 @@ class MapTile:
 			solid=True,
 			surfaceWidth=0,
 			surfaceHeight=0,
-			solidFlag=-1):
+			solidFlag=-1,
+			breakable=False,
+			shootable=False):
 		self.tileset = tilesetWidget
 		if tilesetImage:
 			self.image = tilesetImage.copy(subImageRect)
@@ -72,6 +74,8 @@ class MapTile:
 		self.subImageRect = subImageRect.translated(0,0)
 		self.solid = solid
 		self.layerWidget = layerWidget
+		self.breakable = breakable
+		self.shootable = shootable
 	@property
 	def depth(self):
 		if getattr(self, '_depth', None):
@@ -99,6 +103,9 @@ class MapTile:
 			obj['solidDirections'] = self.solidFlag
 		else:
 			obj['solidDirections'] = 15
+		if self.breakable:
+			obj['breakable'] = self.breakable
+			obj['shootable'] = self.shootable
 		return obj
 	def copy(self):
 		ret = MapTile(
@@ -111,6 +118,8 @@ class MapTile:
 			self.rect.width(),
 			self.rect.height(),
 			self.solidFlag,
+			self.breakable,
+			self.shootable,
 		)
 		ret.image = self.image.copy()
 		return ret
@@ -190,11 +199,12 @@ class SelectionMenu(QMenu):
 			layout = QtWidgets.QHBoxLayout()
 			layout.addWidget(QtWidgets.QLabel("Enabled:"))
 			self.breakableCheck = QtWidgets.QCheckBox()
+			self.breakableCheck.setChecked(self._parent.obj.breakable)
 			layout.addWidget(self.breakableCheck)
 			layout.addWidget(QtWidgets.QLabel("Shootable:"))
 			self.shootableCheck = QtWidgets.QCheckBox()
+			self.shootableCheck.setChecked(self._parent.obj.shootable)
 			layout.addWidget(self.shootableCheck)
-			# TODO: set checked states based on MapTile
 			breakableGroup.setLayout(layout)
 			self.handleBreakableCheckStateChange()
 		def addLayerList(self, value):
@@ -230,12 +240,17 @@ class SelectionMenu(QMenu):
 						break
 				self._parent.obj.layerWidget = widget
 				self._parent.obj.depth = int(self.objectDepth.text())
+
 				if self._parent.obj.solid:
 					self._parent.obj.solidFlag = \
 						(0x08 if self.solidD.isChecked() else 0) | \
 						(0x04 if self.solidU.isChecked() else 0) | \
 						(0x02 if self.solidR.isChecked() else 0) | \
 						(0x01 if self.solidL.isChecked() else 0)
+
+				self._parent.obj.breakable = self.breakableCheck.isChecked()
+				self._parent.obj.shootable = self.shootableCheck.isChecked()
+
 			super().accept()
 
 	class PropertiesDialog(QDialog):
