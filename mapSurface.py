@@ -141,11 +141,13 @@ class SelectionMenu(QMenu):
 			# dimensions
 			self.objectX = self.addOption("X", parent.obj.rect.x())
 			self.objectY = self.addOption("Y", parent.obj.rect.y())
+
 			if isinstance(parent.obj, MapTile):
 				self.objectW = self.addOption("Width", parent.obj.rect.width())
 				self.objectH = self.addOption("Height", parent.obj.rect.height())
 				self.objectDepth = self.addOption("Depth", parent.obj.depth)
 				self.objectLayer = self.addLayerList(parent.obj.layerWidget)
+
 				if parent.obj.solid:
 					self.solidFlagsLayout = QtWidgets.QHBoxLayout()
 					self.solidU = self.addCheckBox("U", self.solidFlagsLayout, parent.obj.solidFlag & 0x04 != 0)
@@ -153,6 +155,10 @@ class SelectionMenu(QMenu):
 					self.solidR = self.addCheckBox("R", self.solidFlagsLayout, parent.obj.solidFlag & 0x02 != 0)
 					self.solidL = self.addCheckBox("L", self.solidFlagsLayout, parent.obj.solidFlag & 0x01 != 0)
 					self.layout.addLayout(self.solidFlagsLayout)
+
+				self.createBreakableOptions()
+				self.breakableCheck.stateChanged.connect(self.handleBreakableCheckStateChange)
+
 			# accept/cancel
 			self.buttonBox = QtWidgets.QDialogButtonBox(
 				QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel,
@@ -178,6 +184,19 @@ class SelectionMenu(QMenu):
 			layout.addWidget(lineEdit)
 			self.layout.addLayout(layout)
 			return lineEdit
+		def createBreakableOptions(self):
+			breakableGroup = QtWidgets.QGroupBox('Breakable')
+			self.layout.addWidget(breakableGroup)
+			layout = QtWidgets.QHBoxLayout()
+			layout.addWidget(QtWidgets.QLabel("Enabled:"))
+			self.breakableCheck = QtWidgets.QCheckBox()
+			layout.addWidget(self.breakableCheck)
+			layout.addWidget(QtWidgets.QLabel("Shootable:"))
+			self.shootableCheck = QtWidgets.QCheckBox()
+			layout.addWidget(self.shootableCheck)
+			# TODO: set checked states based on MapTile
+			breakableGroup.setLayout(layout)
+			self.handleBreakableCheckStateChange()
 		def addLayerList(self, value):
 			layout = QtWidgets.QHBoxLayout()
 			label = QtWidgets.QLabel("Layer:")
@@ -191,6 +210,8 @@ class SelectionMenu(QMenu):
 			layout.addWidget(layers)
 			self.layout.addLayout(layout)
 			return layers
+		def handleBreakableCheckStateChange(self):
+			self.shootableCheck.setEnabled(self.breakableCheck.isChecked())
 		def accept(self):
 			self._parent.obj.rect.moveTo(
 				int(self.objectX.text()),
@@ -216,6 +237,7 @@ class SelectionMenu(QMenu):
 						(0x02 if self.solidR.isChecked() else 0) | \
 						(0x01 if self.solidL.isChecked() else 0)
 			super().accept()
+
 	class PropertiesDialog(QDialog):
 		def __init__(self, parent):
 			super().__init__(parent=parent)
