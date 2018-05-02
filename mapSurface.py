@@ -96,6 +96,8 @@ class MapTile:
 			'tw': self.subImageRect.width(),
 			'th': self.subImageRect.height(),
 			'solid': self.solid,
+			'breakable': self.breakable,
+			'shootable': self.shootable,
 		}
 		if self.depth != int(self.layerWidget.text(1)):
 			obj['depth'] = self.depth
@@ -103,9 +105,6 @@ class MapTile:
 			obj['solidDirections'] = self.solidFlag
 		else:
 			obj['solidDirections'] = 15
-		if self.breakable:
-			obj['breakable'] = self.breakable
-			obj['shootable'] = self.shootable
 		return obj
 	def copy(self):
 		ret = MapTile(

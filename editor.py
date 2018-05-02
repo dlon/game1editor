@@ -389,6 +389,8 @@ class EditorWindow(QMainWindow):
 				layerWidget or layersDepthWidgets[tile['depth']],
 				tile['solid'],
 				solidFlag=tile.get('solidDirections') or -1,
+				breakable=tile.get('breakable', False),
+				shootable=tile.get('shootable', False),
 			)
 			mapTile.rect.setSize(QtCore.QSize(tile['w'], tile['h']))
 			self.mapSurface.addTile(mapTile)
