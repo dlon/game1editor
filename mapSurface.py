@@ -615,10 +615,15 @@ class MapSurface(QWidget):
 		ret = dialog.exec_()
 		if ret == dialog.Accepted:
 			self.selectedObject.creationCode = editor.code.toPlainText()
+	def _handleMiddleMousePress(self, e):
+		self._startScrollPos = e.pos() / self.zoom
 	def showContextMenu(self, pos):
 		if self.selectedObject:
 			SelectionMenu(self, self.selectedObject).exec(pos)
 	def mousePressEvent(self, e):
+		if e.button() == Qt.MiddleButton:
+			self._handleMiddleMousePress(e)
+			return
 		position = e.pos() / self.zoom
 		if self.tileResizeHover:
 			self.resizeDrag = True
