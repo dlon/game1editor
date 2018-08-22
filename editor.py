@@ -38,12 +38,16 @@ class EditorStatusBar(QStatusBar):
 		super().__init__(parent)
 		self.mousePositionLabel = QLabel()
 		self.objectInfoLabel = QLabel()
+		self.zoomInfoLabel = QLabel()
+		self.addPermanentWidget(self.zoomInfoLabel)
 		self.addPermanentWidget(self.mousePositionLabel, 1)
 		self.addPermanentWidget(self.objectInfoLabel)
 	def setPositionInfo(self, text):
 		self.mousePositionLabel.setText(text)
 	def setHoverInfo(self, text):
 		self.objectInfoLabel.setText(text)
+	def setZoomInfo(self, zoomFactor):
+		self.zoomInfoLabel.setText('Zoom: {:.2f}'.format(zoomFactor))
 
 class EditorWindow(QMainWindow):
 	def __init__(self):

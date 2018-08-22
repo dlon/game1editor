@@ -576,6 +576,7 @@ class MapSurface(QWidget):
 				self.zoom += 0.1
 			else:
 				self.zoom -= 0.1
+			self.editor.ui.statusbar.setZoomInfo(self.zoom)
 			scrollArea = self.editor.ui.scrollArea
 			hsb = scrollArea.horizontalScrollBar()
 			vsb = scrollArea.verticalScrollBar()
