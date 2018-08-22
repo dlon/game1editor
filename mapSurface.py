@@ -576,16 +576,23 @@ class MapSurface(QWidget):
 				self.zoom += 0.1
 			else:
 				self.zoom -= 0.1
-			hsb = self.editor.ui.scrollArea.horizontalScrollBar()
-			vsb = self.editor.ui.scrollArea.verticalScrollBar()
+			scrollArea = self.editor.ui.scrollArea
+			hsb = scrollArea.horizontalScrollBar()
+			vsb = scrollArea.verticalScrollBar()
 			scrollPosF = QtCore.QPointF(
 				hsb.value() / float(hsb.pageStep() + hsb.maximum() - hsb.minimum()),
 				vsb.value() / float(vsb.pageStep() + vsb.maximum() - vsb.minimum()),
 			)
+			pos = -self.pos() / prev
+			cursorRelPos = (wheelEvent.pos() / prev - pos)
+			rcrpX = cursorRelPos.x() / self.surfaceWidth
+			rcrpX = self.zoom * rcrpX - prev * rcrpX
+			rcrpY = cursorRelPos.y() / self.surfaceHeight
+			rcrpY = self.zoom * rcrpY - prev * rcrpY
 			self.setWidth(self.surfaceWidth)
 			self.setHeight(self.surfaceHeight)
-			hsb.setValue(scrollPosF.x() * (hsb.maximum() + hsb.pageStep()))
-			vsb.setValue(scrollPosF.y() * (vsb.maximum() + vsb.pageStep()))
+			hsb.setValue(hsb.minimum() + (scrollPosF.x() + rcrpX) * (hsb.maximum() - hsb.minimum() + hsb.pageStep()))
+			vsb.setValue(vsb.minimum() + (scrollPosF.y() + rcrpY) * (vsb.maximum() - vsb.minimum() + vsb.pageStep()))
 			self.zoomed.emit(self.zoom, self.zoom - prev, wheelEvent.pos())
 			self.repaint()
 			wheelEvent.accept()
