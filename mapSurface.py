@@ -576,8 +576,16 @@ class MapSurface(QWidget):
 				self.zoom += 0.1
 			else:
 				self.zoom -= 0.1
+			hsb = self.editor.ui.scrollArea.horizontalScrollBar()
+			vsb = self.editor.ui.scrollArea.verticalScrollBar()
+			scrollPosF = QtCore.QPointF(
+				hsb.value() / float(hsb.pageStep() + hsb.maximum() - hsb.minimum()),
+				vsb.value() / float(vsb.pageStep() + vsb.maximum() - vsb.minimum()),
+			)
 			self.setWidth(self.surfaceWidth)
 			self.setHeight(self.surfaceHeight)
+			hsb.setValue(scrollPosF.x() * (hsb.maximum() + hsb.pageStep()))
+			vsb.setValue(scrollPosF.y() * (vsb.maximum() + vsb.pageStep()))
 			self.zoomed.emit(self.zoom, self.zoom - prev, wheelEvent.pos())
 			self.repaint()
 			wheelEvent.accept()
