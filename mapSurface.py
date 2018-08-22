@@ -520,6 +520,7 @@ class MapSurface(QWidget):
 		self.editor.ui.statusbar.setHoverInfo(message)
 	def mouseMoveEvent(self, e):
 		position = e.pos()
+		position /= self.zoom
 		if not self.selectedObject or not (e.buttons() & Qt.LeftButton):
 			self.editor.ui.statusbar.setPositionInfo(
 				"%sx%s [%sx%s]" % (
@@ -537,7 +538,7 @@ class MapSurface(QWidget):
 				QSize(5,5),
 			)
 			bottomRight.translate(-2,-2)
-			if bottomRight.contains(e.pos()):
+			if bottomRight.contains(position):
 				self.setCursor(QCursor(Qt.SizeFDiagCursor))
 				self.tileResizeHover = True
 			elif self.tileResizeHover:
@@ -603,31 +604,32 @@ class MapSurface(QWidget):
 		if self.selectedObject:
 			SelectionMenu(self, self.selectedObject).exec(pos)
 	def mousePressEvent(self, e):
+		position = e.pos() / self.zoom
 		if self.tileResizeHover:
 			self.resizeDrag = True
 		else:
 			self.resizeDrag = False
 			self.selectedObject = None
 			for obj in self.objects:
-				if obj.rect.contains(e.pos()):
+				if obj.rect.contains(position):
 					self.selectedObject = obj
 					break
 			if not self.selectedObject:
 				for tile in self.tiles:
-					if tile.rect.contains(e.pos()):
+					if tile.rect.contains(position):
 						self.selectedObject = tile
 						break
 		self.repaint()
 		self.clicked.emit(
 			self,
-			e.pos(),
+			position,
 			self.selectedObject,
 		)
 		if self.selectedObject:
 			if e.button() == Qt.RightButton:
 				self.showContextMenu(e.globalPos())
 			else:
-				self.dragOffset = e.pos() - self.selectedObject.rect.topLeft()
+				self.dragOffset = position - self.selectedObject.rect.topLeft()
 	def deleteObject(self, objectOrTile):
 		if objectOrTile:
 			if objectOrTile in self.objects:
