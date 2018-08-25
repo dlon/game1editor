@@ -388,6 +388,8 @@ class MapSurface(QWidget):
 	Top = 4
 	Bottom = 8
 
+	padding = 128
+
 	def __init__(self, parent, editor):
 		QWidget.__init__(self, parent)
 		self.editor = editor
@@ -424,8 +426,9 @@ class MapSurface(QWidget):
 	def setWidth(self, width, updateForm=False, align = Left):
 		try:
 			dx = int(width) - self.surfaceWidth
-			self.setMinimumSize(int(self.zoom*int(width)), self.height())
-			self.setMaximumSize(int(self.zoom*int(width)), self.height())
+			mw = int(self.zoom*(int(width) + 2 * self.padding))
+			self.setMinimumSize(mw, self.height())
+			self.setMaximumSize(mw, self.height())
 			self.surfaceWidth = int(width)
 			if updateForm:
 				self.editor.ui.widthSetting.setText(str(width))
@@ -445,8 +448,9 @@ class MapSurface(QWidget):
 	def setHeight(self, height, updateForm=False, align = Top):
 		try:
 			dx = int(height) - self.surfaceHeight
-			self.setMinimumSize(self.width(), int(self.zoom*int(height)))
-			self.setMaximumSize(self.width(), int(self.zoom*int(height)))
+			mh = int(self.zoom*(int(height) + 2 * self.padding))
+			self.setMinimumSize(self.width(), mh)
+			self.setMaximumSize(self.width(), mh)
 			self.surfaceHeight = int(height)
 			if updateForm:
 				self.editor.ui.heightSetting.setText(str(height))
@@ -479,21 +483,38 @@ class MapSurface(QWidget):
 		qp = QPainter()
 		qp.begin(self)
 		qp.scale(self.zoom, self.zoom)
-		qp.fillRect(0, 0, float(self.surfaceWidth), float(self.surfaceHeight), self.backgroundColor)
+		qp.fillRect(
+			self.padding, self.padding,
+			float(self.surfaceWidth),
+			float(self.surfaceHeight),
+			self.backgroundColor
+		)
 		for object in drawables:
 			brush = QBrush(object.image)
 			transform = QTransform()
-			transform.translate(object.rect.left(), object.rect.top())
+			transform.translate(
+				object.rect.left(),
+				object.rect.top(),
+			)
 			brush.setTransform(transform)
-			qp.fillRect(object.rect, brush)
+			objRect = QRect(object.rect)
+			objRect.translate(self.padding, self.padding)
+			qp.fillRect(objRect, brush)
 		if self.selectedObject:
 			qp.setPen(QColor(255,0,0))
-			qp.drawRect(self.selectedObject.rect)
+			selRect = QRect(self.selectedObject.rect)
+			selRect.translate(self.padding, self.padding)
+			qp.drawRect(selRect)
+			#qp.drawRect(self.selectedObject.rect)
 		qp.end()
 	def resetCursor(self):
 		if self.tileResizeHover:
 			self.setCursor(QCursor(Qt.ArrowCursor))
 			self.tileResizeHover = False
+	def viewToSurfacePosition(self, pos):
+		position = pos
+		position /= self.zoom
+		return position - QPoint(self.padding, self.padding)
 	def updateHoverInfo(self, position):
 		hoverObject = None
 		message = ""
@@ -519,8 +540,7 @@ class MapSurface(QWidget):
 					break
 		self.editor.ui.statusbar.setHoverInfo(message)
 	def mouseMoveEvent(self, e):
-		position = e.pos()
-		position /= self.zoom
+		position = self.viewToSurfacePosition(e.pos())
 		if not self.selectedObject or not (e.buttons() & Qt.LeftButton):
 			self.editor.ui.statusbar.setPositionInfo(
 				"%sx%s [%sx%s]" % (
@@ -617,7 +637,7 @@ class MapSurface(QWidget):
 		if ret == dialog.Accepted:
 			self.selectedObject.creationCode = editor.code.toPlainText()
 	def _handleMiddleMousePress(self, e):
-		self._startScrollPos = e.pos() / self.zoom
+		self._startScrollPos = self.viewToSurfacePosition(e.pos())
 	def showContextMenu(self, pos):
 		if self.selectedObject:
 			SelectionMenu(self, self.selectedObject).exec(pos)
@@ -625,7 +645,7 @@ class MapSurface(QWidget):
 		if e.button() == Qt.MiddleButton:
 			self._handleMiddleMousePress(e)
 			return
-		position = e.pos() / self.zoom
+		position = self.viewToSurfacePosition(e.pos())
 		if self.tileResizeHover:
 			self.resizeDrag = True
 		else:
