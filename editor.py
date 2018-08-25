@@ -116,8 +116,8 @@ class EditorWindow(QMainWindow):
 			)
 		ret = {
 			"settings": {
-				"width": self.mapSurface.width(),
-				"height": self.mapSurface.height(),
+				"width": self.mapSurface.surfaceWidth,
+				"height": self.mapSurface.surfaceHeight,
 				"background": (
 					self.mapSurface.backgroundColor.red(),
 					self.mapSurface.backgroundColor.green(),
