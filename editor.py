@@ -5,6 +5,8 @@ import json
 import os
 import subprocess
 
+os.environ['GAME1_DEBUG'] = 'true'
+
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import *
@@ -184,7 +186,11 @@ class EditorWindow(QMainWindow):
 	def run(self):
 		os.chdir("..")
 		try:
-			p = subprocess.Popen(["python3","main.py","-data"], stdin=subprocess.PIPE)
+			p = subprocess.Popen(
+				["python3","main.py","-data"],
+				stdin=subprocess.PIPE,
+				env=os.environ.copy(),
+			)
 			# input, err = p.communicate(input=json.dumps(self.generateData()).encode())
 			p.stdin.write(json.dumps(self.generateData()).encode())
 			p.stdin.close()
