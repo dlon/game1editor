@@ -187,7 +187,8 @@ class EditorWindow(QMainWindow):
 		os.chdir("..")
 		try:
 			p = subprocess.Popen(
-				["python3","main.py","-data"],
+				#["python3","main.py","-data"],
+				["core/x64/Debug/game1", "-data"],
 				stdin=subprocess.PIPE,
 				env=os.environ.copy(),
 			)
