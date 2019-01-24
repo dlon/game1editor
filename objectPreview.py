@@ -57,7 +57,9 @@ class QObjectPreview(QFrame):
 			ev.setDropAction(Qt.MoveAction)
 		else:
 			ev.ignore()
-	def handleMapSurfaceClick(self, mapSurface, position, selectedObject):
+	def handleMapSurfaceClick(self, mapSurface, position, selectedObject, button):
+		if button != Qt.LeftButton:
+			return
 		if not self.type:
 			return
 		if self.window().ui.tabWidget.currentIndex() != 0:

@@ -379,7 +379,7 @@ class SelectionMenu(QMenu):
 		dialog.exec()
 
 class MapSurface(QWidget):
-	clicked = pyqtSignal([object, QPoint, object])
+	clicked = pyqtSignal([object, QPoint, object, int])
 	zoomed = pyqtSignal([float, float, QPoint])
 
 	Left = 0
@@ -665,6 +665,7 @@ class MapSurface(QWidget):
 			self,
 			position,
 			self.selectedObject,
+			e.button()
 		)
 		if self.selectedObject:
 			if e.button() == Qt.RightButton:

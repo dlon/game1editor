@@ -17,7 +17,9 @@ class QTilesetSurface(QFrame):
 		self.tileset = treeItem.text(0)
 		self.tilesetWidget = treeItem
 		self.repaint()
-	def handleMapSurfaceClick(self, mapSurface, position, selectedObject):
+	def handleMapSurfaceClick(self, mapSurface, position, selectedObject, button):
+		if button != Qt.LeftButton:
+			return
 		if self.image.isNull() or self.selection.isNull():
 			return
 		if self.window().ui.tabWidget.currentIndex() != 1:
