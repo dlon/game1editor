@@ -133,6 +133,7 @@ class EditorWindow(QMainWindow):
 			ret["settings"].update({
 				"creationCode": self.creationCode
 			})
+		ret["settings"].update(self.unsupportedSettings)
 		return ret
 	def editData(self):
 		dialog = QDialog(self)
@@ -432,6 +433,10 @@ class EditorWindow(QMainWindow):
 			QtGui.QColor(*data["settings"]["background"])
 		)
 		self.creationCode = data["settings"].get("creationCode", None)
+		self.unsupportedSettings = {
+			k:v for k, v in data['settings'].items()
+			if k not in ('width', 'height', 'background', 'creationCode')
+		}
 		# objects
 		for obj in data["objects"]:
 			customProp = obj.copy()
