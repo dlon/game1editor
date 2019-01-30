@@ -51,12 +51,15 @@ class EditorStatusBar(QStatusBar):
 	def setZoomInfo(self, zoomFactor):
 		self.zoomInfoLabel.setText('Zoom: {:.2f}'.format(zoomFactor))
 
+
 class EditorWindow(QMainWindow):
 	def __init__(self):
 		# set up UI window
 		super(EditorWindow, self).__init__()
 		self.ui = Ui_EditorWindow()
 		self.ui.setupUi(self)
+		import tool
+		self.editToolHandler = tool.ToolHandler(self.ui)
 
 		self._initTrees()
 
@@ -212,8 +215,9 @@ class EditorWindow(QMainWindow):
 		self.ui.heightSetting.textChanged.connect(self.mapSurface.setHeight)
 		self.ui.widthSetting.setText("640")
 		self.ui.heightSetting.setText("480")
-		self.mapSurface.clicked.connect(self.ui.tilePreviewFrame.handleMapSurfaceClick)
-		self.mapSurface.clicked.connect(self.ui.objectPreviewFrame.handleMapSurfaceClick)
+		#self.mapSurface.clicked.connect(self.ui.tilePreviewFrame.handleMapSurfaceClick)
+		#self.mapSurface.clicked.connect(self.ui.objectPreviewFrame.handleMapSurfaceClick)
+		self.mapSurface.clicked.connect(self.editToolHandler.handleMapSurfaceClick)
 
 		self.ui.buttonBackgroundColor.clicked.connect(self.setBackgroundColor)
 		self.ui.buttonCreationCode.clicked.connect(self.setCreationCode)

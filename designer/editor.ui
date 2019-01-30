@@ -522,6 +522,9 @@
    <addaction name="actionSnap"/>
    <addaction name="separator"/>
    <addaction name="actionRun"/>
+   <addaction name="separator"/>
+   <addaction name="actionPen"/>
+   <addaction name="actionBrush"/>
   </widget>
   <action name="actionNew">
    <property name="icon">
@@ -796,6 +799,31 @@
    </property>
    <property name="toolTip">
     <string>Delete layer</string>
+   </property>
+  </action>
+  <action name="actionPen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Pen</string>
+   </property>
+   <property name="toolTip">
+    <string>Pen</string>
+   </property>
+   <property name="shortcut">
+    <string>P</string>
+   </property>
+  </action>
+  <action name="actionBrush">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Brush</string>
+   </property>
+   <property name="shortcut">
+    <string>B</string>
    </property>
   </action>
  </widget>

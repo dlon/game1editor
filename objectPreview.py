@@ -57,18 +57,6 @@ class QObjectPreview(QFrame):
 			ev.setDropAction(Qt.MoveAction)
 		else:
 			ev.ignore()
-	def handleMapSurfaceClick(self, mapSurface, position, selectedObject, button):
-		if button != Qt.LeftButton:
-			return
-		if not self.type:
-			return
-		if self.window().ui.tabWidget.currentIndex() != 0:
-			return
-		if mapSurface.tileResizeHover:
-			return
-		if not selectedObject:
-			print("objectPreview: adding object to map surface")
-			mapSurface.addObject(self.createObject(position))
 	def createObject(self, position):
 		if not self.type:
 			return None
