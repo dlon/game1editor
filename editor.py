@@ -113,6 +113,7 @@ class EditorWindow(QMainWindow):
 			depth = int(widget.text(1))
 			layers[widget.text(0)] = {
 				'depth': depth,
+				**widget.data(0, Qt.UserRole),
 				'tiles': [],
 			}
 		for tile in self.mapSurface.tiles:
@@ -399,7 +400,7 @@ class EditorWindow(QMainWindow):
 			)
 			mapTile.rect.setSize(QtCore.QSize(tile['w'], tile['h']))
 			self.mapSurface.addTile(mapTile)
-	def createLayer(self, name, depth=0):
+	def createLayer(self, name, depth=0, **unprocessedArgs):
 		widget = QTreeWidgetItem(
 			self.ui.layerTree,
 			(
@@ -408,6 +409,7 @@ class EditorWindow(QMainWindow):
 				"1",
 			)
 		)
+		widget.setData(0, Qt.UserRole, unprocessedArgs)
 		widget.setFlags(widget.flags() | Qt.ItemIsEditable)
 		return widget
 	def deleteLayerWidget(self, widget = None):
@@ -483,7 +485,7 @@ class EditorWindow(QMainWindow):
 			}
 			layerWidget = self.createLayer(
 				layer,
-				layers[layer]['depth'],
+				**layers[layer],
 			)
 			self._processTileData(
 				layers[layer]['tiles'],
