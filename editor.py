@@ -65,6 +65,7 @@ class EditorWindow(QMainWindow):
 
 		self.mapFile = ''
 		self.creationCode = ''
+		self.unsupportedSettings = {}
 		self.setWindowTitle('untitled[*] - game1 editor')
 
 		self._initSettings()
@@ -110,10 +111,11 @@ class EditorWindow(QMainWindow):
 		layers = {}
 		for i in range(self.ui.layerTree.topLevelItemCount()):
 			widget = self.ui.layerTree.topLevelItem(i)
+			widgetData = widget.data(0, Qt.UserRole) or {}
 			depth = int(widget.text(1))
 			layers[widget.text(0)] = {
 				'depth': depth,
-				**widget.data(0, Qt.UserRole),
+				**widgetData,
 				'tiles': [],
 			}
 		for tile in self.mapSurface.tiles:
@@ -300,6 +302,7 @@ class EditorWindow(QMainWindow):
 	def new(self):
 		if self.saveIfWants():
 			# create new project
+			self.unsupportedSettings = {}
 			self.setPath('')
 			self.setWindowModified(False)
 			self.mapSurface.clear()
